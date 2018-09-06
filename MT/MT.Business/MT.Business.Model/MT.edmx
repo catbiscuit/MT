@@ -1,0 +1,147 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="MTModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="MTModelStoreContainer">
+          <EntitySet Name="T_BaseInfo" EntityType="MTModel.Store.T_BaseInfo" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="T_Log" EntityType="MTModel.Store.T_Log" store:Type="Tables" Schema="dbo" />
+        </EntityContainer>
+        <EntityType Name="T_BaseInfo">
+          <Key>
+            <PropertyRef Name="F_ID" />
+          </Key>
+          <Property Name="F_ID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="F_CatalogCode" Type="varchar" MaxLength="200" />
+          <Property Name="F_CatalogName" Type="nvarchar" />
+          <Property Name="F_ItemCode" Type="varchar" MaxLength="200" />
+          <Property Name="F_ItemName" Type="nvarchar" />
+          <Property Name="F_ItemSort" Type="int" />
+          <Property Name="F_CreateUserID" Type="uniqueidentifier" />
+          <Property Name="F_CreateUserName" Type="nvarchar" MaxLength="50" />
+          <Property Name="F_CreateTime" Type="datetime" />
+          <Property Name="F_ModifyUserID" Type="uniqueidentifier" />
+          <Property Name="F_ModifyUserName" Type="nvarchar" MaxLength="50" />
+          <Property Name="F_ModifyTime" Type="datetime" />
+          <Property Name="F_isValid" Type="int" />
+        </EntityType>
+        <EntityType Name="T_Log">
+          <Key>
+            <PropertyRef Name="F_ID" />
+          </Key>
+          <Property Name="F_ID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="F_ControllerName" Type="varchar" MaxLength="1000" />
+          <Property Name="F_ActionName" Type="varchar" MaxLength="1000" />
+          <Property Name="F_Title" Type="varchar(max)" />
+          <Property Name="F_Content" Type="varchar(max)" />
+          <Property Name="F_LogType" Type="varchar" MaxLength="200" />
+          <Property Name="F_LogTypeName" Type="nvarchar" />
+          <Property Name="F_WriteTime" Type="datetime" />
+          <Property Name="F_isValid" Type="int" />
+        </EntityType>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="MTModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="MTEntities" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="T_BaseInfo" EntityType="MTModel.T_BaseInfo" />
+          <EntitySet Name="T_Log" EntityType="MTModel.T_Log" />
+        </EntityContainer>
+        <EntityType Name="T_BaseInfo">
+          <Key>
+            <PropertyRef Name="F_ID" />
+          </Key>
+          <Property Name="F_ID" Type="Guid" Nullable="false" />
+          <Property Name="F_CatalogCode" Type="String" MaxLength="200" Unicode="false" FixedLength="false" />
+          <Property Name="F_CatalogName" Type="String" MaxLength="4000" Unicode="true" FixedLength="false" />
+          <Property Name="F_ItemCode" Type="String" MaxLength="200" Unicode="false" FixedLength="false" />
+          <Property Name="F_ItemName" Type="String" MaxLength="4000" Unicode="true" FixedLength="false" />
+          <Property Name="F_ItemSort" Type="Int32" />
+          <Property Name="F_CreateUserID" Type="Guid" />
+          <Property Name="F_CreateUserName" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="F_CreateTime" Type="DateTime" Precision="3" />
+          <Property Name="F_ModifyUserID" Type="Guid" />
+          <Property Name="F_ModifyUserName" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="F_ModifyTime" Type="DateTime" Precision="3" />
+          <Property Name="F_isValid" Type="Int32" />
+        </EntityType>
+        <EntityType Name="T_Log">
+          <Key>
+            <PropertyRef Name="F_ID" />
+          </Key>
+          <Property Name="F_ID" Type="Guid" Nullable="false" />
+          <Property Name="F_ControllerName" Type="String" MaxLength="1000" Unicode="false" FixedLength="false" />
+          <Property Name="F_ActionName" Type="String" MaxLength="1000" Unicode="false" FixedLength="false" />
+          <Property Name="F_Title" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="F_Content" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="F_LogType" Type="String" MaxLength="200" Unicode="false" FixedLength="false" />
+          <Property Name="F_LogTypeName" Type="String" MaxLength="4000" Unicode="true" FixedLength="false" />
+          <Property Name="F_WriteTime" Type="DateTime" Precision="3" />
+          <Property Name="F_isValid" Type="Int32" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="MTModelStoreContainer" CdmEntityContainer="MTEntities">
+          <EntitySetMapping Name="T_BaseInfo">
+            <EntityTypeMapping TypeName="MTModel.T_BaseInfo">
+              <MappingFragment StoreEntitySet="T_BaseInfo">
+                <ScalarProperty Name="F_ID" ColumnName="F_ID" />
+                <ScalarProperty Name="F_CatalogCode" ColumnName="F_CatalogCode" />
+                <ScalarProperty Name="F_CatalogName" ColumnName="F_CatalogName" />
+                <ScalarProperty Name="F_ItemCode" ColumnName="F_ItemCode" />
+                <ScalarProperty Name="F_ItemName" ColumnName="F_ItemName" />
+                <ScalarProperty Name="F_ItemSort" ColumnName="F_ItemSort" />
+                <ScalarProperty Name="F_CreateUserID" ColumnName="F_CreateUserID" />
+                <ScalarProperty Name="F_CreateUserName" ColumnName="F_CreateUserName" />
+                <ScalarProperty Name="F_CreateTime" ColumnName="F_CreateTime" />
+                <ScalarProperty Name="F_ModifyUserID" ColumnName="F_ModifyUserID" />
+                <ScalarProperty Name="F_ModifyUserName" ColumnName="F_ModifyUserName" />
+                <ScalarProperty Name="F_ModifyTime" ColumnName="F_ModifyTime" />
+                <ScalarProperty Name="F_isValid" ColumnName="F_isValid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_Log">
+            <EntityTypeMapping TypeName="MTModel.T_Log">
+              <MappingFragment StoreEntitySet="T_Log">
+                <ScalarProperty Name="F_ID" ColumnName="F_ID" />
+                <ScalarProperty Name="F_ControllerName" ColumnName="F_ControllerName" />
+                <ScalarProperty Name="F_ActionName" ColumnName="F_ActionName" />
+                <ScalarProperty Name="F_Title" ColumnName="F_Title" />
+                <ScalarProperty Name="F_Content" ColumnName="F_Content" />
+                <ScalarProperty Name="F_LogType" ColumnName="F_LogType" />
+                <ScalarProperty Name="F_LogTypeName" ColumnName="F_LogTypeName" />
+                <ScalarProperty Name="F_WriteTime" ColumnName="F_WriteTime" />
+                <ScalarProperty Name="F_isValid" ColumnName="F_isValid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="无" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
