@@ -1,0 +1,8 @@
+--Mysql.Data
+Install-Package MySql.Data -Version 6.8.8 
+
+Oracle
+Install-Package odp.net.x86 -Version 112.3.20 
+
+--SQLite
+Install-Package System.Data.SQLite -Version 1.0.109.1 
