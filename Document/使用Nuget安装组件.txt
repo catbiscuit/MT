@@ -6,3 +6,19 @@ Install-Package odp.net.x86 -Version 112.3.20
 
 --SQLite
 Install-Package System.Data.SQLite -Version 1.0.109.1 
+
+
+能完全引用Autofac.dll Autofac.Configuration.dll Autofac.Integration.Mvc.dll 三个文件的版本信息，如下
+
+Install-Package Autofac -version 3.5.2
+
+Install-Package Autofac.Configuration -Version 3.3.0
+
+Install-Package Autofac.Mvc5 -version 3.3.4
+
+主要是Configuration的dll，3.3.0后面的就是4.0.0beta版本。
+
+VS2012再引用时就会报错了，好像是因为VS2012最多只能创建.Net4.5版本的项目导致。
+
+--实体框架
+Install-Package EntityFramework -Version 5.0.0 

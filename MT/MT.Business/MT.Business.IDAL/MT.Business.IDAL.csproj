@@ -43,10 +43,17 @@
     <Compile Include="SystemManage\IT_LogDAL.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\MT.Data\MT.Data.Base\MT.Data.Base.csproj">
+      <Project>{cf913ef0-41e2-431f-9611-8f64542afe0e}</Project>
+      <Name>MT.Data.Base</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MT.Business.Model\MT.Business.Model.csproj">
       <Project>{f39af84c-2abd-4ae3-a977-35db7f3125a5}</Project>
       <Name>MT.Business.Model</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

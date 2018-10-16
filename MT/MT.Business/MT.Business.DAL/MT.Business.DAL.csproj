@@ -30,8 +30,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -43,6 +49,10 @@
     <Compile Include="SystemManage\T_LogDAL.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\MT.Data\MT.Data.Base\MT.Data.Base.csproj">
+      <Project>{cf913ef0-41e2-431f-9611-8f64542afe0e}</Project>
+      <Name>MT.Data.Base</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MT.Business.IDAL\MT.Business.IDAL.csproj">
       <Project>{db1ddd69-948b-4c25-9816-cb097c7f649b}</Project>
       <Name>MT.Business.IDAL</Name>
@@ -51,6 +61,10 @@
       <Project>{f39af84c-2abd-4ae3-a977-35db7f3125a5}</Project>
       <Name>MT.Business.Model</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

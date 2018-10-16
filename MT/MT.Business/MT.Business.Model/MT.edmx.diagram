@@ -4,9 +4,12 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="da34daf952e34dc49d8c086b7260a6b9" Name="关系图1">
-        <EntityTypeShape EntityType="MTModel.T_BaseInfo" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="MTModel.T_Log" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+      <Diagram DiagramId="da34daf952e34dc49d8c086b7260a6b9" Name="关系图1" ZoomLevel="47">
+        <EntityTypeShape EntityType="MTModel.T_BaseInfo" Width="1.5" PointX="0.5" PointY="0.5" />
+        <EntityTypeShape EntityType="MTModel.T_Log" Width="1.5" PointX="2.375" PointY="0.625" />
+        <EntityTypeShape EntityType="MTModel.T_Role" Width="1.5" PointX="4.25" PointY="0.625" />
+        <EntityTypeShape EntityType="MTModel.T_User" Width="1.5" PointX="6.25" PointY="0.625" />
+        <EntityTypeShape EntityType="MTModel.T_UserRole" Width="1.5" PointX="8.25" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

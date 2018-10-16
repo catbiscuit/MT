@@ -27,5 +27,8 @@ namespace MT.Business.Model
     
         public DbSet<T_BaseInfo> T_BaseInfo { get; set; }
         public DbSet<T_Log> T_Log { get; set; }
+        public DbSet<T_Role> T_Role { get; set; }
+        public DbSet<T_User> T_User { get; set; }
+        public DbSet<T_UserRole> T_UserRole { get; set; }
     }
 }

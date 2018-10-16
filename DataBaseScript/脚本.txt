@@ -1,0 +1,286 @@
+USE [master]
+GO
+/****** Object:  Database [MT]    Script Date: 2018/10/16 22:35:52 ******/
+CREATE DATABASE [MT]
+ CONTAINMENT = NONE
+ ON  PRIMARY 
+( NAME = N'MT', FILENAME = N'D:\SQLServerDB\MSSQL12.MSSQLSERVER\MSSQL\DATA\MT.mdf' , SIZE = 5120KB , MAXSIZE = UNLIMITED, FILEGROWTH = 1024KB )
+ LOG ON 
+( NAME = N'MT_log', FILENAME = N'D:\SQLServerDB\MSSQL12.MSSQLSERVER\MSSQL\DATA\MT_log.ldf' , SIZE = 2048KB , MAXSIZE = 2048GB , FILEGROWTH = 10%)
+GO
+ALTER DATABASE [MT] SET COMPATIBILITY_LEVEL = 120
+GO
+IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
+begin
+EXEC [MT].[dbo].[sp_fulltext_database] @action = 'enable'
+end
+GO
+ALTER DATABASE [MT] SET ANSI_NULL_DEFAULT OFF 
+GO
+ALTER DATABASE [MT] SET ANSI_NULLS OFF 
+GO
+ALTER DATABASE [MT] SET ANSI_PADDING OFF 
+GO
+ALTER DATABASE [MT] SET ANSI_WARNINGS OFF 
+GO
+ALTER DATABASE [MT] SET ARITHABORT OFF 
+GO
+ALTER DATABASE [MT] SET AUTO_CLOSE OFF 
+GO
+ALTER DATABASE [MT] SET AUTO_SHRINK OFF 
+GO
+ALTER DATABASE [MT] SET AUTO_UPDATE_STATISTICS ON 
+GO
+ALTER DATABASE [MT] SET CURSOR_CLOSE_ON_COMMIT OFF 
+GO
+ALTER DATABASE [MT] SET CURSOR_DEFAULT  GLOBAL 
+GO
+ALTER DATABASE [MT] SET CONCAT_NULL_YIELDS_NULL OFF 
+GO
+ALTER DATABASE [MT] SET NUMERIC_ROUNDABORT OFF 
+GO
+ALTER DATABASE [MT] SET QUOTED_IDENTIFIER OFF 
+GO
+ALTER DATABASE [MT] SET RECURSIVE_TRIGGERS OFF 
+GO
+ALTER DATABASE [MT] SET  DISABLE_BROKER 
+GO
+ALTER DATABASE [MT] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
+GO
+ALTER DATABASE [MT] SET DATE_CORRELATION_OPTIMIZATION OFF 
+GO
+ALTER DATABASE [MT] SET TRUSTWORTHY OFF 
+GO
+ALTER DATABASE [MT] SET ALLOW_SNAPSHOT_ISOLATION OFF 
+GO
+ALTER DATABASE [MT] SET PARAMETERIZATION SIMPLE 
+GO
+ALTER DATABASE [MT] SET READ_COMMITTED_SNAPSHOT OFF 
+GO
+ALTER DATABASE [MT] SET HONOR_BROKER_PRIORITY OFF 
+GO
+ALTER DATABASE [MT] SET RECOVERY FULL 
+GO
+ALTER DATABASE [MT] SET  MULTI_USER 
+GO
+ALTER DATABASE [MT] SET PAGE_VERIFY CHECKSUM  
+GO
+ALTER DATABASE [MT] SET DB_CHAINING OFF 
+GO
+ALTER DATABASE [MT] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
+GO
+ALTER DATABASE [MT] SET TARGET_RECOVERY_TIME = 0 SECONDS 
+GO
+ALTER DATABASE [MT] SET DELAYED_DURABILITY = DISABLED 
+GO
+EXEC sys.sp_db_vardecimal_storage_format N'MT', N'ON'
+GO
+USE [MT]
+GO
+/****** Object:  Table [dbo].[T_BaseInfo]    Script Date: 2018/10/16 22:35:52 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[T_BaseInfo](
+	[F_ID] [uniqueidentifier] NOT NULL,
+	[F_CatalogCode] [varchar](200) NULL,
+	[F_CatalogName] [nvarchar](4000) NULL,
+	[F_ItemCode] [varchar](200) NULL,
+	[F_ItemName] [nvarchar](4000) NULL,
+	[F_ItemSort] [int] NULL,
+	[F_CreateUserID] [uniqueidentifier] NULL,
+	[F_CreateUserName] [nvarchar](50) NULL,
+	[F_CreateTime] [datetime] NULL,
+	[F_ModifyUserID] [uniqueidentifier] NULL,
+	[F_ModifyUserName] [nvarchar](50) NULL,
+	[F_ModifyTime] [datetime] NULL,
+	[F_isValid] [int] NULL,
+ CONSTRAINT [PK_T_BaseInfo] PRIMARY KEY CLUSTERED 
+(
+	[F_ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[T_Log]    Script Date: 2018/10/16 22:35:52 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[T_Log](
+	[F_ID] [uniqueidentifier] NOT NULL,
+	[F_ControllerName] [varchar](1000) NULL,
+	[F_ActionName] [varchar](1000) NULL,
+	[F_Title] [varchar](max) NULL,
+	[F_Content] [varchar](max) NULL,
+	[F_LogType] [varchar](200) NULL,
+	[F_LogTypeName] [nvarchar](4000) NULL,
+	[F_WriteTime] [datetime] NULL,
+	[F_isValid] [int] NULL,
+ CONSTRAINT [PK_T_Log] PRIMARY KEY CLUSTERED 
+(
+	[F_ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[T_Role]    Script Date: 2018/10/16 22:35:52 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[T_Role](
+	[F_ID] [uniqueidentifier] NOT NULL,
+	[F_RoleName] [nvarchar](200) NULL,
+	[F_RoleType] [varchar](20) NULL,
+	[F_RoleTypeName] [nvarchar](200) NULL,
+	[F_isValid] [int] NULL,
+	[F_Remark] [nvarchar](1000) NULL,
+ CONSTRAINT [PK_T_Role] PRIMARY KEY CLUSTERED 
+(
+	[F_ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[T_User]    Script Date: 2018/10/16 22:35:52 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[T_User](
+	[F_ID] [uniqueidentifier] NOT NULL,
+	[F_UserName] [nvarchar](20) NULL,
+	[F_LoginName] [varchar](50) NULL,
+	[F_Password] [varchar](500) NULL,
+	[F_isValid] [int] NULL,
+	[F_Remark] [nvarchar](1000) NULL,
+ CONSTRAINT [PK_T_User] PRIMARY KEY CLUSTERED 
+(
+	[F_ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[T_UserRole]    Script Date: 2018/10/16 22:35:52 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[T_UserRole](
+	[F_ID] [uniqueidentifier] NOT NULL,
+	[F_UserID] [uniqueidentifier] NULL,
+	[F_RoleID] [uniqueidentifier] NULL,
+	[F_isValid] [int] NULL,
+ CONSTRAINT [PK_T_UserRole] PRIMARY KEY CLUSTERED 
+(
+	[F_ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+INSERT [dbo].[T_Log] ([F_ID], [F_ControllerName], [F_ActionName], [F_Title], [F_Content], [F_LogType], [F_LogTypeName], [F_WriteTime], [F_isValid]) VALUES (N'1485ccef-63e7-4074-96f8-3b2049e925de', NULL, NULL, NULL, NULL, NULL, NULL, CAST(N'2018-10-16 20:37:31.210' AS DateTime), 3)
+GO
+INSERT [dbo].[T_Log] ([F_ID], [F_ControllerName], [F_ActionName], [F_Title], [F_Content], [F_LogType], [F_LogTypeName], [F_WriteTime], [F_isValid]) VALUES (N'95b8826d-c5d7-4700-b5ca-f4d8495b2824', NULL, NULL, NULL, NULL, NULL, NULL, CAST(N'2018-10-16 20:37:19.747' AS DateTime), NULL)
+GO
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'GUID主键' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_BaseInfo', @level2type=N'COLUMN',@level2name=N'F_ID'
+GO
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'目录编码' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_BaseInfo', @level2type=N'COLUMN',@level2name=N'F_CatalogCode'
+GO
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'目录名称' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_BaseInfo', @level2type=N'COLUMN',@level2name=N'F_CatalogName'
+GO
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'项目编码' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_BaseInfo', @level2type=N'COLUMN',@level2name=N'F_ItemCode'
+GO
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'项目名称' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_BaseInfo', @level2type=N'COLUMN',@level2name=N'F_ItemName'
+GO
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'项目排序序号' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_BaseInfo', @level2type=N'COLUMN',@level2name=N'F_ItemSort'
+GO
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'创建者UserID' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_BaseInfo', @level2type=N'COLUMN',@level2name=N'F_CreateUserID'
+GO
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'创建者姓名' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_BaseInfo', @level2type=N'COLUMN',@level2name=N'F_CreateUserName'
+GO
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'创建时间' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_BaseInfo', @level2type=N'COLUMN',@level2name=N'F_CreateTime'
+GO
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'修改人UserID' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_BaseInfo', @level2type=N'COLUMN',@level2name=N'F_ModifyUserID'
+GO
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'修改人姓名' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_BaseInfo', @level2type=N'COLUMN',@level2name=N'F_ModifyUserName'
+GO
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'修改时间' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_BaseInfo', @level2type=N'COLUMN',@level2name=N'F_ModifyTime'
+GO
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'是否有效(0删除1有效)' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_BaseInfo', @level2type=N'COLUMN',@level2name=N'F_isValid'
+GO
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'基础信息表' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_BaseInfo'
+GO
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'GUID主键' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_Log', @level2type=N'COLUMN',@level2name=N'F_ID'
+GO
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Controller控制器名称' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_Log', @level2type=N'COLUMN',@level2name=N'F_ControllerName'
+GO
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Action方法名称' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_Log', @level2type=N'COLUMN',@level2name=N'F_ActionName'
+GO
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'日志标题' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_Log', @level2type=N'COLUMN',@level2name=N'F_Title'
+GO
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'日志内容' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_Log', @level2type=N'COLUMN',@level2name=N'F_Content'
+GO
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'日志类型编码' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_Log', @level2type=N'COLUMN',@level2name=N'F_LogType'
+GO
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'日志类型名称' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_Log', @level2type=N'COLUMN',@level2name=N'F_LogTypeName'
+GO
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'记录时间' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_Log', @level2type=N'COLUMN',@level2name=N'F_WriteTime'
+GO
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'是否有效(0删除1有效)' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_Log', @level2type=N'COLUMN',@level2name=N'F_isValid'
+GO
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'日志表' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_Log'
+GO
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'GUID主键' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_Role', @level2type=N'COLUMN',@level2name=N'F_ID'
+GO
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'角色名称' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_Role', @level2type=N'COLUMN',@level2name=N'F_RoleName'
+GO
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'角色类别编码' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_Role', @level2type=N'COLUMN',@level2name=N'F_RoleType'
+GO
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'角色类别名称' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_Role', @level2type=N'COLUMN',@level2name=N'F_RoleTypeName'
+GO
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'数据状态' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_Role', @level2type=N'COLUMN',@level2name=N'F_isValid'
+GO
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'备注' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_Role', @level2type=N'COLUMN',@level2name=N'F_Remark'
+GO
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'GUID主键' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_User', @level2type=N'COLUMN',@level2name=N'F_ID'
+GO
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'姓名' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_User', @level2type=N'COLUMN',@level2name=N'F_UserName'
+GO
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'登录名' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_User', @level2type=N'COLUMN',@level2name=N'F_LoginName'
+GO
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'密码' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_User', @level2type=N'COLUMN',@level2name=N'F_Password'
+GO
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'数据状态' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_User', @level2type=N'COLUMN',@level2name=N'F_isValid'
+GO
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'备注' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_User', @level2type=N'COLUMN',@level2name=N'F_Remark'
+GO
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'GUID主键' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_UserRole', @level2type=N'COLUMN',@level2name=N'F_ID'
+GO
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'用户表主键' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_UserRole', @level2type=N'COLUMN',@level2name=N'F_UserID'
+GO
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'角色表主键' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_UserRole', @level2type=N'COLUMN',@level2name=N'F_RoleID'
+GO
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'数据状态' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_UserRole', @level2type=N'COLUMN',@level2name=N'F_isValid'
+GO
+USE [master]
+GO
+ALTER DATABASE [MT] SET  READ_WRITE 
+GO

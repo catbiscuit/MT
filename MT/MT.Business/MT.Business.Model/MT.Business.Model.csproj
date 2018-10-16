@@ -69,6 +69,15 @@
     <Compile Include="T_Log.cs">
       <DependentUpon>MT.tt</DependentUpon>
     </Compile>
+    <Compile Include="T_Role.cs">
+      <DependentUpon>MT.tt</DependentUpon>
+    </Compile>
+    <Compile Include="T_User.cs">
+      <DependentUpon>MT.tt</DependentUpon>
+    </Compile>
+    <Compile Include="T_UserRole.cs">
+      <DependentUpon>MT.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EntityDeploy Include="MT.edmx">
@@ -96,6 +105,12 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\MT.Data\MT.Data.Base\MT.Data.Base.csproj">
+      <Project>{cf913ef0-41e2-431f-9611-8f64542afe0e}</Project>
+      <Name>MT.Data.Base</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -4,10 +4,13 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="MTModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="MTModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityContainer Name="MTModelStoreContainer">
           <EntitySet Name="T_BaseInfo" EntityType="MTModel.Store.T_BaseInfo" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="T_Log" EntityType="MTModel.Store.T_Log" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="T_Role" EntityType="MTModel.Store.T_Role" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="T_User" EntityType="MTModel.Store.T_User" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="T_UserRole" EntityType="MTModel.Store.T_UserRole" store:Type="Tables" Schema="dbo" />
         </EntityContainer>
         <EntityType Name="T_BaseInfo">
           <Key>
@@ -41,48 +44,112 @@
           <Property Name="F_WriteTime" Type="datetime" />
           <Property Name="F_isValid" Type="int" />
         </EntityType>
-      </Schema>
-    </edmx:StorageModels>
+        <EntityType Name="T_Role">
+          <Key>
+            <PropertyRef Name="F_ID" />
+          </Key>
+          <Property Name="F_ID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="F_RoleName" Type="nvarchar" MaxLength="200" />
+          <Property Name="F_RoleType" Type="varchar" MaxLength="20" />
+          <Property Name="F_RoleTypeName" Type="nvarchar" MaxLength="200" />
+          <Property Name="F_isValid" Type="int" />
+          <Property Name="F_Remark" Type="nvarchar" MaxLength="1000" />
+        </EntityType>
+        <EntityType Name="T_User">
+          <Key>
+            <PropertyRef Name="F_ID" />
+          </Key>
+          <Property Name="F_ID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="F_UserName" Type="nvarchar" MaxLength="20" />
+          <Property Name="F_LoginName" Type="varchar" MaxLength="50" />
+          <Property Name="F_Password" Type="varchar" MaxLength="500" />
+          <Property Name="F_isValid" Type="int" />
+          <Property Name="F_Remark" Type="nvarchar" MaxLength="1000" />
+        </EntityType>
+        <EntityType Name="T_UserRole">
+          <Key>
+            <PropertyRef Name="F_ID" />
+          </Key>
+          <Property Name="F_ID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="F_UserID" Type="uniqueidentifier" />
+          <Property Name="F_RoleID" Type="uniqueidentifier" />
+          <Property Name="F_isValid" Type="int" />
+        </EntityType>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="MTModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="MTEntities" p1:LazyLoadingEnabled="true">
           <EntitySet Name="T_BaseInfo" EntityType="MTModel.T_BaseInfo" />
           <EntitySet Name="T_Log" EntityType="MTModel.T_Log" />
+          <EntitySet Name="T_Role" EntityType="MTModel.T_Role" />
+          <EntitySet Name="T_User" EntityType="MTModel.T_User" />
+          <EntitySet Name="T_UserRole" EntityType="MTModel.T_UserRole" />
         </EntityContainer>
         <EntityType Name="T_BaseInfo">
           <Key>
             <PropertyRef Name="F_ID" />
           </Key>
-          <Property Name="F_ID" Type="Guid" Nullable="false" />
-          <Property Name="F_CatalogCode" Type="String" MaxLength="200" Unicode="false" FixedLength="false" />
-          <Property Name="F_CatalogName" Type="String" MaxLength="4000" Unicode="true" FixedLength="false" />
-          <Property Name="F_ItemCode" Type="String" MaxLength="200" Unicode="false" FixedLength="false" />
-          <Property Name="F_ItemName" Type="String" MaxLength="4000" Unicode="true" FixedLength="false" />
-          <Property Name="F_ItemSort" Type="Int32" />
-          <Property Name="F_CreateUserID" Type="Guid" />
-          <Property Name="F_CreateUserName" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
-          <Property Name="F_CreateTime" Type="DateTime" Precision="3" />
-          <Property Name="F_ModifyUserID" Type="Guid" />
-          <Property Name="F_ModifyUserName" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
-          <Property Name="F_ModifyTime" Type="DateTime" Precision="3" />
-          <Property Name="F_isValid" Type="Int32" />
+          <Property Type="Guid" Name="F_ID" Nullable="false" />
+          <Property Type="String" Name="F_CatalogCode" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="F_CatalogName" MaxLength="4000" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="F_ItemCode" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="F_ItemName" MaxLength="4000" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="F_ItemSort" />
+          <Property Type="Guid" Name="F_CreateUserID" />
+          <Property Type="String" Name="F_CreateUserName" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="F_CreateTime" Precision="3" />
+          <Property Type="Guid" Name="F_ModifyUserID" />
+          <Property Type="String" Name="F_ModifyUserName" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="F_ModifyTime" Precision="3" />
+          <Property Type="Int32" Name="F_isValid" />
         </EntityType>
         <EntityType Name="T_Log">
           <Key>
             <PropertyRef Name="F_ID" />
           </Key>
-          <Property Name="F_ID" Type="Guid" Nullable="false" />
-          <Property Name="F_ControllerName" Type="String" MaxLength="1000" Unicode="false" FixedLength="false" />
-          <Property Name="F_ActionName" Type="String" MaxLength="1000" Unicode="false" FixedLength="false" />
-          <Property Name="F_Title" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
-          <Property Name="F_Content" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
-          <Property Name="F_LogType" Type="String" MaxLength="200" Unicode="false" FixedLength="false" />
-          <Property Name="F_LogTypeName" Type="String" MaxLength="4000" Unicode="true" FixedLength="false" />
-          <Property Name="F_WriteTime" Type="DateTime" Precision="3" />
-          <Property Name="F_isValid" Type="Int32" />
+          <Property Type="Guid" Name="F_ID" Nullable="false" />
+          <Property Type="String" Name="F_ControllerName" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="F_ActionName" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="F_Title" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="F_Content" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="F_LogType" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="F_LogTypeName" MaxLength="4000" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="F_WriteTime" Precision="3" />
+          <Property Type="Int32" Name="F_isValid" />
         </EntityType>
-      </Schema>
+        <EntityType Name="T_Role">
+          <Key>
+            <PropertyRef Name="F_ID" />
+          </Key>
+          <Property Type="Guid" Name="F_ID" Nullable="false" />
+          <Property Type="String" Name="F_RoleName" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="F_RoleType" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="F_RoleTypeName" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="F_isValid" />
+          <Property Type="String" Name="F_Remark" MaxLength="1000" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="T_User">
+          <Key>
+            <PropertyRef Name="F_ID" />
+          </Key>
+          <Property Type="Guid" Name="F_ID" Nullable="false" />
+          <Property Type="String" Name="F_UserName" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="F_LoginName" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="F_Password" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="F_isValid" />
+          <Property Type="String" Name="F_Remark" MaxLength="1000" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="T_UserRole">
+          <Key>
+            <PropertyRef Name="F_ID" />
+          </Key>
+          <Property Type="Guid" Name="F_ID" Nullable="false" />
+          <Property Type="Guid" Name="F_UserID" />
+          <Property Type="Guid" Name="F_RoleID" />
+          <Property Type="Int32" Name="F_isValid" />
+        </EntityType>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -91,34 +158,68 @@
           <EntitySetMapping Name="T_BaseInfo">
             <EntityTypeMapping TypeName="MTModel.T_BaseInfo">
               <MappingFragment StoreEntitySet="T_BaseInfo">
-                <ScalarProperty Name="F_ID" ColumnName="F_ID" />
-                <ScalarProperty Name="F_CatalogCode" ColumnName="F_CatalogCode" />
-                <ScalarProperty Name="F_CatalogName" ColumnName="F_CatalogName" />
-                <ScalarProperty Name="F_ItemCode" ColumnName="F_ItemCode" />
-                <ScalarProperty Name="F_ItemName" ColumnName="F_ItemName" />
-                <ScalarProperty Name="F_ItemSort" ColumnName="F_ItemSort" />
-                <ScalarProperty Name="F_CreateUserID" ColumnName="F_CreateUserID" />
-                <ScalarProperty Name="F_CreateUserName" ColumnName="F_CreateUserName" />
-                <ScalarProperty Name="F_CreateTime" ColumnName="F_CreateTime" />
-                <ScalarProperty Name="F_ModifyUserID" ColumnName="F_ModifyUserID" />
-                <ScalarProperty Name="F_ModifyUserName" ColumnName="F_ModifyUserName" />
-                <ScalarProperty Name="F_ModifyTime" ColumnName="F_ModifyTime" />
                 <ScalarProperty Name="F_isValid" ColumnName="F_isValid" />
+                <ScalarProperty Name="F_ModifyTime" ColumnName="F_ModifyTime" />
+                <ScalarProperty Name="F_ModifyUserName" ColumnName="F_ModifyUserName" />
+                <ScalarProperty Name="F_ModifyUserID" ColumnName="F_ModifyUserID" />
+                <ScalarProperty Name="F_CreateTime" ColumnName="F_CreateTime" />
+                <ScalarProperty Name="F_CreateUserName" ColumnName="F_CreateUserName" />
+                <ScalarProperty Name="F_CreateUserID" ColumnName="F_CreateUserID" />
+                <ScalarProperty Name="F_ItemSort" ColumnName="F_ItemSort" />
+                <ScalarProperty Name="F_ItemName" ColumnName="F_ItemName" />
+                <ScalarProperty Name="F_ItemCode" ColumnName="F_ItemCode" />
+                <ScalarProperty Name="F_CatalogName" ColumnName="F_CatalogName" />
+                <ScalarProperty Name="F_CatalogCode" ColumnName="F_CatalogCode" />
+                <ScalarProperty Name="F_ID" ColumnName="F_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="T_Log">
             <EntityTypeMapping TypeName="MTModel.T_Log">
               <MappingFragment StoreEntitySet="T_Log">
-                <ScalarProperty Name="F_ID" ColumnName="F_ID" />
-                <ScalarProperty Name="F_ControllerName" ColumnName="F_ControllerName" />
-                <ScalarProperty Name="F_ActionName" ColumnName="F_ActionName" />
-                <ScalarProperty Name="F_Title" ColumnName="F_Title" />
-                <ScalarProperty Name="F_Content" ColumnName="F_Content" />
-                <ScalarProperty Name="F_LogType" ColumnName="F_LogType" />
-                <ScalarProperty Name="F_LogTypeName" ColumnName="F_LogTypeName" />
-                <ScalarProperty Name="F_WriteTime" ColumnName="F_WriteTime" />
                 <ScalarProperty Name="F_isValid" ColumnName="F_isValid" />
+                <ScalarProperty Name="F_WriteTime" ColumnName="F_WriteTime" />
+                <ScalarProperty Name="F_LogTypeName" ColumnName="F_LogTypeName" />
+                <ScalarProperty Name="F_LogType" ColumnName="F_LogType" />
+                <ScalarProperty Name="F_Content" ColumnName="F_Content" />
+                <ScalarProperty Name="F_Title" ColumnName="F_Title" />
+                <ScalarProperty Name="F_ActionName" ColumnName="F_ActionName" />
+                <ScalarProperty Name="F_ControllerName" ColumnName="F_ControllerName" />
+                <ScalarProperty Name="F_ID" ColumnName="F_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_Role">
+            <EntityTypeMapping TypeName="MTModel.T_Role">
+              <MappingFragment StoreEntitySet="T_Role">
+                <ScalarProperty Name="F_Remark" ColumnName="F_Remark" />
+                <ScalarProperty Name="F_isValid" ColumnName="F_isValid" />
+                <ScalarProperty Name="F_RoleTypeName" ColumnName="F_RoleTypeName" />
+                <ScalarProperty Name="F_RoleType" ColumnName="F_RoleType" />
+                <ScalarProperty Name="F_RoleName" ColumnName="F_RoleName" />
+                <ScalarProperty Name="F_ID" ColumnName="F_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_User">
+            <EntityTypeMapping TypeName="MTModel.T_User">
+              <MappingFragment StoreEntitySet="T_User">
+                <ScalarProperty Name="F_Remark" ColumnName="F_Remark" />
+                <ScalarProperty Name="F_isValid" ColumnName="F_isValid" />
+                <ScalarProperty Name="F_Password" ColumnName="F_Password" />
+                <ScalarProperty Name="F_LoginName" ColumnName="F_LoginName" />
+                <ScalarProperty Name="F_UserName" ColumnName="F_UserName" />
+                <ScalarProperty Name="F_ID" ColumnName="F_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_UserRole">
+            <EntityTypeMapping TypeName="MTModel.T_UserRole">
+              <MappingFragment StoreEntitySet="T_UserRole">
+                <ScalarProperty Name="F_isValid" ColumnName="F_isValid" />
+                <ScalarProperty Name="F_RoleID" ColumnName="F_RoleID" />
+                <ScalarProperty Name="F_UserID" ColumnName="F_UserID" />
+                <ScalarProperty Name="F_ID" ColumnName="F_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
