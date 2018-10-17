@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseObject\DatabaseFactory.T.cs" />
+    <Compile Include="BaseObject\Disposable.cs" />
     <Compile Include="BaseObject\Repository.T.cs" />
     <Compile Include="BaseObject\UnitOfWork.T.cs" />
     <Compile Include="IBaseInterface\IDatabaseFactory.T.cs" />

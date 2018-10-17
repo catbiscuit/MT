@@ -10,7 +10,7 @@ namespace MT.Data.Base.BaseObject
     /// <summary>
     /// 数据库工厂类
     /// </summary>
-    public class DatabaseFactory<T> : IDatabaseFactory<T>
+    public class DatabaseFactory<T> : Disposable, IDatabaseFactory<T>
         where T : class
     {
         private T _dbcontext;
@@ -39,7 +39,7 @@ namespace MT.Data.Base.BaseObject
             }
         }
 
-        public void Dispose()
+        protected override void DisposeCore()
         {
             if (_dbcontext != null)
             {

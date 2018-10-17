@@ -23,15 +23,25 @@ namespace MT.Application.Web.Controllers
             T_Log model = new T_Log();
             model.F_ID = Guid.NewGuid();
             model.F_WriteTime = DateTime.Now;
-            lst.Add(model);
+            //lst.Add(model);
 
-            T_Log model1 = new T_Log();
-            model1.F_ID = Guid.Parse("1485CCEF-63E7-4074-96F8-3B2049E925DE");
-            model1.F_WriteTime = DateTime.Now;
-            lst.Add(model1);
+            //T_Log model1 = new T_Log();
+            //model1.F_ID = Guid.Parse("1485CCEF-63E7-4074-96F8-3B2049E925DE");
+            //model1.F_WriteTime = DateTime.Now;
+            //lst.Add(model1);
 
             //int i = _iT_LogBLL.Insert(lst);
 
+            T_Log model2 = new T_Log();
+            model2 = _iT_LogBLL.GetModelByCondition(x => x.F_isValid > 0);
+            model2.F_isValid++;
+            //_iT_LogBLL.Update();
+
+            return View();
+        }
+
+        public ActionResult Add()
+        {
             T_Log model2 = new T_Log();
             model2 = _iT_LogBLL.GetModelByCondition(x => x.F_isValid > 0);
             model2.F_isValid++;

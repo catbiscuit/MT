@@ -26,9 +26,9 @@ namespace MT.Application.Web.App_Code
             {
                 builder = new ContainerBuilder();
                 //工作单元
-                builder.RegisterGeneric(typeof(UnitOfWork<>)).As(typeof(IUnitOfWork<>)).SingleInstance();//单例模式
-                //数据库工厂
-                builder.RegisterGeneric(typeof(DatabaseFactory<>)).As(typeof(IDatabaseFactory<>)).SingleInstance();//单例模式                                                   
+                builder.RegisterGeneric(typeof(UnitOfWork<>)).As(typeof(IUnitOfWork<>));//单例模式
+                //数据库工厂                
+                builder.RegisterGeneric(typeof(DatabaseFactory<>)).As(typeof(IDatabaseFactory<>)).InstancePerRequest();
 
                 //T_Log类
                 builder.RegisterType<T_LogDAL>().As<IT_LogDAL>();

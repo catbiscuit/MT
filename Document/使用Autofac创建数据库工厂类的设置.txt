@@ -1,0 +1,32 @@
+1、InstancePerDependency
+builder.RegisterGeneric(typeof(DatabaseFactory<>)).As(typeof(IDatabaseFactory<>)).InstancePerDependency();
+每次获取DatabaseFactory类都是新的实体，
+数据无法添加。
+
+2、InstancePerLifetimeScope
+builder.RegisterGeneric(typeof(DatabaseFactory<>)).As(typeof(IDatabaseFactory<>)).InstancePerLifetimeScope();
+每次获取DatabaseFactory类都是新的实体，
+数据无法添加。
+
+3、InstancePerMatchingLifetimeScope
+builder.RegisterGeneric(typeof(DatabaseFactory<>)).As(typeof(IDatabaseFactory<>)).InstancePerMatchingLifetimeScope();
+No scope with a Tag matching '' is visible from the scope in which the instance was requested. This generally indicates that a component registered as per-HTTP request is being requested by a SingleInstance() component (or a similar scenario.) Under the web integration always request dependencies from the DependencyResolver.Current or ILifetimeScopeProvider.RequestLifetime, never from the container itself.
+报错，程序无法运行。
+
+4、InstancePerOwned
+builder.RegisterGeneric(typeof(DatabaseFactory<>)).As(typeof(IDatabaseFactory<>)).InstancePerOwned(typeof(DatabaseFactory<>));
+No scope with a Tag matching 'MT.Data.Base.BaseObject.DatabaseFactory`1' is visible from the scope in which the instance was requested. This generally indicates that a component registered as per-HTTP request is being requested by a SingleInstance() component (or a similar scenario.) Under the web integration always request dependencies from the DependencyResolver.Current or ILifetimeScopeProvider.RequestLifetime, never from the container itself.
+报错，程序无法运行。
+
+5、SingleInstance
+builder.RegisterGeneric(typeof(DatabaseFactory<>)).As(typeof(IDatabaseFactory<>)).SingleInstance();
+单例模式，执行时得到的都是同一个相同的共享的实例。
+一个HTTP请求，将实体附加到数据库上下问中，但是不提交。在下一个HTTP请求中，得到的数据库上下文对象与上一次HTTP请求的数据库上下文对象是同一个。
+数据会将之前附加未提交的记录一并提交。
+数据添加异常，不能这样操作。
+
+6、InstancePerHttpRequest
+builder.RegisterGeneric(typeof(DatabaseFactory<>)).As(typeof(IDatabaseFactory<>)).InstancePerRequest();
+builder.RegisterType<DatabaseFactory<MTEntities>>().As<IDatabaseFactory<MTEntities>>().InstancePerRequest();
+在一次HTTP请求中，获取到的数据库上下文中对象是同一个。
+数据正常添加。
