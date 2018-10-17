@@ -11,43 +11,62 @@ namespace MT.Application.Web.Controllers
     public class HomeController : Controller
     {
         private readonly IT_LogBLL _iT_LogBLL;
+        private readonly IT_UserBLL _iT_UserBLL;
+        private readonly IT_UserRoleBLL _iT_UserRoleBLL;
+        private readonly IT_RoleBLL _iT_RoleBLL;
 
-        public HomeController(IT_LogBLL iT_LogBLL)
+        public HomeController(IT_LogBLL iT_LogBLL
+            , IT_UserBLL iT_UserBLL
+            , IT_UserRoleBLL iT_UserRoleBLL
+            , IT_RoleBLL iT_RoleBLL)
         {
             this._iT_LogBLL = iT_LogBLL;
+            this._iT_UserBLL = iT_UserBLL;
+            this._iT_UserRoleBLL = iT_UserRoleBLL;
+            this._iT_RoleBLL = iT_RoleBLL;
         }
 
         public ActionResult Index()
         {
-            List<T_Log> lst = new List<T_Log>();
-            T_Log model = new T_Log();
-            model.F_ID = Guid.NewGuid();
-            model.F_WriteTime = DateTime.Now;
-            //lst.Add(model);
+            T_User user = new T_User();
+            user.F_ID = Guid.NewGuid();
+            user.F_UserName = DateTime.Now.ToShortTimeString();
 
-            //T_Log model1 = new T_Log();
-            //model1.F_ID = Guid.Parse("1485CCEF-63E7-4074-96F8-3B2049E925DE");
-            //model1.F_WriteTime = DateTime.Now;
-            //lst.Add(model1);
+            T_Role role = new T_Role();
+            role = _iT_RoleBLL.GetModelByCondition(x => x.F_RoleName == "管理员");
 
-            //int i = _iT_LogBLL.Insert(lst);
-
-            T_Log model2 = new T_Log();
-            model2 = _iT_LogBLL.GetModelByCondition(x => x.F_isValid > 0);
-            model2.F_isValid++;
-            //_iT_LogBLL.Update();
+            List<T_UserRole> lstUserRole = new List<T_UserRole>();
+            T_UserRole userRole = new T_UserRole();
+            userRole.F_ID = Guid.NewGuid();
+            userRole.F_UserID = user.F_ID;
+            userRole.F_RoleID = role.F_ID;
+            userRole.F_isValid = 1;
+            lstUserRole.Add(userRole);
 
             return View();
         }
 
         public ActionResult Add()
         {
-            T_Log model2 = new T_Log();
-            model2 = _iT_LogBLL.GetModelByCondition(x => x.F_isValid > 0);
-            model2.F_isValid++;
-            _iT_LogBLL.Update();
+            T_User user = new T_User();
+            user.F_ID = Guid.Parse("259E4C58-6719-4896-904C-F090E3F45514");
+            user.F_UserName = DateTime.Now.ToShortTimeString();
+
+            T_Role role = new T_Role();
+            role = _iT_RoleBLL.GetModelByCondition(x => x.F_RoleName == "管理员");
+
+            List<T_UserRole> lstUserRole = new List<T_UserRole>();
+            T_UserRole userRole = new T_UserRole();
+            userRole.F_ID = Guid.NewGuid();
+            userRole.F_UserID = user.F_ID;
+            userRole.F_RoleID = role.F_ID;
+            userRole.F_isValid = 1;
+            lstUserRole.Add(userRole);
+
+            _iT_UserBLL.Add(user, lstUserRole);
 
             return View();
         }
+
     }
 }

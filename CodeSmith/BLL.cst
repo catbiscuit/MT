@@ -1,0 +1,71 @@
+﻿<%@ Template Language="C#" TargetLanguage="C#" %>
+<%@ Assembly Name="SchemaExplorer" %>
+<%@ Import Namespace="SchemaExplorer" %>
+<%@ Property Name="SourceTable" Type="SchemaExplorer.TableSchema" Category="数据库" %>
+<%@ Property Name="ModuleName" Type="System.String" Default="SystemManage" Category="Property" Description="模块名称"%>
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Text;
+using System.Threading.Tasks;
+using MT.Business.IBLL.SystemManage;
+using MT.Business.IDAL.SystemManage;
+using MT.Business.Model;
+using MT.Data.Base;
+using MT.Data.Base.IBaseInterface;
+
+namespace MT.Business.IDAL.<%=ModuleName%>
+{
+    /// <summary>
+    /// 功能: 实体类 (<%=SourceTable.Description%>)    
+    /// 创建日期：<%=DateTime.Now.ToShortDateString() %>    
+    /// </summary>  
+    public class <%=SourceTable.Name %>BLL : I<%=SourceTable.Name %>BLL
+    {
+        private IUnitOfWork<MTEntities> _iUnitOfWork;
+        private I<%=SourceTable.Name %>DAL _i<%=SourceTable.Name %>DAL;
+        
+        public <%=SourceTable.Name %>BLL(IUnitOfWork<MTEntities> iUnitOfWork
+            , I<%=SourceTable.Name %>DAL i<%=SourceTable.Name %>DAL)
+        {
+            this._iUnitOfWork = iUnitOfWork;
+            this._i<%=SourceTable.Name %>DAL = i<%=SourceTable.Name %>DAL;
+        }
+
+        public int Insert(<%=SourceTable.Name %> entity)
+        {
+            _i<%=SourceTable.Name %>DAL.Insert(entity);
+            return _iUnitOfWork.Commit();
+        }
+        public int Delete(<%=SourceTable.Name %> entity)
+        {
+            _i<%=SourceTable.Name %>DAL.Delete(entity);
+            return _iUnitOfWork.Commit();
+        }
+
+        public int Update()
+        {
+            return _iUnitOfWork.Commit();
+        }
+
+        public <%=SourceTable.Name %> GetModelByCondition(Expression<Func<<%=SourceTable.Name %>, bool>> condition)
+        {
+            return _i<%=SourceTable.Name %>DAL.GetModelByCondition(condition);
+        }
+    }
+}
+
+<script runat="template">
+/// <summary>
+/// 获取继承的接口字符串
+/// 直接写也行，但是会有个空格，强迫症
+/// </summary>
+/// <param name="table">TableSchema</param>
+/// <returns>类名</returns>
+public string GetInterfaceName(string sTableName)
+{
+		return "Repository<"+sTableName+", MTEntities>";
+}
+</script>

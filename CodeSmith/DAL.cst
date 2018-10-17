@@ -1,0 +1,45 @@
+﻿<%@ Template Language="C#" TargetLanguage="C#" %>
+<%@ Assembly Name="SchemaExplorer" %>
+<%@ Import Namespace="SchemaExplorer" %>
+<%@ Property Name="SourceTable" Type="SchemaExplorer.TableSchema" Category="数据库" %>
+<%@ Property Name="ModuleName" Type="System.String" Default="SystemManage" Category="Property" Description="模块名称"%>
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using MT.Business.IDAL.SystemManage;
+using MT.Business.Model;
+using MT.Data.Base;
+using MT.Data.Base.BaseObject;
+using MT.Data.Base.IBaseInterface;
+
+namespace MT.Business.IDAL.<%=ModuleName%>
+{
+    /// <summary>
+    /// 功能: 实体类 (<%=SourceTable.Description%>)    
+    /// 创建日期：<%=DateTime.Now.ToShortDateString() %>    
+    /// </summary>  
+    public class <%=SourceTable.Name %>DAL : <%=GetInterfaceName(SourceTable.Name)%>, I<%=SourceTable.Name %>DAL
+    {
+        public <%=SourceTable.Name %>DAL(IDatabaseFactory<MTEntities> iDatabaseFactory)
+            : base(iDatabaseFactory)
+        {
+
+        }
+    }
+}
+
+<script runat="template">
+/// <summary>
+/// 获取继承的接口字符串
+/// 直接写也行，但是会有个空格，强迫症
+/// </summary>
+/// <param name="table">TableSchema</param>
+/// <returns>类名</returns>
+public string GetInterfaceName(string sTableName)
+{
+		return "Repository<"+sTableName+", MTEntities>";
+}
+</script>

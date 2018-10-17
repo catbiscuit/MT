@@ -22,3 +22,6 @@ VS2012再引用时就会报错了，好像是因为VS2012最多只能创建.Net4.5版本的项目导致。
 
 --实体框架
 Install-Package EntityFramework -Version 5.0.0 
+
+--MVC jscss 压缩技术
+Install-Package Microsoft.AspNet.Web.Optimization

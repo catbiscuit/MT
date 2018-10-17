@@ -1,0 +1,41 @@
+﻿<%@ Template Language="C#" TargetLanguage="C#" %>
+<%@ Assembly Name="SchemaExplorer" %>
+<%@ Import Namespace="SchemaExplorer" %>
+<%@ Property Name="SourceTable" Type="SchemaExplorer.TableSchema" Category="数据库" %>
+<%@ Property Name="ModuleName" Type="System.String" Default="SystemManage" Category="Property" Description="模块名称"%>
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Text;
+using System.Threading.Tasks;
+using MT.Business.Model;
+
+namespace MT.Business.IBLL.<%=ModuleName%>
+{
+    /// <summary>
+    /// 功能: 实体类 (<%=SourceTable.Description%>)    
+    /// 创建日期：<%=DateTime.Now.ToShortDateString() %>    
+    /// </summary>  
+    public interface I<%=SourceTable.Name %>BLL
+    {
+        int Insert(<%=SourceTable.Name %> entity);
+        int Delete(<%=SourceTable.Name %> entity);
+        int Update();        
+        <%=SourceTable.Name %> GetModelByCondition(<%=GetExpressionName(SourceTable.Name)%> condition);
+    }
+}
+
+<script runat="template">
+/// <summary>
+/// 获取lambda字符串
+/// 直接写也行，但是会有个空格，强迫症
+/// </summary>
+/// <param name="table">TableSchema</param>
+/// <returns>类名</returns>
+public string GetExpressionName(string sTableName)
+{
+		return "Expression<Func<"+sTableName+",bool>>";
+}
+</script>

@@ -36,7 +36,14 @@ namespace MT.Data.Base.BaseObject
         /// <returns></returns>
         public int Commit()
         {
-            return _dbContext.SaveChanges();
+            try
+            {
+                return _dbContext.SaveChanges();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

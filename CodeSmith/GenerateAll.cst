@@ -1,0 +1,75 @@
+﻿<%@ Template Language="C#" TargetLanguage="Text" %>
+<%@ Property Type="DatabaseSchema" Name="DatabaseSchema" %>
+<%@ Property Name="ModuleName" Type="System.String" Default="SystemManage" Category="Property" Description="模块名称"%>
+<%@ Assembly Name="SchemaExplorer" %>
+<%@ Import Namespace="SchemaExplorer" %>
+<%@ Register Name="DAL" Template="DAL.cst" %>
+<%@ Register Name="BLL" Template="BLL.cst" %>
+<%@ Register Name="IDAL" Template="IDAL.cst" %>
+<%@ Register Name="IBLL" Template="IBLL.cst" %>
+<%Generate(); %>
+<script runat="template">
+    private string _outputDirectory;
+    [Editor(typeof(System.Windows.Forms.Design.FolderNameEditor),typeof(System.Drawing.Design.UITypeEditor))]
+    public string OutputDirectory
+    {
+        set{_outputDirectory=value;}
+        get{return _outputDirectory;}
+    }
+    public void Generate()
+    {    
+        foreach(var i in DatabaseSchema.Tables)
+        {
+            Response.WriteLine("//"+GetClassName(i)+"类");
+            Response.WriteLine(string.Format("builder.RegisterType<{0}DAL>().As<I{0}DAL>();",GetClassName(i)));
+            Response.WriteLine(string.Format("builder.RegisterType<{0}BLL>().As<I{0}BLL>();",GetClassName(i)));
+        }
+        Response.WriteLine("\r\n");
+        
+		DAL dal=new DAL();
+        foreach(var i in DatabaseSchema.Tables)
+        {
+            dal.SetProperty("ModuleName",ModuleName);            
+            dal.SetProperty("SourceTable",i);
+            this.CopyPropertiesTo(dal);
+            dal.RenderToFile(System.IO.Path.Combine(OutputDirectory+@"\DAL\",GetClassName(i)+"DAL.cs" ), true);
+    		Response.WriteLine("Rendering: "+GetClassName(i)+".cs");
+        }
+        BLL bll=new BLL();
+        foreach(var i in DatabaseSchema.Tables)
+        {
+            bll.SetProperty("ModuleName",ModuleName);                        
+            bll.SetProperty("SourceTable",i);
+            this.CopyPropertiesTo(bll);
+            bll.RenderToFile(System.IO.Path.Combine(OutputDirectory+@"\BLL\",GetClassName(i)+"BLL.cs" ), true);
+    		Response.WriteLine("Rendering: "+GetClassName(i)+".cs");
+        }
+        IDAL idal=new IDAL();
+        foreach(var i in DatabaseSchema.Tables)
+        {
+            idal.SetProperty("ModuleName",ModuleName);                        
+            idal.SetProperty("SourceTable",i);
+            this.CopyPropertiesTo(idal);
+            idal.RenderToFile(System.IO.Path.Combine(OutputDirectory+@"\IDAL\","I"+GetClassName(i)+"DAL.cs" ), true);
+    		Response.WriteLine("Rendering: "+GetClassName(i)+".cs");
+        }
+        IBLL ibll=new IBLL();
+        foreach(var i in DatabaseSchema.Tables)
+        {
+            ibll.SetProperty("ModuleName",ModuleName);                        
+            ibll.SetProperty("SourceTable",i);
+            this.CopyPropertiesTo(ibll);
+            ibll.RenderToFile(System.IO.Path.Combine(OutputDirectory+@"\IBLL\","I"+GetClassName(i)+"BLL.cs" ), true);
+    		Response.WriteLine("Rendering: "+GetClassName(i)+".cs");
+        }
+    }
+    /// <summary>
+/// 获取类名(截取后缀s)
+/// </summary>
+/// <param name="table">TableSchema</param>
+/// <returns>类名</returns>
+public string GetClassName(TableSchema table)
+{
+		return table.Name;
+}
+</script>
