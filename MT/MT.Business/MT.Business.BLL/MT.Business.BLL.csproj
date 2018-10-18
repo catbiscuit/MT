@@ -57,6 +57,10 @@
       <Project>{cf913ef0-41e2-431f-9611-8f64542afe0e}</Project>
       <Name>MT.Data.Base</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\MT.Utility\MT.Utility.Common\MT.Utility.Common.csproj">
+      <Project>{0d12f622-78a5-4e8d-a11c-7524992447d7}</Project>
+      <Name>MT.Utility.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\MT.Utility\MT.Utility.WebControl\MT.Utility.WebControl.csproj">
       <Project>{939c4815-eb46-4f6a-8bdf-45e533c6f0a8}</Project>
       <Name>MT.Utility.WebControl</Name>

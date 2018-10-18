@@ -16,9 +16,11 @@ namespace MT.Business.IBLL.SystemManage
     {
         int Insert(T_User entity);
         int Delete(T_User entity);
-        int Update();        
-        T_User GetModelByCondition(Expression<Func<T_User,bool>> condition);
+        int Update();
+        T_User GetModelByCondition(Expression<Func<T_User, bool>> condition);
 
         int Add(T_User user, List<T_UserRole> lstUserrole);
+
+        T_User CheckLogin(string loginname, string loginpassword);
     }
 }

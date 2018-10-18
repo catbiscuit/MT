@@ -121,8 +121,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\js\jquery-3.3.1\jquery-3.3.1.js" />
-    <Content Include="Content\js\jquery-3.3.1\jquery-3.3.1.min.js" />
+    <Content Include="Content\js\jquery\jquery-1.10.2.min.js" />
+    <Content Include="Content\js\jquery\jquery-2.0.3.min.js" />
+    <Content Include="Content\js\jquery\jquery-3.3.1.js" />
+    <Content Include="Content\js\jquery\jquery-3.3.1.min.js" />
     <Content Include="Content\js\login\css\component.css" />
     <Content Include="Content\js\login\css\demo.css" />
     <Content Include="Content\js\login\css\normalize.css" />
@@ -133,6 +135,7 @@
     <Content Include="Content\js\login\js\html5.js" />
     <Content Include="Content\js\login\js\rAF.js" />
     <Content Include="Content\js\login\js\TweenLite.min.js" />
+    <Content Include="Content\js\plugins\md5\jquery.md5.js" />
     <Content Include="Global.asax" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -161,6 +164,8 @@
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
+    <Content Include="XmlConfig\system.config" />
+    <Content Include="XmlConfig\database.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

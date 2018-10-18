@@ -23,13 +23,13 @@
                     <form action="#" name="f" method="post">
                         <div class="input_outer">
                             <span class="u_user"></span>
-                            <input name="logname" class="text" style="color: #FFFFFF !important" type="text" placeholder="请输入账户">
+                            <input id="loginname" name="logname" class="text" onpaste="return false;" style="color: #FFFFFF !important; ime-mode: disabled;" type="text" placeholder="请输入账户">
                         </div>
                         <div class="input_outer">
                             <span class="us_uer"></span>
-                            <input name="logpass" class="text" style="color: #FFFFFF !important; position: absolute; z-index: 100;" value="" type="password" placeholder="请输入密码">
+                            <input id="loginpassword" name="logpass" class="text" onpaste="return false;" style="color: #FFFFFF !important; position: absolute; z-index: 100; ime-mode: disabled;" value="" type="password" placeholder="请输入密码">
                         </div>
-                        <div class="mb2"><a class="act-but submit" href="javascript:;" style="color: #FFFFFF">登录</a></div>
+                        <div class="mb2"><a class="act-but submit" href="javascript:Login();" style="color: #FFFFFF">登录</a></div>
                     </form>
                 </div>
             </div>
@@ -40,5 +40,44 @@
     <script src="~/Content/js/login/js/EasePack.min.js"></script>
     <script src="~/Content/js/login/js/rAF.js"></script>
     <script src="~/Content/js/login/js/demo-1.js"></script>
+    <!--Login In-->
+    <script src="~/Content/js/jquery/jquery-1.10.2.min.js"></script>
+    <script src="~/Content/js/plugins/md5/jquery.md5.js"></script>
+    <!--业务逻辑处理-->
+    <script type="text/javascript">
+        function Login() {
+            var $loginname = $("#loginname");
+            var $loginpassword = $("#loginpassword");
+            if ($loginname.val() == "") {
+                $loginname.focus();
+                alert("请输入账号");
+                return;
+            }
+            if ($loginpassword.val() == "") {
+                $loginpassword.focus();
+                alert("请输入密码");
+                return;
+            }
+
+            var loginname = $.trim($("#loginname").val());
+            var loginpassword = $.trim($("#loginpassword").val());
+            loginpassword = $.md5(loginpassword);
+
+            $.ajax({
+                url: "/Login/CheckLogin",
+                data: { loginname: $.trim(loginname), loginpassword: $.trim(loginpassword) },
+                type: "post",
+                dataType: "json",
+                success: function (data) {
+                    if (data.success == "1") {
+                        window.location.href = '/Home/Index';
+                    }
+                    else {
+                        alert(data.message);
+                    }
+                }
+            });
+        }
+    </script>
 </body>
 </html>
