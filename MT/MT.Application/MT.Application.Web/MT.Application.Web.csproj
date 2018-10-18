@@ -121,28 +121,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\css\framework-font.css" />
-    <Content Include="Content\css\framework-login.css" />
-    <Content Include="Content\fonts\fontawesome-webfont.svg" />
-    <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
-    <Content Include="Content\fonts\weathericons-regular-webfont.svg" />
     <Content Include="Content\js\jquery-3.3.1\jquery-3.3.1.js" />
     <Content Include="Content\js\jquery-3.3.1\jquery-3.3.1.min.js" />
+    <Content Include="Content\js\login\css\component.css" />
+    <Content Include="Content\js\login\css\demo.css" />
+    <Content Include="Content\js\login\css\normalize.css" />
+    <Content Include="Content\js\login\img\demo-1-bg.jpg" />
+    <Content Include="Content\js\login\img\login_ico.png" />
+    <Content Include="Content\js\login\js\demo-1.js" />
+    <Content Include="Content\js\login\js\EasePack.min.js" />
+    <Content Include="Content\js\login\js\html5.js" />
+    <Content Include="Content\js\login\js\rAF.js" />
+    <Content Include="Content\js\login\js\TweenLite.min.js" />
     <Content Include="Global.asax" />
-    <Content Include="Content\fonts\fontawesome-webfont.eot" />
-    <Content Include="Content\fonts\fontawesome-webfont.ttf" />
-    <Content Include="Content\fonts\fontawesome-webfont.woff" />
-    <Content Include="Content\fonts\fontawesome-webfont.woff2" />
-    <Content Include="Content\fonts\FontAwesome.otf" />
-    <Content Include="Content\fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="Content\fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="Content\fonts\glyphicons-halflings-regular.woff2" />
-    <Content Include="Content\fonts\glyphicons-halflings-regulard41d.eot" />
-    <Content Include="Content\fonts\weathericons-regular-webfont.eot" />
-    <Content Include="Content\fonts\weathericons-regular-webfont.ttf" />
-    <Content Include="Content\fonts\weathericons-regular-webfont.woff" />
-    <Content Include="Content\fonts\weathericons-regular-webfontd41d.eot" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -173,6 +164,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\css\" />
+    <Folder Include="Content\fonts\" />
     <Folder Include="Content\images\" />
     <Folder Include="Models\" />
   </ItemGroup>
