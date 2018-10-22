@@ -1,0 +1,83 @@
+网上地址：https://www.cnblogs.com/h82258652/p/3939365.html
+
+1、原理
+（1）首先，ajax 请求跟一般的 web 请求本质是相同的，都是 http 请求。理论上服务器端是无法区分该次请求是不是 ajax 请求的，但是，既然标题都已经说了，那么肯定是有办法做的。
+在 ajax 请求的请求报文里，往往会包含这么一条：X-Requested-With = XMLHttpRequest
+这在各大的 javascript 框架上也是这么做的。
+（2）IsValidForRequest 方法返回的是bool类型的值，指示对当前方法访问是否有效。
+所以只需要返回对当前方法的访问是否是Ajax请求即可，
+而Request类中有扩展方法IsAjaxRequest();，就是返回此状态的。
+所以思路就清晰了。
+
+（3）ActionMethodSelectorAttribute类源码
+    // 摘要:
+    //     表示一个特性，该特性用于影响操作方法的选择。
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
+    public abstract class ActionMethodSelectorAttribute : Attribute
+    {
+        // 摘要:
+        //     初始化 System.Web.Mvc.ActionMethodSelectorAttribute 类的新实例。
+        protected ActionMethodSelectorAttribute();
+
+        // 摘要:
+        //     确定操作方法选择对指定的控制器上下文是否有效。
+        //
+        // 参数:
+        //   controllerContext:
+        //     控制器上下文。
+        //
+        //   methodInfo:
+        //     有关操作方法的信息。
+        //
+        // 返回结果:
+        //     如果操作方法选择对指定的控制器上下文有效，则为 true；否则为 false。
+        public abstract bool IsValidForRequest(ControllerContext controllerContext, MethodInfo methodInfo);
+    }
+
+而服务器端就可以根据这一点来判别，该次的请求是否是 ajax 请求。
+2、代码
+    /// <summary>
+    /// 仅允许Ajax操作
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Method)]
+    public class HandlerAjaxOnlyAttribute : ActionMethodSelectorAttribute
+    {
+        /// <summary>
+        /// 初始化仅允许Ajax操作
+        /// </summary>
+        public bool Ignore { get; set; }
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="ignore">是否取消验证，默认false。也就是默认进行验证。</param>
+        public HandlerAjaxOnlyAttribute(bool ignore = false)
+        {
+            Ignore = ignore;
+        }
+        /// <summary>
+        /// 验证请求有效性
+        /// </summary>
+        /// <param name="controllerContext"></param>
+        /// <param name="methodInfo"></param>
+        /// <returns></returns>
+        public override bool IsValidForRequest(ControllerContext controllerContext, System.Reflection.MethodInfo methodInfo)
+        {
+            if (Ignore)
+                return true;
+            return controllerContext.RequestContext.HttpContext.Request.IsAjaxRequest();
+        }
+    }
+3、使用
+        [HandlerAjaxOnly]
+        public ActionResult CheckLogin(string loginname, string loginpassword)
+        {
+            try
+            {
+                T_User user = _iT_UserBLL.CheckLogin(loginname, loginpassword);
+                return Content("{\"success\":\"1\",\"message\":\"登录成功\"}");
+            }
+            catch (Exception ex)
+            {
+                return Content("{\"success\":\"0\",\"message\":\"" + ex.Message.ToString() + "\"}");
+            }
+        }

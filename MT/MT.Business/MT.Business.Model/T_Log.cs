@@ -53,5 +53,13 @@ namespace MT.Business.Model
     	/// 是否有效(0删除1有效)
     	/// </summary>
         public Nullable<int> F_isValid { get; set; }
+    	/// <summary>
+    	/// 用户姓名
+    	/// </summary>
+        public string F_UserName { get; set; }
+    	/// <summary>
+    	/// 用户登录名
+    	/// </summary>
+        public string F_LoginName { get; set; }
     }
 }
