@@ -39,9 +39,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CurrentUser\IUserProvider.cs" />
+    <Compile Include="CurrentUser\UserExtension.cs" />
+    <Compile Include="CurrentUser\UserProvider.cs" />
     <Compile Include="Enums\LoginMode.cs" />
     <Compile Include="Enums\LogType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\MT.Utility\MT.Utility.Common\MT.Utility.Common.csproj">
+      <Project>{0d12f622-78a5-4e8d-a11c-7524992447d7}</Project>
+      <Name>MT.Utility.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

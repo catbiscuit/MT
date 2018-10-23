@@ -60,8 +60,8 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Newtonsoft.Json.5.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Data.Entity" />
@@ -145,6 +145,7 @@
     <Compile Include="App_Code\AutofacRegister.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\Handler\HandlerAjaxOnlyAttribute.cs" />
+    <Compile Include="App_Start\Handler\HandlerLoginAttribute.cs" />
     <Compile Include="App_Start\Handler\MvcControllerBase.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -204,6 +205,10 @@
     <ProjectReference Include="..\..\MT.Utility\MT.Utility.Common\MT.Utility.Common.csproj">
       <Project>{0d12f622-78a5-4e8d-a11c-7524992447d7}</Project>
       <Name>MT.Utility.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MT.Utility\MT.Utility.WebControl\MT.Utility.WebControl.csproj">
+      <Project>{939c4815-eb46-4f6a-8bdf-45e533c6f0a8}</Project>
+      <Name>MT.Utility.WebControl</Name>
     </ProjectReference>
     <ProjectReference Include="..\MT.Application.Code\MT.Application.Code.csproj">
       <Project>{3b810ad9-65d5-4a6c-9ed6-9b562afb0bdb}</Project>

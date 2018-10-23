@@ -25,3 +25,6 @@ Install-Package EntityFramework -Version 5.0.0
 
 --MVC jscss Ñ¹Ëõ¼¼Êõ
 Install-Package Microsoft.AspNet.Web.Optimization
+
+Json¿ò¼Ü
+Install-Package Newtonsoft.Json -Version 9.0.1 

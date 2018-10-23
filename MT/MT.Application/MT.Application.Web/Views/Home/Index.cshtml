@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     Layout = null;
 }
 
@@ -9,9 +8,29 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Index</title>
+    <!--Login In-->
+    <script src="~/Content/js/jquery/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript">
+        function LogOut() {
+            $.ajax({
+                url: "/Login/OutLogin",
+                type: "post",
+                dataType: "json",
+                success: function (data) {
+                    if (data.type == "1") {
+                        window.location.href = '/Login/Index';
+                    }
+                    else {
+                        alert(data.message);
+                    }
+                }
+            });
+        }
+    </script>
 </head>
 <body>
-    <div> 
+    <div>
+        <input type="button" onclick="LogOut();" />
     </div>
 </body>
 </html>

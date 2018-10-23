@@ -29,6 +29,8 @@ namespace MT.Application.Web.App_Code
                 builder.RegisterGeneric(typeof(UnitOfWork<>)).As(typeof(IUnitOfWork<>));//单例模式
                 //数据库工厂                
                 builder.RegisterGeneric(typeof(DatabaseFactory<>)).As(typeof(IDatabaseFactory<>)).InstancePerRequest();
+                //登录用户的提供者
+                builder.RegisterType<MT.Application.Code.CurrentUser.UserProvider>().As<MT.Application.Code.CurrentUser.IUserProvider>();
 
                 //T_BaseInfo类
                 builder.RegisterType<T_BaseInfoDAL>().As<IT_BaseInfoDAL>();
@@ -54,6 +56,5 @@ namespace MT.Application.Web.App_Code
                 return builder;
             }
         }
-
     }
 }

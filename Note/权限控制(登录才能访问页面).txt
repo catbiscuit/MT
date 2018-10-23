@@ -1,0 +1,13 @@
+1、UserProvider类，获取和设置当前登录用户信息。
+
+2、在登录时，将登录用户信息使用Cookie或Session进行保存。
+包括用户基础信息，以及用户的权限(可以访问的页面，可以操作的按钮)
+
+3、重点：HandlerLoginAttribute 类。
+用于控制Controller和Action是否可以访问。
+(1)在需要权限控制的Controller和Action上，添加该过滤器
+(2)其中的OnAuthorization方法，会在响应执行前进行登录验证
+(3)从Cookie或Session中获取保存的用户信息，
+如果没有登录或已经过期，获取到的用户信息都是空，也就是未登录状态。
+(4)filterContext.Result = new RedirectResult("~/Login/Index");
+执行此语句，将页面跳转至登录页面
