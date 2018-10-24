@@ -34,7 +34,7 @@ namespace MT.Application.Code.CurrentUser
             {
                 if (LoginProvider == "Cookie")
                 {
-                    WebHelper.WriteCookie(LoginUserKey, DESEncrypt.Encrypt(user.ToJson()), 3);
+                    WebHelper.WriteCookie(LoginUserKey, DESEncrypt.Encrypt(user.ToJson()), 720);
                 }
                 else
                 {

@@ -33,45 +33,7 @@ namespace MT.Application.Web.Controllers
 
         public ActionResult Index()
         {
-            //T_User user = new T_User();
-            //user.F_ID = Guid.NewGuid();
-            //user.F_UserName = DateTime.Now.ToShortTimeString();
-
-            //T_Role role = new T_Role();
-            //role = _iT_RoleBLL.GetModelByCondition(x => x.F_RoleName == "管理员");
-
-            //List<T_UserRole> lstUserRole = new List<T_UserRole>();
-            //T_UserRole userRole = new T_UserRole();
-            //userRole.F_ID = Guid.NewGuid();
-            //userRole.F_UserID = user.F_ID;
-            //userRole.F_RoleID = role.F_ID;
-            //userRole.F_isValid = 1;
-            //lstUserRole.Add(userRole);
-
             return View();
         }
-
-        public ActionResult Add()
-        {
-            T_User user = new T_User();
-            user.F_ID = Guid.Parse("259E4C58-6719-4896-904C-F090E3F45514");
-            user.F_UserName = DateTime.Now.ToShortTimeString();
-
-            T_Role role = new T_Role();
-            role = _iT_RoleBLL.GetModelByCondition(x => x.F_RoleName == "管理员");
-
-            List<T_UserRole> lstUserRole = new List<T_UserRole>();
-            T_UserRole userRole = new T_UserRole();
-            userRole.F_ID = Guid.NewGuid();
-            userRole.F_UserID = user.F_ID;
-            userRole.F_RoleID = role.F_ID;
-            userRole.F_isValid = 1;
-            lstUserRole.Add(userRole);
-
-            _iT_UserBLL.Add(user, lstUserRole);
-
-            return View();
-        }
-
     }
 }
