@@ -51,6 +51,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\DESEncrypt.cs" />
     <Compile Include="Security\Md5Helper.cs" />
+    <Compile Include="SqlHelper\DbHelperSQL.cs" />
     <Compile Include="WebHelper.cs" />
   </ItemGroup>
   <ItemGroup>

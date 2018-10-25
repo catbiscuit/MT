@@ -16,6 +16,15 @@ namespace MT.Application.Web
     [HandlerLogin(LoginMode.Enforce)]
     public class MvcControllerBase : Controller
     {
+        public readonly IUserProvider _iUserProvider;
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="iUserProvider"></param>
+        public MvcControllerBase()
+        {
+            this._iUserProvider = new UserProvider();
+        }
         /// <summary>
         /// 返回成功消息
         /// </summary>

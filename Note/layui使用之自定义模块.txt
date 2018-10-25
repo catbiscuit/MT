@@ -1,0 +1,77 @@
+一、前言
+项目中包含layui完整包。
+引用:
+./layui/css/layui.css
+./layui/layui.js
+加一个1.8以上版本的jquery.js
+
+二、用到的语法。
+1、layui.use	使用模块。
+可以是layui的官方模块(路径:layui-v2.4.3\layui\lay\modules)，
+也可以是自己写的模块。
+(1)模块化调用，仅调用部分模块。
+示例:
+layui.use(['layer', 'form'], function(){
+  var layer = layui.layer
+  ,form = layui.form;
+  
+  layer.msg('Hello World');
+});
+
+此例，其中使用了layer 和 form 模块，此为官方模块。
+var layer = layui.layer ，根据模块获取出一个操作对象。
+layer.msg('Hello World'); ，调用layer模块的一个msg方法。
+(2)非模块化调用，即一次性加载所有的模块。
+将路径:layui-v2.4.3\layui\lay\modules，下的所有模块都进行加载。作者不建议这么使用。
+示例：
+;!function(){
+  var layer = layui.layer
+  ,form = layui.form;
+  
+  layer.msg('Hello World');
+}();
+
+此例，由于模块都一次性加载，因此不用执行 layui.use() 来加载对应模块，直接使用即可。
+
+2、layui.define	定义模块。
+语法：
+layui.define([mods], function(exports){
+  
+  //……
+  
+  exports('mod', api);
+});  
+
+示例:
+layui.define(function (exports) {
+    var obj = {
+        hello: function (str) {
+            alert("Hello" + (str || "index"));
+        }
+    };
+
+    exports("index", obj);////注意，这里是模块输出的核心，模块名必须和use时的模块名一致
+}); 
+调用:
+        layui.config({
+            base: "/Content/layuiapp/custom/js/" //存放拓展模块的根目录
+        }).use('index', function () {
+            var index = layui.index;
+            index.hello('123');
+        });
+效果:
+html页面，加载完毕后，layui弹出窗 显示"Hello123"
+
+3、layui.config	layui全局参数配置。
+示例:
+layui.config({
+  base: '/res/js/modules/' //设定扩展的Layui模块的所在目录，一般用于外部模块扩展(你存放新模块的目录，注意，不是layui的模块目录)
+});
+
+此例，相对路径:/res/js/modules/ ，即为存放新模块的目录。
+此处注意，不是layui官方模块的目录。
+
+
+
+三、自定义一个模块。
+(1)

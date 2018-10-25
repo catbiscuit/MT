@@ -7,14 +7,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>@MT.Utility.Common.Configs.Config.GetValue("SystemName").ToString()</title>
-    <link href="~/Content/layuiadmin/layui-v2.4.3/css/layui.css" rel="stylesheet" />
-    <link href="~/Content/layuiadmin/style/admin.css" rel="stylesheet" />
-    <script src="~/Content/layuiadmin/layui-v2.4.3/layui.js"></script>
-    <script src="~/Content/layuiadmin/layui-v2.4.3/layui.all.js"></script>
+    <link href="~/Content/layuiapp/layui/css/layui.css" rel="stylesheet" />
+    <link href="~/Content/layuiapp/custom/css/index.css" rel="stylesheet" />
+    <script src="~/Content/js/jquery/jquery-2.0.3.min.js"></script>
+    <script src="~/Content/layuiapp/layui/layui.js"></script>
     <script>
         layui.config({
-            base: "/Content/layuiadmin/layui-v2.4.3" //静态资源所在路径
-        }).use('lay');
+            base: "/Content/layuiapp/custom/js/" //存放拓展模块的根目录
+        }).use('index', function () {
+            var index = layui.index;
+            index.hello('123');
+        });//使用拓展模块
     </script>
 </head>
 <body class="layui-layout-body">
