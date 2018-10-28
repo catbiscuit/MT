@@ -1,0 +1,18 @@
+1、关键
+在a标签中，添加一个span标签，
+jq可以捕捉到span标签，
+因为经过js调试，jq模拟a标签时只会进入按键点击事件，但是点击事件后的onclick();中的代码却不会执行。
+但是，模拟点击span标签，事件正常执行。
+
+2、原代码
+<a id="alink" href="abc.aspx" style="visibility: hidden;">下一步</a> 
+//jq
+$("#alink").click(); // 触发了a标签的点击事件，但是没有触发页面跳转 
+//js
+document.getElementById("alink").click(); //既触发了a标签的点击事件，又触发了页面跳转 
+
+3、调整
+把 “下一步” 改为 “<span id="spanId">下一步</span>” 
+<a id="alink" href="abc.aspx" style="visibility: hidden;"><span id="spanId">下一步</span></a> 
+
+即给A标签中的文字添加一个能被jQuery捕获的元素，然后$("#spanId").click()；，才可以触发页面跳转。

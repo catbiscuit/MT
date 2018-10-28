@@ -52,7 +52,7 @@ namespace MT.Application.Web.Controllers
         [HttpGet]
         public ActionResult GetPermissions()
         {
-            UserExtension user = _iUserProvider.Current();
+            UserExtension user = UserProvider.Provider.Current();
             StringBuilder updateSql = new StringBuilder();
             updateSql.Append(" select c.* ");
             updateSql.Append(" from T_UserRole a ");

@@ -13,16 +13,14 @@ namespace MT.Application.Web
     /// </summary>
     public class HandlerAuthorizeAttribute : ActionFilterAttribute
     {
-        private PermissionMode _customMode;
-        private IUserProvider _iUserProvider;
+        private PermissionMode _customMode;        
         /// <summary>
         /// 默认构造
         /// </summary>
         /// <param name="Mode"></param>
         public HandlerAuthorizeAttribute(PermissionMode Mode)
         {
-            this._customMode = Mode;
-            _iUserProvider = new UserProvider();
+            this._customMode = Mode;            
         }
 
         /// <summary>

@@ -23,39 +23,46 @@
                     <form action="#" name="f" method="post">
                         <div class="input_outer">
                             <span class="u_user"></span>
-                            <input id="loginname" name="logname" class="text" onpaste="return false;" style="color: #FFFFFF !important; ime-mode: disabled;" type="text" placeholder="请输入账户">
+                            <input id="loginname" name="loginname" class="text" onpaste="return false;" style="color: #FFFFFF !important; ime-mode: disabled;" type="text" placeholder="请输入账户">
                         </div>
                         <div class="input_outer">
                             <span class="us_uer"></span>
-                            <input id="loginpassword" name="logpass" class="text" onpaste="return false;" style="color: #FFFFFF !important; position: absolute; z-index: 100; ime-mode: disabled;" value="" type="password" placeholder="请输入密码">
+                            <input id="loginpassword" name="loginpassword" class="text" onpaste="return false;" style="color: #FFFFFF !important; position: absolute; z-index: 100; ime-mode: disabled;" value="" type="password" placeholder="请输入密码">
                         </div>
-                        <div class="mb2"><a class="act-but submit" href="javascript:Login();" style="color: #FFFFFF">登录</a></div>
+                        <div class="mb2"><a class="act-but submit" href="javascript:Login();" style="color: #FFFFFF"><span id="spanLogin">登录</span></a></div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
     <!-- /container -->
+    <script src="~/Content/js/jquery/jquery-2.1.4.js"></script>
     <script src="~/Content/js/login/js/TweenLite.min.js"></script>
     <script src="~/Content/js/login/js/EasePack.min.js"></script>
     <script src="~/Content/js/login/js/rAF.js"></script>
     <script src="~/Content/js/login/js/demo-1.js"></script>
-    <!--Login In-->
-    <script src="~/Content/js/jquery/jquery-1.10.2.min.js"></script>
     <script src="~/Content/js/plugins/md5/jquery.md5.js"></script>
+    <!--LayUI-->
+    <script src="~/Content/layuiapp/layer/layer.js"></script>
     <!--业务逻辑处理-->
     <script type="text/javascript">
+        document.onkeydown = function (e) {
+            if (!e) e = window.event;
+            if ((e.keyCode || e.which) == 13) {
+                $("#spanLogin").click();
+            }
+        };
         function Login() {
             var $loginname = $("#loginname");
             var $loginpassword = $("#loginpassword");
             if ($loginname.val() == "") {
                 $loginname.focus();
-                alert("请输入账号");
+                layer.tips('请输入账号!', '#loginname');
                 return;
             }
             if ($loginpassword.val() == "") {
                 $loginpassword.focus();
-                alert("请输入密码");
+                layer.tips('请输入密码!', '#loginpassword');
                 return;
             }
 
@@ -73,7 +80,7 @@
                         window.location.href = '/Home/Index';
                     }
                     else {
-                        alert(data.message);
+                        layer.msg(data.message);
                     }
                 }
             });

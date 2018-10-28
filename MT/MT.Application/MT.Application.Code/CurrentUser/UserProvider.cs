@@ -25,6 +25,14 @@ namespace MT.Application.Code.CurrentUser
         private string LoginProvider = Config.GetValue("LoginProvider");
 
         /// <summary>
+        /// 当前提供者
+        /// </summary>
+        public static IUserProvider Provider
+        {
+            get { return new UserProvider(); }
+        }
+
+        /// <summary>
         /// 写入登录信息
         /// </summary>
         /// <param name="user"></param>

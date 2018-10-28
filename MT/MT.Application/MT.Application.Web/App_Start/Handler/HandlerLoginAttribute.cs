@@ -14,7 +14,6 @@ namespace MT.Application.Web
     public class HandlerLoginAttribute : AuthorizeAttribute
     {
         private LoginMode _customMode;
-        private IUserProvider _iUserProvider;
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -22,7 +21,6 @@ namespace MT.Application.Web
         public HandlerLoginAttribute(LoginMode Mode)
         {
             _customMode = Mode;
-            _iUserProvider = new UserProvider();
         }
 
         /// <summary>
@@ -36,7 +34,7 @@ namespace MT.Application.Web
             {
                 return;
             }
-            if (_iUserProvider.IsOverdue())
+            if (UserProvider.Provider.IsOverdue())
             {
                 filterContext.Result = new RedirectResult("~/Login/Index");
                 return;
