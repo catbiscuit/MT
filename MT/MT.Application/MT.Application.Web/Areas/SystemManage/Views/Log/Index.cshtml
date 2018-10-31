@@ -1,17 +1,81 @@
 ﻿@{
-    Layout = null;
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
 }
+<script type="text/javascript">
+    layui.config({
+        base: "/Content/layuiapp/custom/" //存放拓展模块的根目录
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','table'], function () {
+        var admin = layui.admin
+        , form = layui.form
+        , table = layui.table;
+        //监听搜索
+        form.on('submit(LAY-user-back-search)', function (data) {
+            var field = data.field;
 
-<!DOCTYPE html>
+            //执行重载
+            table.reload('LAY-user-back-manage', {
+                where: field
+            });
+        });
+        table.render({
+            elem: '#data-table'
+          , url: '/SystemManage/Log/GetPageListJson'
+          , cols: [[
+            { field: 'F_ControllerName', width: 120, title: '控制器名称', sort: true }
+            , { field: 'F_ActionName', width: 120, title: '方法名称' }
+            , { field: 'F_Title', width: 150, title: '标题' }
+            , { field: 'F_Content', minWidth: 200, title: '内容' }
+            , { field: 'F_LogTypeName', width: 120, title: '日志类别' }
+            , { field: 'F_WriteTime', width: 200, title: '时间', sort: true }
+            , { field: 'F_LoginName', width: 120, title: '登录名' }
+            , { field: 'F_UserName', width: 120, title: '用户名' }
+          ]]
+          , page: true
+        });
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
-</head>
-<body>
-    <div>
-        <span>  Log 日志的 Index  页面  </span>
+        $('.layui-btn.layuiadmin-btn-admin').on('click', function () {
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+    });
+</script>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">登录名</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="F_LoginName" placeholder="请输入" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">日志类别</label>
+                    <div class="layui-input-block">
+                        <select name="F_LogType">
+                            <option value="">请选择</option>
+                            <option value="1">登录</option>
+                            <option value="2">退出</option>
+                            <option value="3">访问</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn-admin" lay-submit lay-filter="LAY-user-back-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="layui-card-body">
+            <table class="layui-hide" id="data-table"></table>
+        </div>
     </div>
-</body>
-</html>
+</div>
+
+
+
+

@@ -269,6 +269,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Areas\SystemManage\Controllers\LogController.cs" />
     <Compile Include="Areas\SystemManage\SystemManageAreaRegistration.cs" />
+    <Compile Include="Controllers\ClientDataController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Global.asax.cs">
@@ -285,6 +286,8 @@
     <Content Include="Content\layuiapp\layui\font\iconfont.ttf" />
     <Content Include="Content\layuiapp\layui\font\iconfont.woff" />
     <Content Include="Areas\SystemManage\Views\web.config" />
+    <Content Include="Views\Shared\_LayoutIndex.cshtml" />
+    <Content Include="Views\Shared\_LayoutForm.cshtml" />
     <Content Include="Areas\SystemManage\Views\Log\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -301,6 +304,7 @@
     <Folder Include="Content\css\" />
     <Folder Include="Content\fonts\" />
     <Folder Include="Content\images\" />
+    <Folder Include="Views\ClientData\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\MT.Business\MT.Business.BLL\MT.Business.BLL.csproj">

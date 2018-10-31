@@ -15,6 +15,6 @@ namespace MT.Business.IBLL.SystemManage
         int Update();
         int Insert(List<T_Log> lstEntity);
 
-        T_Log GetModelByCondition(Expression<Func<T_Log, bool>> condition);
+        T_Log GetModelByCondition(Expression<Func<T_Log, bool>> condition);        
     }
 }

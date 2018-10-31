@@ -7,6 +7,7 @@ using MT.Application.Code.CurrentUser;
 using MT.Application.Code.Enums;
 using MT.Utility.WebControl;
 using MT.Utility.Common.Extension;
+using System.Data;
 
 namespace MT.Application.Web
 {
@@ -15,7 +16,17 @@ namespace MT.Application.Web
     /// </summary>
     [HandlerLogin(LoginMode.Enforce)]
     public class MvcControllerBase : Controller
-    {        
+    {
+        #region Index页面获取数据的参数
+        /// <summary>
+        /// 总记录数(MvcControllerBase统一变量)
+        /// </summary>
+        public int iTotalNumberUnify = 0;
+        /// <summary>
+        /// 查询的数据(MvcControllerBase统一变量)
+        /// </summary>
+        public DataTable dtResultUnify = null;
+        #endregion
         /// <summary>
         /// 返回成功消息
         /// </summary>
