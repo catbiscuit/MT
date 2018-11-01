@@ -53,18 +53,19 @@ namespace MT.Application.Web.Controllers
         public ActionResult GetPermissions()
         {
             UserExtension user = UserProvider.Provider.Current();
-            StringBuilder updateSql = new StringBuilder();
-            updateSql.Append(" select c.* ");
-            updateSql.Append(" from T_UserRole a ");
-            updateSql.Append(" join T_RoleMenu b on a.F_RoleID=b.F_RoleID ");
-            updateSql.Append(" left join T_Menu c on b.F_MenuID=c.F_ID ");
-            updateSql.Append(" where a.F_UserID=@UserID ");
+            StringBuilder sbSql = new StringBuilder();
+            sbSql.Append(" select c.* ");
+            sbSql.Append(" from T_UserRole a ");
+            sbSql.Append(" join T_RoleMenu b on a.F_RoleID=b.F_RoleID ");
+            sbSql.Append(" left join T_Menu c on b.F_MenuID=c.F_ID ");
+            sbSql.Append(" where a.F_UserID=@UserID ");
+            sbSql.Append(" order by c.F_Level,c.F_ParentID,c.F_Sort  ");
             SqlParameter[] parameters =
             {
                 new SqlParameter("@UserID", SqlDbType.UniqueIdentifier),
             };
             parameters[0].Value = user == null ? default(Guid) : user.F_ID;
-            DataSet dsResult = DbHelperSQL.Query(updateSql.ToString(), parameters);
+            DataSet dsResult = DbHelperSQL.Query(sbSql.ToString(), parameters);
             if (dsResult != null && dsResult.Tables.Count > 0 && dsResult.Tables[0].Rows.Count > 0)
             {
                 return Content(dsResult.Tables[0].ToJson());
