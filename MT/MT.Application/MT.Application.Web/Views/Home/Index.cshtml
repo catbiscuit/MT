@@ -61,9 +61,8 @@
                 <ul class="layui-nav layui-layout-right" lay-filter="layadmin-layout-right">
 
                     <li class="layui-nav-item" lay-unselect="">
-                        <a lay-href="app/message/index.html" layadmin-event="message" lay-text="消息中心">
+                        <a lay-href="/PersonalIssue/NotificationMessage/Index" layadmin-event="message" lay-text="消息中心">
                             <i class="layui-icon layui-icon-notice"></i>
-
                             <!-- 如果有新消息，则显示小圆点 -->
                             <span class="layui-badge-dot"></span>
                         </a>
@@ -88,18 +87,11 @@
                             <cite>@MT.Application.Code.CurrentUser.UserProvider.Provider.Current().F_UserName</cite>
                         </a>
                         <dl class="layui-nav-child">
-                            <dd><a lay-href="set/user/info.html">基本资料</a></dd>
-                            <dd><a lay-href="set/user/password.html">修改密码</a></dd>
+                            <dd><a lay-href="/PersonalIssue/UserInfomation/UserInfo">基本资料</a></dd>
+                            <dd><a lay-href="/PersonalIssue/UserInfomation/ChangePwd">修改密码</a></dd>
                             <hr>
                             <dd layadmin-event="logout" style="text-align: center;"><a>退出</a></dd>
                         </dl>
-                    </li>
-
-                    <li class="layui-nav-item layui-hide-xs" lay-unselect="">
-                        <a href="javascript:;" layadmin-event="about"><i class="layui-icon layui-icon-more-vertical"></i></a>
-                    </li>
-                    <li class="layui-nav-item layui-show-xs-inline-block layui-hide-sm" lay-unselect="">
-                        <a href="javascript:;" layadmin-event="more"><i class="layui-icon layui-icon-more-vertical"></i></a>
                     </li>
                 </ul>
             </div>
@@ -132,9 +124,10 @@
                         </li>
                     </ul>
                 </div>
+                <!--标签页的导航标题-->
                 <div class="layui-tab" lay-unauto lay-allowclose="true" lay-filter="layadmin-layout-tabs">
                     <ul class="layui-tab-title" id="LAY_app_tabsheader">
-                        <li lay-id="home/console.html" lay-attr="home/console.html" class="layui-this"><i class="layui-icon layui-icon-home"></i></li>
+                        <li lay-id="/PersonalIssue/UserInfomation/Index" lay-attr="/SystemManage/Log/Index" class="layui-this"><i class="layui-icon layui-icon-home"></i></li>
                     </ul>
                 </div>
             </div>
@@ -143,7 +136,7 @@
             <!-- 主体内容 -->
             <div class="layui-body" id="LAY_app_body">
                 <div class="layadmin-tabsbody-item layui-show">
-                    <iframe src="/SystemManage/Log/Index" frameborder="0" class="layadmin-iframe"></iframe>
+                    <iframe src="/PersonalIssue/UserInfomation/Index" frameborder="0" class="layadmin-iframe"></iframe>
                 </div>
             </div>
 

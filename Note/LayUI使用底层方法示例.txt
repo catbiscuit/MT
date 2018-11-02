@@ -1,0 +1,37 @@
+一、引用
+<link rel="stylesheet" href="../layui/css/layui.css">
+<script src="../layui/layui.js"></script>
+
+二、使用
+1、layui全局配置
+layui.config(options)
+<script>
+layui.config({
+  base: '/res/js/modules/' //你存放新模块的目录，注意，不是layui的模块目录
+}).use('index'); //加载入口
+</script>    
+上述的 index 即为 /res/js/modules/ 目录下的 index.js    
+
+2、layui设置模块别名
+layui.extend({
+    setter: "config",
+    admin: "lib/admin",
+    view: "lib/view"
+})
+在后面的use方法中，view模块即为lib/view模块。
+
+3、layui模块的定义
+    layui.define([mods], function(exports){
+      
+      //……
+      
+      exports('mod', api);
+    });  
+     
+4、layui模块的使用
+    layui.use(['mod1', 'mod2'], function(args){
+      var mod = layui.mod1;
+      
+      //……
+      
+    });    

@@ -13,9 +13,12 @@
 		<script>
 			layui.config({
 				base: "/js/layuiapp/custome/" //静态资源所在路径
-			}).extend('')
-			.use('lay');
-		</script>
+			}).extend({
+				index:'lib/index'//主入口模块
+			}).use('index');
+			
+			layui.jquery(window)("#LAY_app_tabsheader>li");
+		</script> 
 	</head>
 
 	<body>

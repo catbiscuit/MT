@@ -1,7 +1,6 @@
 ﻿/** layuiAdmin.std-v1.1.0 LPPL License By http://www.layui.com/admin/ */
 ;
-layui.define("view",
-function (e) {
+layui.define("view", function (e) {
     var a = layui.jquery,
     i = layui.laytpl,
     t = layui.element,
@@ -27,6 +26,7 @@ function (e) {
     P = {
         v: "1.1.0 std",
         req: l.req,
+        //发送身份验证码
         sendAuthCode: function (e) {
             e = a.extend({
                 seconds: 60,
@@ -77,10 +77,12 @@ function (e) {
                 }
             })
         },
+        //全屏
         screen: function () {
             var e = r.width();
             return e >= 1200 ? 3 : e >= 992 ? 2 : e >= 768 ? 1 : 0
         },
+        //退出
         exit: l.exit,
         sideFlexible: function (e) {
             var i = u,
@@ -91,6 +93,7 @@ function (e) {
                 status: e
             })
         },
+        //替换特殊字符和标记
         escape: function (e) {
             return String(e || "").replace(/&(?!#?[a-zA-Z0-9]+;)/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/'/g, "&#39;").replace(/"/g, "&quot;")
         },
@@ -113,6 +116,7 @@ function (e) {
             },
             e))
         },
+        //主题
         theme: function (e) {
             var t = (n.theme, layui.data(n.tableName)),
             l = "LAY_layadmin_theme",
@@ -135,6 +139,7 @@ function (e) {
                 value: t.theme
             })
         },
+        //初始化主题
         initTheme: function (e) {
             var a = n.theme;
             e = e || 0,
@@ -175,32 +180,42 @@ function (e) {
             r.off("resize", P.resizeFn[a]),
             delete P.resizeFn[a]
         },
+        //关闭当前窗口
         closeThisTabs: function () {
             P.tabsPage.index && a(z).eq(P.tabsPage.index).find(".layui-tab-close").trigger("click")
         },
+        //全屏
         fullScreen: function () {
             var e = document.documentElement,
             a = e.requestFullScreen || e.webkitRequestFullScreen || e.mozRequestFullScreen || e.msRequestFullscreen;
             "undefined" != typeof a && a && a.call(e)
         },
+        //退出全屏
         exitScreen: function () {
             document.documentElement;
             document.exitFullscreen ? document.exitFullscreen() : document.mozCancelFullScreen ? document.mozCancelFullScreen() : document.webkitCancelFullScreen ? document.webkitCancelFullScreen() : document.msExitFullscreen && document.msExitFullscreen()
         }
     },
+    //头部区域的事件
     F = P.events = {
         flexible: function (e) {
             var a = e.find("#" + h),
             i = a.hasClass(x);
             P.sideFlexible(i ? "spread" : null)
         },
+        //刷新
         refresh: function () {
             var e = ".layadmin-iframe",
             i = a("." + b).length;
             P.tabsPage.index >= i && (P.tabsPage.index = i - 1);
             var t = P.tabsBody(P.tabsPage.index).find(e);
-            t[0].contentWindow.location.reload(!0)
+            //添加判断，当标签页大于0时才进行刷新。
+            //否则，会报错。t[0] 会找不到元素。
+            if (t.length > 0) {
+                t[0].contentWindow.location.reload(!0)
+            }
         },
+        //搜索
         serach: function (e) {
             e.off("keypress").on("keypress",
             function (a) {
@@ -217,9 +232,11 @@ function (e) {
                 }
             })
         },
+        //消息
         message: function (e) {
             e.find(".layui-badge-dot").remove()
         },
+        //主题
         theme: function () {
             P.popupRight({
                 id: "LAY_adminPopupTheme",
@@ -228,6 +245,7 @@ function (e) {
                 }
             })
         },
+        //便签
         note: function (e) {
             var a = P.screen() < 2,
             i = layui.data(n.tableName).note;
@@ -253,12 +271,14 @@ function (e) {
                 }
             })
         },
+        //全屏
         fullscreen: function (e) {
             var a = "layui-icon-screen-full",
             i = "layui-icon-screen-restore",
             t = e.children("i");
             t.hasClass(a) ? (P.fullScreen(), t.addClass(i).removeClass(a)) : (P.exitScreen(), t.addClass(a).removeClass(i))
         },
+        //关于
         about: function () {
             P.popupRight({
                 id: "LAY_adminPopupAbout",
@@ -267,6 +287,7 @@ function (e) {
                 }
             })
         },
+        //更多
         more: function () {
             P.popupRight({
                 id: "LAY_adminPopupMore",
@@ -275,14 +296,17 @@ function (e) {
                 }
             })
         },
+        //返回
         back: function () {
             history.back()
         },
+        //设置主题
         setTheme: function (e) {
             var a = e.data("index");
             e.siblings(".layui-this").data("index");
             e.hasClass(y) || (e.addClass(y).siblings(".layui-this").removeClass(y), P.initTheme(a))
         },
+        //滚动页面
         rollPage: function (e, i) {
             var t = a("#LAY_app_tabsheader"),
             n = t.children("li"),
@@ -319,28 +343,34 @@ function (e) {
                 !1
             })
         },
+        //滚动到左边
         leftPage: function () {
             F.rollPage("left")
         },
+        //滚动到右边
         rightPage: function () {
             F.rollPage()
         },
+        //关闭当前窗口
         closeThisTabs: function () {
             var e = parent === self ? P : parent.layui.admin;
             e.closeThisTabs()
         },
+        //关闭其他窗口
         closeOtherTabs: function (e) {
             var i = "LAY-system-pagetabs-remove";
             "all" === e ? (a(z + ":gt(0)").remove(), a(m).find("." + b + ":gt(0)").remove(), a(z).eq(0).trigger("click")) : (a(z).each(function (e, t) {
                 e && e != P.tabsPage.index && (a(t).addClass(i), P.tabsBody(e).addClass(i))
             }), a("." + i).remove())
         },
+        //关闭所有窗口
         closeAllTabs: function () {
             F.closeOtherTabs("all")
         },
         shade: function () {
             P.sideFlexible()
         },
+        //LayIM即时聊天
         im: function () {
             P.popup({
                 id: "LAY-popup-layim-demo",

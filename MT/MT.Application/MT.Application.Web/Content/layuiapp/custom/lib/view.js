@@ -15,12 +15,15 @@ function (e) {
         this.id = e,
         this.container = t("#" + (e || s))
     };
+    //加载中
     i.loading = function (e) {
         e.append(this.elemLoad = t('<i class="layui-anim layui-anim-rotate layui-anim-loop layui-icon layui-icon-loading layadmin-loading"></i>'))
     },
+    //移除加载中
     i.removeLoad = function () {
         this.elemLoad && this.elemLoad.remove()
     },
+    //退出
     i.exit = function (e) {
         layui.data(r.tableName, {
             key: r.request.tokenName,
@@ -28,6 +31,7 @@ function (e) {
         }),
         e && e()
     },
+    //请求
     i.req = function (e) {
         var n = e.success,
         a = (e.error, r.request),

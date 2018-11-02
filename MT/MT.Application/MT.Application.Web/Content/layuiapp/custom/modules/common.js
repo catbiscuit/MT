@@ -2,17 +2,19 @@
 ;
 layui.define(function (e) {
     var i = (layui.$, layui.layer, layui.laytpl, layui.setter, layui.view, layui.admin);
+    //定义登出事件
     i.events.logout = function () {
         i.req({
-            url: layui.setter.base + "json/user/logout.js",
+            url: "../../../../Login/CheckLogin",
             type: "get",
             data: {},
             done: function (e) {
                 i.exit(function () {
-                    location.href = "user/login.html"
+                    location.href = "../../../../Login/Index"
                 })
             }
         })
     },
     e("common", {})
 });
+

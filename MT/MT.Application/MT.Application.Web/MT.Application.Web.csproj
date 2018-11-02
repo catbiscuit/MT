@@ -140,6 +140,7 @@
     <Content Include="Content\layuiapp\custom\lib\admin.js" />
     <Content Include="Content\layuiapp\custom\lib\index.js" />
     <Content Include="Content\layuiapp\custom\lib\view.js" />
+    <Content Include="Content\layuiapp\custom\tpl\system\theme.html" />
     <Content Include="Content\layuiapp\layer\layer.js" />
     <Content Include="Content\layuiapp\layer\mobile\layer.js" />
     <Content Include="Content\layuiapp\layer\mobile\need\layer.css" />
@@ -267,6 +268,17 @@
     <Compile Include="App_Start\Handler\HandlerLoginAttribute.cs" />
     <Compile Include="App_Start\Handler\MvcControllerBase.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Areas\AdministrativeManage\AdministrativeManageAreaRegistration.cs" />
+    <Compile Include="Areas\CooperativeWork\CooperativeWorkAreaRegistration.cs" />
+    <Compile Include="Areas\FinancialManage\FinancialManageAreaRegistration.cs" />
+    <Compile Include="Areas\PersonalIssue\Controllers\AddressListController.cs" />
+    <Compile Include="Areas\PersonalIssue\Controllers\NoticeController.cs" />
+    <Compile Include="Areas\PersonalIssue\Controllers\NotificationMessageController.cs" />
+    <Compile Include="Areas\PersonalIssue\Controllers\SalarySheetController.cs" />
+    <Compile Include="Areas\PersonalIssue\Controllers\UserInfomationController.cs" />
+    <Compile Include="Areas\PersonalIssue\PersonalIssueAreaRegistration.cs" />
+    <Compile Include="Areas\PersonnelManage\Controllers\PersonnelArchivesController.cs" />
+    <Compile Include="Areas\PersonnelManage\PersonnelManageAreaRegistration.cs" />
     <Compile Include="Areas\SystemManage\Controllers\LogController.cs" />
     <Compile Include="Areas\SystemManage\SystemManageAreaRegistration.cs" />
     <Compile Include="Controllers\ClientDataController.cs" />
@@ -289,6 +301,19 @@
     <Content Include="Views\Shared\_LayoutIndex.cshtml" />
     <Content Include="Views\Shared\_LayoutForm.cshtml" />
     <Content Include="Areas\SystemManage\Views\Log\Index.cshtml" />
+    <Content Include="Areas\PersonnelManage\Views\web.config" />
+    <Content Include="Areas\CooperativeWork\Views\web.config" />
+    <Content Include="Areas\PersonnelManage\Views\PersonnelArchives\Index.cshtml" />
+    <Content Include="Areas\FinancialManage\Views\web.config" />
+    <Content Include="Areas\AdministrativeManage\Views\web.config" />
+    <Content Include="Areas\PersonalIssue\Views\web.config" />
+    <Content Include="Areas\PersonalIssue\Views\AddressList\Index.cshtml" />
+    <Content Include="Areas\PersonalIssue\Views\Notice\Index.cshtml" />
+    <Content Include="Areas\PersonalIssue\Views\SalarySheet\Index.cshtml" />
+    <Content Include="Areas\PersonalIssue\Views\NotificationMessage\Index.cshtml" />
+    <Content Include="Areas\PersonalIssue\Views\UserInfomation\UserInfo.cshtml" />
+    <Content Include="Areas\PersonalIssue\Views\UserInfomation\ChangePwd.cshtml" />
+    <Content Include="Areas\PersonalIssue\Views\UserInfomation\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -300,7 +325,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\SystemManage\Views\Shared\" />
+    <Folder Include="Areas\AdministrativeManage\Controllers\" />
+    <Folder Include="Areas\CooperativeWork\Controllers\" />
+    <Folder Include="Areas\FinancialManage\Controllers\" />
     <Folder Include="Content\css\" />
     <Folder Include="Content\fonts\" />
     <Folder Include="Content\images\" />
@@ -357,7 +384,7 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerPort>59607</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:6992/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
