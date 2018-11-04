@@ -46,7 +46,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SystemManage\T_BaseInfoDAL.cs" />
+    <Compile Include="SystemManage\T_DataItemDAL.cs" />
+    <Compile Include="SystemManage\T_DataItemDetailDAL.cs" />
     <Compile Include="SystemManage\T_LogDAL.cs" />
     <Compile Include="SystemManage\T_RoleDAL.cs" />
     <Compile Include="SystemManage\T_UserDAL.cs" />
@@ -56,6 +57,10 @@
     <ProjectReference Include="..\..\MT.Data\MT.Data.Base\MT.Data.Base.csproj">
       <Project>{cf913ef0-41e2-431f-9611-8f64542afe0e}</Project>
       <Name>MT.Data.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MT.Utility\MT.Utility.WebControl\MT.Utility.WebControl.csproj">
+      <Project>{939c4815-eb46-4f6a-8bdf-45e533c6f0a8}</Project>
+      <Name>MT.Utility.WebControl</Name>
     </ProjectReference>
     <ProjectReference Include="..\MT.Business.IDAL\MT.Business.IDAL.csproj">
       <Project>{db1ddd69-948b-4c25-9816-cb097c7f649b}</Project>

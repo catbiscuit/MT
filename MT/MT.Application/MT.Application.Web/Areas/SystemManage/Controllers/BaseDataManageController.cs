@@ -5,42 +5,34 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using MT.Application.Code.Enums;
-using MT.Business.IBLL.SystemManage;
 using MT.Utility.Common.SqlHelper;
 using MT.Utility.Common.Extension;
+using System.Text;
+
 namespace MT.Application.Web.Areas.SystemManage.Controllers
 {
-    public class LogController : MvcControllerBase
+    /// <summary>
+    /// 基础数据管理
+    /// </summary>
+    public class BaseDataManageController : MvcControllerBase
     {
-        #region 引用
-        private readonly IT_LogBLL _iT_LogBLL;
-
-        public LogController(IT_LogBLL iT_LogBLL)
-        {
-            this._iT_LogBLL = iT_LogBLL;
-        }
-        #endregion
-
         #region 视图
-        /// <summary>
-        /// 日志管理
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        [HandlerAuthorize(PermissionMode.Enforce)]
         public ActionResult Index()
         {
+            ViewBag.Title = "基础数据管理";
             return View();
         }
         #endregion
 
         #region 获取数据
-        [HttpGet]
-        public ActionResult GetPageListJson(int page, int limit, string ordersort)
+        /// <summary>
+        /// 获取字典数据
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult GetDataItemList(int page, int limit, string ordersort)
         {
             string sqlWhere = string.Empty;
-            string orderSort = "F_WriteTime desc";
+            string orderSort = "F_Sort asc";
             int StartIndex = (page - 1) * limit + 1;
             int EndIndex = StartIndex + limit - 1;
 
@@ -48,6 +40,7 @@ namespace MT.Application.Web.Areas.SystemManage.Controllers
             {
                 orderSort = ordersort;
             }
+            sqlWhere = GetWhere();
 
             SqlParameter[] sqlParameters =
             {                
@@ -57,7 +50,7 @@ namespace MT.Application.Web.Areas.SystemManage.Controllers
                 new SqlParameter("@EndIndex",EndIndex)
             };
 
-            DataSet dsResult = DbHelperSQL.RunProcedure("Proc_GetLogList", sqlParameters, "dt");
+            DataSet dsResult = DbHelperSQL.RunProcedure("Proc_GetDataItemList", sqlParameters, "dt");
             if (dsResult != null && dsResult.Tables != null && dsResult.Tables.Count > 0 && dsResult.Tables[0].Rows.Count > 0)
             {
                 dtResultUnify = dsResult.Tables[0];
@@ -78,6 +71,32 @@ namespace MT.Application.Web.Areas.SystemManage.Controllers
             };
 
             return Content(JsonData.ToJson());
+        }
+
+        /// <summary>
+        /// 获取查询条件
+        /// </summary>
+        /// <returns></returns>
+        protected string GetWhere()
+        {
+            try
+            {
+                StringBuilder sbWhere = new StringBuilder();
+                if (Request.QueryString["F_ItemCode"] != null && !string.IsNullOrEmpty(Request.QueryString["F_ItemCode"].ToString()))
+                {
+                    sbWhere.AppendFormat(" and (F_ItemCode like '%{0}%' or F_ItemName like '%{0}%' or F_HelpCode like '%{0}%') ", Request.QueryString["F_ItemCode"].ToString());
+                }
+                if (Request.QueryString["F_AddUserName"] != null && !string.IsNullOrEmpty(Request.QueryString["F_AddUserName"].ToString()))
+                {
+                    sbWhere.AppendFormat(" and F_AddUserName like '%{0}%' ) ", Request.QueryString["F_AddUserName"].ToString());
+                }
+
+                return sbWhere.ToString();
+            }
+            catch
+            {
+                return "";
+            }
         }
         #endregion
     }

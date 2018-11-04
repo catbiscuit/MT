@@ -66,10 +66,25 @@
     <Compile Include="T_BaseInfo.cs">
       <DependentUpon>MT.tt</DependentUpon>
     </Compile>
+    <Compile Include="T_DataItem.cs">
+      <DependentUpon>MT.tt</DependentUpon>
+    </Compile>
+    <Compile Include="T_DataItemDetail.cs">
+      <DependentUpon>MT.tt</DependentUpon>
+    </Compile>
+    <Compile Include="T_Department.cs">
+      <DependentUpon>MT.tt</DependentUpon>
+    </Compile>
     <Compile Include="T_Log.cs">
       <DependentUpon>MT.tt</DependentUpon>
     </Compile>
+    <Compile Include="T_Menu.cs">
+      <DependentUpon>MT.tt</DependentUpon>
+    </Compile>
     <Compile Include="T_Role.cs">
+      <DependentUpon>MT.tt</DependentUpon>
+    </Compile>
+    <Compile Include="T_RoleMenu.cs">
       <DependentUpon>MT.tt</DependentUpon>
     </Compile>
     <Compile Include="T_User.cs">

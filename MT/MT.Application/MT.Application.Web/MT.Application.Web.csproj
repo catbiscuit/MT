@@ -136,8 +136,10 @@
     <Content Include="Content\js\mt\LoadMenu.js" />
     <Content Include="Content\js\plugins\md5\jquery.md5.js" />
     <Content Include="Content\layuiapp\custom\config.js" />
+    <Content Include="Content\layuiapp\custom\css\admin.css" />
     <Content Include="Content\layuiapp\custom\css\index.css" />
     <Content Include="Content\layuiapp\custom\lib\admin.js" />
+    <Content Include="Content\layuiapp\custom\modules\BaseDataManage.js" />
     <Content Include="Content\layuiapp\custom\lib\index.js" />
     <Content Include="Content\layuiapp\custom\lib\view.js" />
     <Content Include="Content\layuiapp\custom\tpl\system\theme.html" />
@@ -279,6 +281,7 @@
     <Compile Include="Areas\PersonalIssue\PersonalIssueAreaRegistration.cs" />
     <Compile Include="Areas\PersonnelManage\Controllers\PersonnelArchivesController.cs" />
     <Compile Include="Areas\PersonnelManage\PersonnelManageAreaRegistration.cs" />
+    <Compile Include="Areas\SystemManage\Controllers\BaseDataManageController.cs" />
     <Compile Include="Areas\SystemManage\Controllers\LogController.cs" />
     <Compile Include="Areas\SystemManage\SystemManageAreaRegistration.cs" />
     <Compile Include="Controllers\ClientDataController.cs" />
@@ -314,6 +317,7 @@
     <Content Include="Areas\PersonalIssue\Views\UserInfomation\UserInfo.cshtml" />
     <Content Include="Areas\PersonalIssue\Views\UserInfomation\ChangePwd.cshtml" />
     <Content Include="Areas\PersonalIssue\Views\UserInfomation\Index.cshtml" />
+    <Content Include="Areas\SystemManage\Views\BaseDataManage\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

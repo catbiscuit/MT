@@ -9,14 +9,14 @@ using MT.Business.Model;
 namespace MT.Business.IBLL.SystemManage
 {
     /// <summary>
-    /// 功能: 实体类 (基础信息表)    
-    /// 创建日期：2018/10/17    
+    /// 功能: 实体类 ()    
+    /// 创建日期：2018/11/3    
     /// </summary>  
-    public interface IT_BaseInfoBLL
+    public interface IT_DataItemDetailBLL
     {
-        int Insert(T_BaseInfo entity);
-        int Delete(T_BaseInfo entity);
+        int Insert(T_DataItemDetail entity);
+        int Delete(T_DataItemDetail entity);
         int Update();        
-        T_BaseInfo GetModelByCondition(Expression<Func<T_BaseInfo,bool>> condition);
+        T_DataItemDetail GetModelByCondition(Expression<Func<T_DataItemDetail,bool>> condition);
     }
 }

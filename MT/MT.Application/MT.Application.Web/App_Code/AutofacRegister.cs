@@ -32,9 +32,6 @@ namespace MT.Application.Web.App_Code
                 //登录用户的提供者
                 builder.RegisterType<MT.Application.Code.CurrentUser.UserProvider>().As<MT.Application.Code.CurrentUser.IUserProvider>();
 
-                //T_BaseInfo类
-                builder.RegisterType<T_BaseInfoDAL>().As<IT_BaseInfoDAL>();
-                builder.RegisterType<T_BaseInfoBLL>().As<IT_BaseInfoBLL>();
                 //T_Log类
                 builder.RegisterType<T_LogDAL>().As<IT_LogDAL>();
                 builder.RegisterType<T_LogBLL>().As<IT_LogBLL>();
@@ -47,6 +44,13 @@ namespace MT.Application.Web.App_Code
                 //T_UserRole类
                 builder.RegisterType<T_UserRoleDAL>().As<IT_UserRoleDAL>();
                 builder.RegisterType<T_UserRoleBLL>().As<IT_UserRoleBLL>();
+
+                //T_DataItem类
+                builder.RegisterType<T_DataItemDAL>().As<IT_DataItemDAL>();
+                builder.RegisterType<T_DataItemBLL>().As<IT_DataItemBLL>();
+                //T_DataItemDetail类
+                builder.RegisterType<T_DataItemDetailDAL>().As<IT_DataItemDetailDAL>();
+                builder.RegisterType<T_DataItemDetailBLL>().As<IT_DataItemDetailBLL>();
 
                 return builder;
             }

@@ -12,12 +12,12 @@ using MT.Data.Base.IBaseInterface;
 namespace MT.Business.IDAL.SystemManage
 {
     /// <summary>
-    /// 功能: 实体类 (基础信息表)    
-    /// 创建日期：2018/10/17    
+    /// 功能: 实体类 ()    
+    /// 创建日期：2018/11/3    
     /// </summary>  
-    public class T_BaseInfoDAL : Repository<T_BaseInfo, MTEntities>, IT_BaseInfoDAL
+    public class T_DataItemDetailDAL : Repository<T_DataItemDetail, MTEntities>, IT_DataItemDetailDAL
     {
-        public T_BaseInfoDAL(IDatabaseFactory<MTEntities> iDatabaseFactory)
+        public T_DataItemDetailDAL(IDatabaseFactory<MTEntities> iDatabaseFactory)
             : base(iDatabaseFactory)
         {
 

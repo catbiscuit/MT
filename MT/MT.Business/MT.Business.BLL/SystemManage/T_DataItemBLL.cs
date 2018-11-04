@@ -13,29 +13,29 @@ using MT.Data.Base.IBaseInterface;
 namespace MT.Business.IDAL.SystemManage
 {
     /// <summary>
-    /// 功能: 实体类 (基础信息表)    
-    /// 创建日期：2018/10/17    
+    /// 功能: 实体类 ()    
+    /// 创建日期：2018/11/3    
     /// </summary>  
-    public class T_BaseInfoBLL : IT_BaseInfoBLL
+    public class T_DataItemBLL : IT_DataItemBLL
     {
         private IUnitOfWork<MTEntities> _iUnitOfWork;
-        private IT_BaseInfoDAL _iT_BaseInfoDAL;
+        private IT_DataItemDAL _iT_DataItemDAL;
         
-        public T_BaseInfoBLL(IUnitOfWork<MTEntities> iUnitOfWork
-            , IT_BaseInfoDAL iT_BaseInfoDAL)
+        public T_DataItemBLL(IUnitOfWork<MTEntities> iUnitOfWork
+            , IT_DataItemDAL iT_DataItemDAL)
         {
             this._iUnitOfWork = iUnitOfWork;
-            this._iT_BaseInfoDAL = iT_BaseInfoDAL;
+            this._iT_DataItemDAL = iT_DataItemDAL;
         }
 
-        public int Insert(T_BaseInfo entity)
+        public int Insert(T_DataItem entity)
         {
-            _iT_BaseInfoDAL.Insert(entity);
+            _iT_DataItemDAL.Insert(entity);
             return _iUnitOfWork.Commit();
         }
-        public int Delete(T_BaseInfo entity)
+        public int Delete(T_DataItem entity)
         {
-            _iT_BaseInfoDAL.Delete(entity);
+            _iT_DataItemDAL.Delete(entity);
             return _iUnitOfWork.Commit();
         }
 
@@ -44,9 +44,9 @@ namespace MT.Business.IDAL.SystemManage
             return _iUnitOfWork.Commit();
         }
 
-        public T_BaseInfo GetModelByCondition(Expression<Func<T_BaseInfo, bool>> condition)
+        public T_DataItem GetModelByCondition(Expression<Func<T_DataItem, bool>> condition)
         {
-            return _iT_BaseInfoDAL.GetModelByCondition(condition);
+            return _iT_DataItemDAL.GetModelByCondition(condition);
         }
     }
 }
