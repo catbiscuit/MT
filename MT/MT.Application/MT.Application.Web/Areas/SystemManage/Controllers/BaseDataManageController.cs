@@ -8,18 +8,38 @@ using System.Web.Mvc;
 using MT.Utility.Common.SqlHelper;
 using MT.Utility.Common.Extension;
 using System.Text;
+using MT.Business.Model;
+using MT.Business.IBLL.SystemManage;
+using MT.Application.Code.Enums;
 
 namespace MT.Application.Web.Areas.SystemManage.Controllers
 {
     /// <summary>
     /// 基础数据管理
     /// </summary>
+    [HandlerLogin(LoginMode.Enforce)]
     public class BaseDataManageController : MvcControllerBase
     {
+        private readonly IT_DataItemBLL _iT_DataItemBLL;
+        #region 字段、属性
+        public BaseDataManageController(IT_DataItemBLL iT_DataItemBLL)
+        {
+            this._iT_DataItemBLL = iT_DataItemBLL;
+        }
+        #endregion
+
         #region 视图
         public ActionResult Index()
         {
             ViewBag.Title = "基础数据管理";
+            return View();
+        }
+        /// <summary>
+        /// 表单
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Form()
+        {
             return View();
         }
         #endregion
@@ -96,6 +116,44 @@ namespace MT.Application.Web.Areas.SystemManage.Controllers
             catch
             {
                 return "";
+            }
+        }
+        #endregion
+
+        #region 提交数据
+        /// <summary>
+        /// 修改 是否启用 字段
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [HandlerAjaxOnly]
+        public ActionResult UpdateF_isEnable(Guid F_ID, bool? IsChecked)
+        {
+            try
+            {
+                if (F_ID == default(Guid))
+                {
+                    return Error("修改失败,未获取到记录,请刷新页面重试！");
+                }
+                if (IsChecked == null)
+                {
+                    return Error("修改失败,未获取到状态,请刷新页面重试！");
+                }
+                T_DataItem T_DataItemModel = _iT_DataItemBLL.GetModelByCondition(x => x.F_ID == F_ID);
+                T_DataItemModel.F_isEnable = IsChecked == true ? 1 : 0;
+                if (_iT_DataItemBLL.Update() > 0)
+                {
+                    return Success(T_DataItemModel.F_isEnable.ToString());
+                }
+                else
+                {
+                    return Error("修改失败,请刷新页面重试！");
+                }
+            }
+            catch (Exception ex)
+            {
+                return Error("修改失败," + ex.Message.ToString());
             }
         }
         #endregion

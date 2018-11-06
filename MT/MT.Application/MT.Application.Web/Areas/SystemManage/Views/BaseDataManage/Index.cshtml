@@ -1,141 +1,122 @@
 ﻿@{
-    Layout = null;
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
 }
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+    </div>
+</div>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="data-table" lay-filter="test-table-toolbar"></table>
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>@ViewBag.Title</title>
-
-    <meta name="renderer" content="webkit">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <link href="~/Content/layuiapp/layui/css/layui.css" rel="stylesheet" />
-    <link href="~/Content/layuiapp/custom/css/admin.css" rel="stylesheet" />
-</head>
-<body>
-
-    <div class="layui-fluid">
-        <div class="layui-card">
-            <div class="layui-form layui-card-header layuiadmin-card-header-auto">
-                <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label">字典项目</label>
-                        <div class="layui-input-block">
-                            <input type="text" name="F_ItemCode" placeholder="请输入字典编码或名称或助记码" autocomplete="off" class="layui-input" style="width: 220px">
+                    <script type="text/html" id="data-table-switchF_isEnable">                    
+                    <input type="checkbox" name="F_isEnable" lay-skin="switch" lay-text="是|否" lay-filter="data-table-column-F_isEnable"
+                    value="{{ d.F_isEnable }}" data-json="{{ encodeURIComponent(JSON.stringify(d)) }}" {{ d.F_isEnable== 1 ? 'checked' : '' }}>
+                    </script>
+                    <script type="text/html" id="data-table-toolbar">
+                        <div class="layui-btn-container">
+                            <button class="layui-btn layui-btn-sm" lay-event="Add">添加</button>
+                            <button class="layui-btn layui-btn-sm" lay-event="BatchDelete">批量删除</button>
+                            <button class="layui-btn layui-btn-sm" lay-event="ExportAllData">导出全部数据</button>
                         </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">录入人</label>
-                        <div class="layui-input-block">
-                            <input type="text" name="F_AddUserName" placeholder="请输入" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <button class="layui-btn layuiadmin-btn-admin" lay-submit lay-filter="LAY-user-back-search">
-                            <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
-                        </button>
-                    </div>
+                    </script>
+                    <script type="text/html" id="data-table-row-button">
+                        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+                        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+                    </script>
                 </div>
-            </div>
-
-            <div class="layui-card-body">
-                <div style="padding-bottom: 10px;">
-                    <button class="layui-btn layuiadmin-btn-admin" data-type="add">添加</button>
-                    <button class="layui-btn layuiadmin-btn-admin" data-type="batchdel">删除</button>
-                </div>
-
-                <table id="LAY-DataItem-List" lay-filter="LAY-DataItem-List"></table>
             </div>
         </div>
     </div>
+</div>
 
-    <script src="~/Content/layuiapp/layui/layui.js"></script>
-    <script>
-        layui.config({
-            base: "/Content/layuiapp/custom/" //存放拓展模块的根目录
-        }).extend({
-            index: 'lib/index' //主入口模块
-        }).use(['index', 'BaseDataManage', 'table'], function () {
-            var $ = layui.$
+<script type="text/javascript">
+    layui.config({
+        base: "/Content/layuiapp/custom/" //存放拓展模块的根目录
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'table', 'form', 'layer'], function () {
+        var admin = layui.admin
             , form = layui.form
-            , table = layui.table;
+            , table = layui.table
+            , $ = layui.$;
 
-            //监听搜索
-            form.on('submit(LAY-user-back-search)', function (data) {
-                var field = data.field;
-
-                //执行重载
-                table.reload('LAY-DataItem-List', {
-                    where: field
-                });
-            });
-
-            //事件
-            var active = {
-                batchdel: function () {
-                    var checkStatus = table.checkStatus('LAY-DataItem-List')
-                    , checkData = checkStatus.data; //得到选中的数据
-
-                    if (checkData.length === 0) {
-                        return layer.msg('请选择数据');
-                    }
-
-                    layer.prompt({
-                        formType: 1
-                      , title: '敏感操作，请验证口令'
-                    }, function (value, index) {
-                        layer.close(index);
-
-                        layer.confirm('确定删除吗？', function (index) {
-
-                            //执行 Ajax 后重载
-                            /*
-                            admin.req({
-                              url: 'xxx'
-                              //,……
-                            });
-                            */
-                            table.reload('LAY-DataItem-List');
-                            layer.msg('已删除');
-                        });
-                    });
-                }
-              , add: function () {
-                  layer.open({
-                      type: 2
-                    , title: '添加管理员'
-                    , content: 'adminform.html'
-                    , area: ['420px', '420px']
-                    , btn: ['确定', '取消']
-                    , yes: function (index, layero) {
-                        var iframeWindow = window['layui-layer-iframe' + index]
-                        , submitID = 'LAY-user-back-submit'
-                        , submit = layero.find('iframe').contents().find('#' + submitID);
-
-                        //监听提交
-                        iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
-                            var field = data.field; //获取提交的字段
-
-                            //提交 Ajax 成功后，静态更新表格中的数据
-                            //$.ajax({});
-                            table.reload('LAY-user-front-submit'); //数据刷新
-                            layer.close(index); //关闭弹层
-                        });
-
-                        submit.trigger('click');
-                    }
-                  });
-              }
-            }
-            $('.layui-btn.layuiadmin-btn-admin').on('click', function () {
-                var type = $(this).data('type');
-                active[type] ? active[type].call(this) : '';
-            });
+        //表格信息
+        table.render({
+            elem: "#data-table",
+            url: "/SystemManage/BaseDataManage/GetDataItemList",            
+            cols: [[
+                { type: "checkbox", fixed: "left", }
+                , { field: "F_ItemCode", title: "字典编码", width: 200 }
+                , { field: "F_ItemName", title: "字典名称", width: 200, }
+                , { field: "F_Sort", title: "排序", width: 80 }
+                , { field: "F_isEnable", title: "是否可用", width: 100, templet: '#data-table-switchF_isEnable', unresize: true }
+                , { field: "F_AddUserName", width: 100, title: "录入人" }
+                , { field: "F_AddTime", title: "录入时间", width: 200, sort: true }
+                , { field: "F_Remark", title: "备注", }
+                , { title: "操作", width: 120, align: "center", fixed: "right", unresize: true, toolbar: "#data-table-row-button" }
+            ]],
+            height: 'full-100',
+            cellMinWidth: 80,
+            page: true,
+            limit: 30,
+            toolbar: "#data-table-toolbar"//头部工具栏
         });
-    </script>
-</body>
-</html>
+        //监听"是否可用"操作
+        form.on('switch(data-table-column-F_isEnable)', function (obj) {
+            var json = JSON.parse(decodeURIComponent($(this).data('json')));
 
+            $.post("/SystemManage/BaseDataManage/UpdateF_isEnable", { F_ID: json.F_ID, IsChecked: obj.elem.checked },
+                function (result) {
+                    var resultJson = JSON.parse(result);
+                    if (resultJson.type == "1") {
+                        obj.elem.value = resultJson.message;//修改input标签的value值
+                    }
+                    else {
+                        layer.msg(resultJson.message, { icon: 5 });//提示消息                    
+                        obj.elem.checked = obj.elem.value == "1" ? true : false;//还原checkbox的状态
+                    }
+                });
+        });
+        //头工具栏事件
+        table.on('toolbar(data-table)', function (obj) {
+            var checkStatus = table.checkStatus(obj.config.id);
+            switch (obj.event) {
+                case 'Add'://添加
+                    layer.open({
+                        type: 2,
+                        title: '添加基础数据项目',
+                        maxmin: true,
+                        area: ['800px', '600px'],
+                        btn: ['确定', '取消'],
+                        yes: function (index, layero) {
+                            var iframeWindow = window['layui-layer-iframe' + index],
+                                submitID = 'LAY-user-front-submit',
+                                submit = layero.find('iframe').contents().find('#' + submitID);
+
+                            //监听提交
+                            iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
+                                var field = data.field; //获取提交的字段
+
+                                //提交新增的数据
+                                //$.post
+
+                                table.reload('LAY-user-front-submit'); //数据刷新
+                                layer.close(index); //关闭弹层
+                            });
+                            submit.trigger('click');
+                        }
+                    });
+                    break;
+                case 'BatchDelete'://批量删除
+                    break;
+                case 'ExportAllData'://导出全部数据
+                    break;
+            }
+        });
+    });
+</script>

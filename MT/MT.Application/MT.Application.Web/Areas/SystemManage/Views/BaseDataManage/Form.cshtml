@@ -1,0 +1,62 @@
+﻿@{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-header">表单组合</div>
+        <div class="layui-card-body" style="padding: 15px;">
+            <form class="layui-form" action="" lay-filter="component-form-group">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">项目编码</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="F_ItemCode" lay-verify="title" autocomplete="off" placeholder="请输入项目编码" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">项目名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="F_ItemName" lay-verify="required" placeholder="请输入项目名称" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">排序</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="F_Sort" lay-verify="required|number" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">是否可用 </label>
+                    <div class="layui-input-block">
+                        <input type="checkbox" checked="" name="F_isEnable" lay-skin="switch" lay-filter="component-form-switchTest" lay-text="ON|OFF">
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">备注</label>
+                    <div class="layui-input-block">
+                        <textarea name="F_Remark" placeholder="请输入备注" class="layui-textarea"></textarea>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    layui.config({
+        base: "/Content/layuiapp/custom/" //存放拓展模块的根目录
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form'], function () {
+        var $ = layui.$
+         , admin = layui.admin
+         , element = layui.element
+         , layer = layui.layer
+         , form = layui.form;
+
+        form.render(null, 'component-form-group');
+    });
+</script>

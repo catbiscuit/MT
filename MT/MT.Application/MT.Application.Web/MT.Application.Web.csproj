@@ -139,7 +139,6 @@
     <Content Include="Content\layuiapp\custom\css\admin.css" />
     <Content Include="Content\layuiapp\custom\css\index.css" />
     <Content Include="Content\layuiapp\custom\lib\admin.js" />
-    <Content Include="Content\layuiapp\custom\modules\BaseDataManage.js" />
     <Content Include="Content\layuiapp\custom\lib\index.js" />
     <Content Include="Content\layuiapp\custom\lib\view.js" />
     <Content Include="Content\layuiapp\custom\tpl\system\theme.html" />
@@ -318,6 +317,7 @@
     <Content Include="Areas\PersonalIssue\Views\UserInfomation\ChangePwd.cshtml" />
     <Content Include="Areas\PersonalIssue\Views\UserInfomation\Index.cshtml" />
     <Content Include="Areas\SystemManage\Views\BaseDataManage\Index.cshtml" />
+    <Content Include="Areas\SystemManage\Views\BaseDataManage\Form.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
