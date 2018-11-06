@@ -55,5 +55,10 @@ namespace MT.Application.Web
         {
             return Content(new AjaxResult { type = ResultType.error, message = message }.ToJson());
         }
+
+        protected virtual ActionResult LogOut(string message)
+        {
+            return Content(new { code = "1001" }.ToJson());
+        }
     }
 }

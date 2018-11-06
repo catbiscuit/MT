@@ -116,7 +116,7 @@ namespace MT.Application.Web.Controllers
                 Session.Clear();                                            //清除当前浏览器所有Session
                 _iUserProvider.RemoveCurrent();                  //清除登录者信息
 
-                return Success("登录成功");
+                return LogOut("退出成功");
             }
             catch (Exception ex)
             {

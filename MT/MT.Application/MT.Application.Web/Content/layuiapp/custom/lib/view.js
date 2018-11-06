@@ -25,10 +25,10 @@ function (e) {
     },
     //退出
     i.exit = function (e) {
-        layui.data(r.tableName, {
-            key: r.request.tokenName,
-            remove: !0
-        }),
+        //layui.data(r.tableName, {
+        //    key: r.request.tokenName,
+        //    remove: true
+        //}),
         e && e()
     },
     //请求

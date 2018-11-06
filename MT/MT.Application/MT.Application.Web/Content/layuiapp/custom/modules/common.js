@@ -5,12 +5,12 @@ layui.define(function (e) {
     //定义登出事件
     i.events.logout = function () {
         i.req({
-            url: "../../../../Login/CheckLogin",
-            type: "get",
+            url: "../../../../Login/OutLogin",
+            type: "post",
             data: {},
             done: function (e) {
                 i.exit(function () {
-                    location.href = "../../../../Login/Index"
+                    location.href = "../../../../Login/Index";
                 })
             }
         })
