@@ -4,9 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MT.Utility.Common;
-using MT.Utility.Common.Configs;
-using MT.Utility.Common.Extension;
-using MT.Utility.Common.Security;
 
 namespace MT.Application.Code.CurrentUser
 {

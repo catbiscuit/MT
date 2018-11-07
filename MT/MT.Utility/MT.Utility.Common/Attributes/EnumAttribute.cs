@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MT.Utility.Common.Attributes
+namespace MT.Utility.Common
 {
     /// <summary>
     /// 获取实体类Attribute自定义属性

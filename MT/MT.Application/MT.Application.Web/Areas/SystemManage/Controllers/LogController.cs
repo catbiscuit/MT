@@ -7,8 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using MT.Application.Code.Enums;
 using MT.Business.IBLL.SystemManage;
-using MT.Utility.Common.SqlHelper;
-using MT.Utility.Common.Extension;
+using MT.Utility.Common;
 namespace MT.Application.Web.Areas.SystemManage.Controllers
 {
     public class LogController : MvcControllerBase

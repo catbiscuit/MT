@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MT.Utility.Common.SqlHelper
+namespace MT.Utility.Common
 {
     /// <summary>
     /// 数据访问抽象基础类
@@ -902,7 +902,7 @@ namespace MT.Utility.Common.SqlHelper
             SqlDataAdapter Dat = new SqlDataAdapter();
             using (SqlConnection conn = new SqlConnection())
             {
-                conn.ConnectionString = SqlHelper.DbHelperSQL.dbMain;//.ConnectionString;
+                conn.ConnectionString = DbHelperSQL.dbMain;//.ConnectionString;
                 SqlCommand cmd = new SqlCommand();
                 cmd.CommandText = spName;
                 cmd.CommandType = CommandType.StoredProcedure;

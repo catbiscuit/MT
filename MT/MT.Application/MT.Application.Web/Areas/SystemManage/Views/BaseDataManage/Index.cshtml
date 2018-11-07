@@ -11,22 +11,24 @@
         <div class="layui-col-md12">
             <div class="layui-card">
                 <div class="layui-card-body">
-                    <table class="layui-hide" id="data-table" lay-filter="test-table-toolbar"></table>
+                    <table class="layui-hide" id="mt-data-table" lay-filter="mt-data-table"></table>
 
-                    <script type="text/html" id="data-table-switchF_isEnable">                    
-                    <input type="checkbox" name="F_isEnable" lay-skin="switch" lay-text="是|否" lay-filter="data-table-column-F_isEnable"
-                    value="{{ d.F_isEnable }}" data-json="{{ encodeURIComponent(JSON.stringify(d)) }}" {{ d.F_isEnable== 1 ? 'checked' : '' }}>
-                    </script>
-                    <script type="text/html" id="data-table-toolbar">
+                    <script type="text/html" id="mt-data-table-toolbar">
                         <div class="layui-btn-container">
                             <button class="layui-btn layui-btn-sm" lay-event="Add">添加</button>
                             <button class="layui-btn layui-btn-sm" lay-event="BatchDelete">批量删除</button>
                             <button class="layui-btn layui-btn-sm" lay-event="ExportAllData">导出全部数据</button>
                         </div>
                     </script>
-                    <script type="text/html" id="data-table-row-button">
+
+                    <script type="text/html" id="mt-data-table-row-button">
                         <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
                         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+                    </script>
+
+                    <script type="text/html" id="mt-data-table-switchF_isEnable">                    
+                         <input type="checkbox" name="F_isEnable" lay-skin="switch" lay-text="是|否" lay-filter="mt-data-table-column-F_isEnable"
+                          value="{{ d.F_isEnable }}" data-json="{{ encodeURIComponent(JSON.stringify(d)) }}" {{ d.F_isEnable== 1 ? 'checked' : '' }}>
                     </script>
                 </div>
             </div>
@@ -47,76 +49,69 @@
 
         //表格信息
         table.render({
-            elem: "#data-table",
-            url: "/SystemManage/BaseDataManage/GetDataItemList",            
-            cols: [[
+            elem: "#mt-data-table"
+            , url: "/SystemManage/BaseDataManage/GetDataItemList"
+            , toolbar: "#mt-data-table-toolbar"//头部工具栏
+            , cols: [[
                 { type: "checkbox", fixed: "left", }
                 , { field: "F_ItemCode", title: "字典编码", width: 200 }
                 , { field: "F_ItemName", title: "字典名称", width: 200, }
                 , { field: "F_Sort", title: "排序", width: 80 }
-                , { field: "F_isEnable", title: "是否可用", width: 100, templet: '#data-table-switchF_isEnable', unresize: true }
+                , { field: "F_isEnable", title: "是否可用", width: 100, templet: '#mt-data-table-switchF_isEnable', unresize: true }
                 , { field: "F_AddUserName", width: 100, title: "录入人" }
                 , { field: "F_AddTime", title: "录入时间", width: 200, sort: true }
                 , { field: "F_Remark", title: "备注", }
-                , { title: "操作", width: 120, align: "center", fixed: "right", unresize: true, toolbar: "#data-table-row-button" }
-            ]],
-            height: 'full-100',
-            cellMinWidth: 80,
-            page: true,
-            limit: 30,
-            toolbar: "#data-table-toolbar"//头部工具栏
+                , { title: "操作", width: 120, align: "center", fixed: "right", unresize: true, toolbar: "#mt-data-table-row-button" }
+            ]]
+            , height: 'full-100'
+            , cellMinWidth: 80
+            , page: true
+            , limit: 30
         });
-        //监听"是否可用"操作
-        form.on('switch(data-table-column-F_isEnable)', function (obj) {
-            var json = JSON.parse(decodeURIComponent($(this).data('json')));
 
+        //监听"是否可用"操作
+        form.on('switch(mt-data-table-column-F_isEnable)', function (obj) {
+            var json = JSON.parse(decodeURIComponent($(this).data('json')));
             $.post("/SystemManage/BaseDataManage/UpdateF_isEnable", { F_ID: json.F_ID, IsChecked: obj.elem.checked },
-                function (result) {
-                    var resultJson = JSON.parse(result);
-                    if (resultJson.type == "1") {
-                        obj.elem.value = resultJson.message;//修改input标签的value值
-                    }
-                    else {
-                        layer.msg(resultJson.message, { icon: 5 });//提示消息                    
-                        obj.elem.checked = obj.elem.value == "1" ? true : false;//还原checkbox的状态
-                    }
-                });
+            function (result) {
+                var resultJson = JSON.parse(result);
+                if (resultJson.type == "1") {
+                    obj.elem.value = resultJson.message;//修改input标签的value值
+                }
+                else {
+                    layer.msg(resultJson.message, { icon: 5 });//提示消息                    
+                    obj.elem.checked = obj.elem.value == "1" ? true : false;//还原checkbox的状态
+                }
+            });
         });
+
         //头工具栏事件
-        table.on('toolbar(data-table)', function (obj) {
+        table.on('toolbar(mt-data-table)', function (obj) {
             var checkStatus = table.checkStatus(obj.config.id);
             switch (obj.event) {
                 case 'Add'://添加
                     layer.open({
-                        type: 2,
-                        title: '添加基础数据项目',
-                        maxmin: true,
-                        area: ['800px', '600px'],
-                        btn: ['确定', '取消'],
-                        yes: function (index, layero) {
+                        type: 2
+                        , title: '添加基础数据项目'
+                        , content: '/SystemManage/BaseDataManage/Form'
+                        , maxmin: true
+                        , area: ['600px', '550px']
+                        , btn: ['确定', '取消']
+                        , yes: function (index, layero) {
                             var iframeWindow = window['layui-layer-iframe' + index],
-                                submitID = 'LAY-user-front-submit',
+                                submitID = 'mt-form-submit',
                                 submit = layero.find('iframe').contents().find('#' + submitID);
-
-                            //监听提交
-                            iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
-                                var field = data.field; //获取提交的字段
-
-                                //提交新增的数据
-                                //$.post
-
-                                table.reload('LAY-user-front-submit'); //数据刷新
-                                layer.close(index); //关闭弹层
-                            });
-                            submit.trigger('click');
+                                submit.click();
                         }
                     });
                     break;
                 case 'BatchDelete'://批量删除
+                    console.log(checkStatus);
                     break;
                 case 'ExportAllData'://导出全部数据
+                    console.log(checkStatus);
                     break;
-            }
+            };
         });
     });
 </script>

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MT.Utility.Common.Security
+namespace MT.Utility.Common
 {
     public class Md5Helper
     {

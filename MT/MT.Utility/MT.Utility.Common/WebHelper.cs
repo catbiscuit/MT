@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
-using MT.Utility.Common.Extension;
+using MT.Utility.Common;
 
 namespace MT.Utility.Common
 {

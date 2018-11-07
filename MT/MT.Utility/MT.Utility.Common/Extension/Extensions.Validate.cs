@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MT.Utility.Common.Extension
+namespace MT.Utility.Common
 {
     /// <summary>
     /// 验证扩展

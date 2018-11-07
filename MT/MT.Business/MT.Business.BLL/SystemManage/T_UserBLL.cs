@@ -9,7 +9,7 @@ using MT.Business.IDAL.SystemManage;
 using MT.Business.Model;
 using MT.Data.Base;
 using MT.Data.Base.IBaseInterface;
-using MT.Utility.Common.Security;
+using MT.Utility.Common;
 
 namespace MT.Business.IDAL.SystemManage
 {

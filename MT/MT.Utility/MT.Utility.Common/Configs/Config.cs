@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace MT.Utility.Common.Configs
+namespace MT.Utility.Common
 {
     /// <summary>
     /// Config文件操作

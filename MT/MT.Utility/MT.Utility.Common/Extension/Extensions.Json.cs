@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 
-namespace MT.Utility.Common.Extension
+namespace MT.Utility.Common
 {
     /// <summary>
     /// Json扩展

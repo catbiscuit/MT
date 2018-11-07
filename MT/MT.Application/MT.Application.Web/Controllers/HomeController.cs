@@ -10,8 +10,7 @@ using MT.Application.Code.CurrentUser;
 using MT.Application.Code.Enums;
 using MT.Business.IBLL.SystemManage;
 using MT.Business.Model;
-using MT.Utility.Common.SqlHelper;
-using MT.Utility.Common.Extension;
+using MT.Utility.Common;
 
 namespace MT.Application.Web.Controllers
 {
@@ -51,8 +50,7 @@ namespace MT.Application.Web.Controllers
         /// <returns></returns>
         [HttpGet]
         public ActionResult GetPermissions()
-        {
-            UserExtension user = UserProvider.Provider.Current();
+        {            
             StringBuilder sbSql = new StringBuilder();
             sbSql.Append(" select c.* ");
             sbSql.Append(" from T_UserRole a ");
@@ -64,7 +62,7 @@ namespace MT.Application.Web.Controllers
             {
                 new SqlParameter("@UserID", SqlDbType.UniqueIdentifier),
             };
-            parameters[0].Value = user == null ? default(Guid) : user.F_ID;
+            parameters[0].Value = userExtension == null ? default(Guid) : userExtension.F_ID;
             DataSet dsResult = DbHelperSQL.Query(sbSql.ToString(), parameters);
             if (dsResult != null && dsResult.Tables.Count > 0 && dsResult.Tables[0].Rows.Count > 0)
             {

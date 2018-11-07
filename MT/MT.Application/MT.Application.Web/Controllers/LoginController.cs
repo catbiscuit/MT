@@ -6,7 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using MT.Application.Code.Enums;
-using MT.Utility.Common.Attributes;
+using MT.Utility.Common;
 using MT.Application.Code.CurrentUser;
 
 namespace MT.Application.Web.Controllers

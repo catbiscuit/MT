@@ -5,8 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using MT.Utility.Common.SqlHelper;
-using MT.Utility.Common.Extension;
+using MT.Utility.Common;
 using System.Text;
 using MT.Business.Model;
 using MT.Business.IBLL.SystemManage;
@@ -142,6 +141,9 @@ namespace MT.Application.Web.Areas.SystemManage.Controllers
                 }
                 T_DataItem T_DataItemModel = _iT_DataItemBLL.GetModelByCondition(x => x.F_ID == F_ID);
                 T_DataItemModel.F_isEnable = IsChecked == true ? 1 : 0;
+                T_DataItemModel.F_UpdateTime = DateTime.Now;
+                T_DataItemModel.F_UpdateUserID = userExtension.F_ID;
+                T_DataItemModel.F_UpdateUserName = userExtension.F_UserName;
                 if (_iT_DataItemBLL.Update() > 0)
                 {
                     return Success(T_DataItemModel.F_isEnable.ToString());
@@ -154,6 +156,62 @@ namespace MT.Application.Web.Areas.SystemManage.Controllers
             catch (Exception ex)
             {
                 return Error("修改失败," + ex.Message.ToString());
+            }
+        }
+
+        /// <summary>
+        /// 保存表单
+        /// </summary>
+        /// <param name="F_IDValue">主键(区别Insert和Update)</param>
+        /// <param name="model">实体</param>
+        /// <returns></returns>
+        [HttpPost]
+        [HandlerAjaxOnly]
+        public ActionResult SaveForm(string F_IDValue, T_DataItem model)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(F_IDValue))//Add
+                {
+                    model.F_ID = Guid.NewGuid();
+                    model.F_AddTime = DateTime.Now;
+                    model.F_AddUserID = userExtension.F_ID;
+                    model.F_AddUserName = userExtension.F_UserName;
+                    model.F_isValid = 1;
+                    if (_iT_DataItemBLL.Insert(model) > 0)
+                    {
+                        return Success("添加成功!");
+                    }
+                    else
+                    {
+                        return Error("添加失败!");
+                    }
+                }
+                else//Update
+                {
+                    Guid F_ID = Guid.Parse(F_IDValue);
+                    T_DataItem T_DataItemModel = _iT_DataItemBLL.GetModelByCondition(x => x.F_ID == F_ID);
+                    T_DataItemModel.F_ItemName = model.F_ItemName;
+                    T_DataItemModel.F_HelpCode = model.F_HelpCode;
+                    T_DataItemModel.F_Sort = model.F_Sort;
+                    T_DataItemModel.F_isEnable = model.F_isEnable;
+                    T_DataItemModel.F_Remark = model.F_Remark;
+                    T_DataItemModel.F_UpdateTime = DateTime.Now;
+                    T_DataItemModel.F_UpdateUserID = userExtension.F_ID;
+                    T_DataItemModel.F_UpdateUserName = userExtension.F_UserName;
+                    if (_iT_DataItemBLL.Update() > 0)
+                    {
+                        return Success("修改成功!");
+                    }
+                    else
+                    {
+                        return Error("修改失败!");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return Error("保存失败," + ex.Message.ToString());
             }
         }
         #endregion

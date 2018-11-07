@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MT.Utility.Common.Security
+namespace MT.Utility.Common
 {
     /// <summary>
     /// 加密解密类

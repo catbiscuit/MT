@@ -6,7 +6,7 @@ using System.Web.Mvc;
 using MT.Application.Code.CurrentUser;
 using MT.Application.Code.Enums;
 using MT.Utility.WebControl;
-using MT.Utility.Common.Extension;
+using MT.Utility.Common;
 using System.Data;
 
 namespace MT.Application.Web
@@ -27,6 +27,14 @@ namespace MT.Application.Web
         /// </summary>
         public DataTable dtResultUnify = null;
         #endregion
+
+        #region 公共属性
+        /// <summary>
+        /// 当前登录用户信息
+        /// </summary>
+        public UserExtension userExtension = UserProvider.Provider.Current();
+        #endregion
+
         /// <summary>
         /// 返回成功消息
         /// </summary>
@@ -55,7 +63,11 @@ namespace MT.Application.Web
         {
             return Content(new AjaxResult { type = ResultType.error, message = message }.ToJson());
         }
-
+        /// <summary>
+        /// 返回退出消息
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
         protected virtual ActionResult LogOut(string message)
         {
             return Content(new { code = "1001" }.ToJson());

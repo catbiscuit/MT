@@ -1,0 +1,5 @@
+1.重点
+table.on('toolbar(data-table)',function(){};
+事件中,toolbar中的参数,是table标签中的lay-filter属性,
+因为官网中 将table的id和lay-filter属性都设置为test-table,误以为需要传递的是table的id属性.
+调试也没有报错,一顿好找啊这个问题.
