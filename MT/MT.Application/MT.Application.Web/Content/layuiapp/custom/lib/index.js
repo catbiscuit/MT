@@ -5,7 +5,7 @@ layui.extend({
     setter: "config",
     admin: "lib/admin",
     view: "lib/view"
-}).define(["setter", "admin"], function (a) {
+}).define(["setter", "admin", "element"], function (a) {
     var e = layui.setter,
     i = layui.element,
     n = layui.admin,
