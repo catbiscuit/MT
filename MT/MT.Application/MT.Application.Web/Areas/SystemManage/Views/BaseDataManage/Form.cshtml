@@ -71,7 +71,13 @@
         form.on('submit(mt-form-submit)', function (data) {
             var field = data.field; //获取提交的字段
             var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引  
-            //field["F_IDValue"] = "123";
+
+            //根据参数判断表单类型
+            var FormType = request('FormType');
+            if (FormType != "" && FormType != null && FormType != undefined && FormType == "UPDATE") {
+                var F_IDValue = request('F_IDValue');
+                field["F_IDValue"] = F_IDValue;
+            }
 
             field["F_isEnable"] = field["F_isEnable"] == "on" ? 1 : 0;//将on-off 转换为 1-0
 
@@ -95,4 +101,39 @@
             $("#F_HelpCode").val(PinyinInitials($(this).val()));
         });
     });
+    $(document).ready(function () {
+        PageInitial();
+    });
+    //页面初始化
+    function PageInitial() {
+        var FormType = request('FormType');
+        var F_IDValue = request('F_IDValue');
+        if (FormType != "" && FormType != null && FormType != undefined && FormType == "UPDATE") {
+            $.post("/SystemManage/BaseDataManage/GetForm", { F_IDValue: F_IDValue },
+            function (result) {
+                var resultJson = JSON.parse(result);
+                if (resultJson.type == "1") {
+                    var model = JSON.parse(resultJson.message);
+                    $('input[name="F_ItemCode"]').val(model.F_ItemCode);
+                    $('input[name="F_ItemCode"]').attr("disabled", "disabled");
+                    $('input[name="F_ItemCode"]').attr("readonly", "readonly");
+                    $('input[name="F_ItemName"]').val(model.F_ItemName);
+                    $('input[name="F_HelpCode"]').val(model.F_HelpCode);
+                    $('input[name="F_Sort"]').val(model.F_Sort);
+                    if (model.F_isEnable == "1") {
+                        $('input[name="F_isEnable"]').next().addClass("layui-form-onswitch");
+                        $('input[name="F_isEnable"]').next().children("em").html("是");
+                    }
+                    else {
+                        $('input[name="F_isEnable"]').next().removeClass("layui-form-onswitch");
+                        $('input[name="F_isEnable"]').next().children("em").html("否");
+                    }
+                    $('textarea[name="F_Remark"]').val(model.F_Remark);
+                }
+                else {
+                    layer.msg(resultJson.message, { icon: 5 });//提示消息                                        
+                }
+            });
+        }
+    }
 </script>

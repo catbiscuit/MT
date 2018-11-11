@@ -117,6 +117,32 @@ namespace MT.Application.Web.Areas.SystemManage.Controllers
                 return "";
             }
         }
+
+        /// <summary>
+        /// 获取数据
+        /// </summary>
+        /// <param name="F_IDValue"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [HandlerAjaxOnly]
+        public ActionResult GetForm(string F_IDValue)
+        {
+            MT.Business.Model.T_DataItem model = null;
+            Guid F_ID = default(Guid);
+            if (string.IsNullOrEmpty(F_IDValue))
+            {
+                model = new T_DataItem();
+                return Error("主键为空,获取记录失败!");
+            }
+            if (Guid.TryParse(F_IDValue, out F_ID) == false)
+            {
+                model = new T_DataItem();
+                return Error("主键格式错误,获取记录失败!");
+            }
+
+            model = _iT_DataItemBLL.GetModelByCondition(x => x.F_ID == F_ID);
+            return Success(model.ToJson());
+        }
         #endregion
 
         #region 提交数据
@@ -212,6 +238,39 @@ namespace MT.Application.Web.Areas.SystemManage.Controllers
             catch (Exception ex)
             {
                 return Error("保存失败," + ex.Message.ToString());
+            }
+        }
+
+        /// <summary>
+        /// 逻辑删除
+        /// </summary>
+        /// <param name="F_IDValue">主键(区别Insert和Update)</param>        
+        /// <returns></returns>
+        [HttpPost]
+        [HandlerAjaxOnly]
+        public ActionResult RemoveForm(string F_IDValue)
+        {
+            MT.Business.Model.T_DataItem model = null;
+            Guid F_ID = default(Guid);
+            if (string.IsNullOrEmpty(F_IDValue))
+            {
+                model = new T_DataItem();
+                return Error("主键为空,获取记录失败!");
+            }
+            if (Guid.TryParse(F_IDValue, out F_ID) == false)
+            {
+                model = new T_DataItem();
+                return Error("主键格式错误,获取记录失败!");
+            }
+            model = _iT_DataItemBLL.GetModelByCondition(x => x.F_ID == F_ID);
+            model.F_isValid = 0;
+            if (_iT_DataItemBLL.Update() > 0)
+            {
+                return Success("修改成功!");
+            }
+            else
+            {
+                return Error("修改失败!");
             }
         }
         #endregion

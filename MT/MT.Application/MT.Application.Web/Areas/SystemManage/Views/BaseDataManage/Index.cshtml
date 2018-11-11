@@ -23,7 +23,7 @@
 
                     <script type="text/html" id="mt-data-table-row-button">
                         <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-                        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+                        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
                     </script>
 
                     <script type="text/html" id="mt-data-table-switchF_isEnable">                    
@@ -93,7 +93,7 @@
                     layer.open({
                         type: 2
                         , title: '添加基础数据项目'
-                        , content: '/SystemManage/BaseDataManage/Form'
+                        , content: '/SystemManage/BaseDataManage/Form?FormType=ADD'
                         , maxmin: true
                         , area: ['600px', '550px']
                         , btn: ['确定', '取消']
@@ -101,7 +101,7 @@
                             var iframeWindow = window['layui-layer-iframe' + index],
                                 submitID = 'mt-form-submit',
                                 submit = layero.find('iframe').contents().find('#' + submitID);
-                                submit.click();
+                            submit.click();
                         }
                     });
                     break;
@@ -112,6 +112,34 @@
                     console.log(checkStatus);
                     break;
             };
+        });
+        //监听行工具事件
+        table.on('tool(mt-data-table)', function (obj) {
+            var data = obj.data;
+            switch (obj.event) {
+                case 'edit'://编辑
+                    layer.open({
+                        type: 2
+                        , title: '修改基础数据项目'
+                        , content: '/SystemManage/BaseDataManage/Form?FormType=UPDATE&F_IDValue=' + data.F_ID
+                        , maxmin: true
+                        , area: ['600px', '550px']
+                        , btn: ['确定', '取消']
+                        , yes: function (index, layero) {
+                            var iframeWindow = window['layui-layer-iframe' + index],
+                                submitID = 'mt-form-submit',
+                                submit = layero.find('iframe').contents().find('#' + submitID);
+                            submit.click();
+                        }
+                    });
+                    break;
+                case 'delete'://删除
+                    layer.confirm('真的删除行吗？', function (index) {
+
+                        layer.close(index);
+                    });
+                    break;
+            }
         });
     });
 </script>

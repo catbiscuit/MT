@@ -122,6 +122,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\js\custom\PinYinHelper.js" />
+    <Content Include="Content\js\custom\Utility.js" />
     <Content Include="Content\js\jquery\jquery-2.1.4.js" />
     <Content Include="Content\js\jquery\jquery-2.1.4.min.js" />
     <Content Include="Content\js\login\css\component.css" />
@@ -142,16 +143,8 @@
     <Content Include="Content\layuiapp\custom\lib\admin.js" />
     <Content Include="Content\layuiapp\custom\lib\index.js" />
     <Content Include="Content\layuiapp\custom\lib\view.js" />
+    <Content Include="Content\layuiapp\custom\modules\loadmenu.js" />
     <Content Include="Content\layuiapp\custom\tpl\system\theme.html" />
-    <Content Include="Content\layuiapp\layer\layer.js" />
-    <Content Include="Content\layuiapp\layer\mobile\layer.js" />
-    <Content Include="Content\layuiapp\layer\mobile\need\layer.css" />
-    <Content Include="Content\layuiapp\layer\theme\default\icon-ext.png" />
-    <Content Include="Content\layuiapp\layer\theme\default\icon.png" />
-    <Content Include="Content\layuiapp\layer\theme\default\layer.css" />
-    <Content Include="Content\layuiapp\layer\theme\default\loading-0.gif" />
-    <Content Include="Content\layuiapp\layer\theme\default\loading-1.gif" />
-    <Content Include="Content\layuiapp\layer\theme\default\loading-2.gif" />
     <Content Include="Content\layuiapp\layui\css\layui.css" />
     <Content Include="Content\layuiapp\layui\css\layui.mobile.css" />
     <Content Include="Content\layuiapp\layui\css\modules\code.css" />

@@ -10,35 +10,15 @@
     <link href="~/Content/layuiapp/layui/css/layui.css" rel="stylesheet" />
     <link href="~/Content/layuiapp/custom/css/index.css" rel="stylesheet" />
     <script src="~/Content/js/jquery/jquery-2.1.4.js"></script>
-    <script src="~/Content/layuiapp/layui/layui.js"></script>
-    <!--页面js-->
-    <script src="~/Content/js/mt/LoadMenu.js"></script>
+    <script src="~/Content/layuiapp/layui/layui.js"></script>    
     <script>
-        //动态加载导航菜单                
-        $.ajax({
-            url: "/Home/GetPermissions",
-            type: "GET",
-            dataType: "json",
-            success: function (data) {
-                if (data.length > 0) {
-                    var _html = LoadFirstMenu(data);
-                    $("#LAY-system-side-menu").html(_html);
-                }
-                else {
-                    //layui模块的使用
-                    layui.use(['layer'], function () {
-                        var layer = layui.layer;
-                        layer.msg("未获取到用户权限，请刷新页面重试！");
-                    });
-                }
-            }
-        });
         //加载LayUI页面
         layui.config({
             base: "/Content/layuiapp/custom/" //存放拓展模块的根目录
         }).extend({
-            index: 'lib/index' //主入口模块
-        }).use('index');//使用拓展模块
+            loadmenu: 'modules/loadmenu',//加载菜单
+            index: 'lib/index',//主入口
+        }).use(['loadmenu', 'index']);//使用拓展模块
     </script>
 </head>
 <body class="layui-layout-body">

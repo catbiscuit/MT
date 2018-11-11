@@ -49,8 +49,9 @@ namespace MT.Application.Web.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
+        [HandlerAjaxOnly]
         public ActionResult GetPermissions()
-        {            
+        {
             StringBuilder sbSql = new StringBuilder();
             sbSql.Append(" select c.* ");
             sbSql.Append(" from T_UserRole a ");
