@@ -1,18 +1,21 @@
 ﻿;
 layui.define(["layer"], function (e) {
-    var layer = layui.layer;    
-    $.ajax({
-        url: "/Home/GetPermissions",
-        type: "GET",
-        dataType: "json",
-        success: function (data) {
-            if (data.length > 0) {
-                var _html = LoadFirstMenu(data);
+    var layer = layui.layer;
+    $.post("/Home/GetPermissions", [],
+    function (result) {
+        var resultJson = JSON.parse(result);
+        if (resultJson.code == "1") {
+            if (resultJson.data.length > 0) {
+                var MenuData = JSON.parse(resultJson.data);
+                var _html = LoadFirstMenu(MenuData);
                 $("#LAY-system-side-menu").html(_html);
             }
             else {
                 layer.msg("未获取到用户权限，请刷新页面重试！");
             }
+        }
+        else {
+            layer.msg(resultJson.msg, { icon: 5 });//提示消息                                        
         }
     });
     e("loadmenu", {});

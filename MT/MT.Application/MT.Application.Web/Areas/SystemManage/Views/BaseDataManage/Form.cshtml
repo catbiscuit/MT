@@ -67,53 +67,15 @@
          , layer = layui.layer
          , form = layui.form;
 
-        //监听提交
-        form.on('submit(mt-form-submit)', function (data) {
-            var field = data.field; //获取提交的字段
-            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引  
-
-            //根据参数判断表单类型
-            var FormType = request('FormType');
-            if (FormType != "" && FormType != null && FormType != undefined && FormType == "UPDATE") {
-                var F_IDValue = request('F_IDValue');
-                field["F_IDValue"] = F_IDValue;
-            }
-
-            field["F_isEnable"] = field["F_isEnable"] == "on" ? 1 : 0;//将on-off 转换为 1-0
-
-            //提交 Ajax 成功后，关闭当前弹层并重载表格
-            $.post("/SystemManage/BaseDataManage/SaveForm", field,
-            function (result) {
-                var resultJson = JSON.parse(result);
-                if (resultJson.type == "1") {
-                    parent.layui.table.reload('mt-data-table'); //重载表格
-                    parent.layer.close(index); //再执行关闭 
-                }
-                else {
-                    layer.msg(resultJson.message, { icon: 5 });//提示消息                                        
-                }
-            });
-        });
-    });
-    //生成助记码
-    $(function () {
-        $("#F_ItemName").keyup(function () {
-            $("#F_HelpCode").val(PinyinInitials($(this).val()));
-        });
-    });
-    $(document).ready(function () {
-        PageInitial();
-    });
-    //页面初始化
-    function PageInitial() {
+        //元素的初始化
         var FormType = request('FormType');
         var F_IDValue = request('F_IDValue');
-        if (FormType != "" && FormType != null && FormType != undefined && FormType == "UPDATE") {
+        if (FormType != "" && FormType != null && FormType != undefined && (FormType == "UPDATE"||FormType=="VIEW")) {
             $.post("/SystemManage/BaseDataManage/GetForm", { F_IDValue: F_IDValue },
             function (result) {
                 var resultJson = JSON.parse(result);
-                if (resultJson.type == "1") {
-                    var model = JSON.parse(resultJson.message);
+                if (resultJson.code == "1") {
+                    var model = JSON.parse(resultJson.msg);
                     $('input[name="F_ItemCode"]').val(model.F_ItemCode);
                     $('input[name="F_ItemCode"]').attr("disabled", "disabled");
                     $('input[name="F_ItemCode"]').attr("readonly", "readonly");
@@ -129,11 +91,47 @@
                         $('input[name="F_isEnable"]').next().children("em").html("否");
                     }
                     $('textarea[name="F_Remark"]').val(model.F_Remark);
+                    form.render(); //更新全部 
                 }
                 else {
-                    layer.msg(resultJson.message, { icon: 5 });//提示消息                                        
+                    layer.msg(resultJson.msg, { icon: 5 });//提示消息                                        
                 }
             });
-        }
-    }
+        }         
+
+        //监听提交
+        form.on('submit(mt-form-submit)', function (data) {
+            var field = data.field; //获取提交的字段
+            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引  
+
+            //根据参数判断表单类型
+            var FormType = request('FormType');            
+            if (FormType != "" && FormType != null && FormType != undefined && FormType == "UPDATE") {
+                var F_IDValue = request('F_IDValue');
+                field["F_IDValue"] = F_IDValue;
+            }
+
+            field["F_isEnable"] = field["F_isEnable"] == "on" ? 1 : 0;//将on-off 转换为 1-0
+            field["FormType"] = FormType;//页面类型
+
+            //提交 Ajax 成功后，关闭当前弹层并重载表格
+            $.post("/SystemManage/BaseDataManage/SaveForm", field,
+            function (result) {
+                var resultJson = JSON.parse(result);
+                if (resultJson.code == "1") {
+                    parent.layui.table.reload('mt-data-table'); //重载表格
+                    parent.layer.close(index); //再执行关闭 
+                }
+                else {
+                    layer.msg(resultJson.msg, { icon: 5 });//提示消息                                        
+                }
+            });
+        });
+    });
+    //生成助记码
+    $(function () {
+        $("#F_ItemName").keyup(function () {
+            $("#F_HelpCode").val(PinyinInitials($(this).val()));
+        });
+    });
 </script>

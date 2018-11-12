@@ -48,30 +48,37 @@ namespace MT.Application.Web.Controllers
         /// 获取权限信息
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
+        [HttpPost]
         [HandlerAjaxOnly]
         public ActionResult GetPermissions()
         {
-            StringBuilder sbSql = new StringBuilder();
-            sbSql.Append(" select c.* ");
-            sbSql.Append(" from T_UserRole a ");
-            sbSql.Append(" join T_RoleMenu b on a.F_RoleID=b.F_RoleID ");
-            sbSql.Append(" left join T_Menu c on b.F_MenuID=c.F_ID ");
-            sbSql.Append(" where a.F_UserID=@UserID ");
-            sbSql.Append(" order by c.F_Level,c.F_ParentID,c.F_Sort  ");
-            SqlParameter[] parameters =
+            try
             {
-                new SqlParameter("@UserID", SqlDbType.UniqueIdentifier),
-            };
-            parameters[0].Value = userExtension == null ? default(Guid) : userExtension.F_ID;
-            DataSet dsResult = DbHelperSQL.Query(sbSql.ToString(), parameters);
-            if (dsResult != null && dsResult.Tables.Count > 0 && dsResult.Tables[0].Rows.Count > 0)
-            {
-                return Content(dsResult.Tables[0].ToJson());
+                StringBuilder sbSql = new StringBuilder();
+                sbSql.Append(" select c.* ");
+                sbSql.Append(" from T_UserRole a ");
+                sbSql.Append(" join T_RoleMenu b on a.F_RoleID=b.F_RoleID ");
+                sbSql.Append(" left join T_Menu c on b.F_MenuID=c.F_ID ");
+                sbSql.Append(" where a.F_UserID=@UserID ");
+                sbSql.Append(" order by c.F_Level,c.F_ParentID,c.F_Sort  ");
+                SqlParameter[] parameters =
+                {
+                    new SqlParameter("@UserID", SqlDbType.UniqueIdentifier),
+                };
+                parameters[0].Value = userExtension == null ? default(Guid) : userExtension.F_ID;
+                DataSet dsResult = DbHelperSQL.Query(sbSql.ToString(), parameters);
+                if (dsResult != null && dsResult.Tables.Count > 0 && dsResult.Tables[0].Rows.Count > 0)
+                {
+                    return Success("获取成功!", dsResult.Tables[0].ToJson());
+                }
+                else
+                {
+                    return Success("未获取到用户权限!", new DataTable().ToJson());
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return Content(new DataTable().ToJson());
+                return Error("获取失败," + ex.Message.ToString());
             }
         }
         #endregion

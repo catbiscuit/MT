@@ -70,18 +70,14 @@
             var loginpassword = $.trim($("#loginpassword").val());
             loginpassword = $.md5(loginpassword);
 
-            $.ajax({
-                url: "/Login/CheckLogin",
-                data: { loginname: $.trim(loginname), loginpassword: $.trim(loginpassword) },
-                type: "post",
-                dataType: "json",
-                success: function (data) {
-                    if (data.type == "1") {
-                        window.location.href = '/Home/Index';
-                    }
-                    else {
-                        layer.msg(data.message);
-                    }
+            $.post("/Login/CheckLogin", { loginname: $.trim(loginname), loginpassword: $.trim(loginpassword) },
+            function (result) {
+                var resultJson = JSON.parse(result);
+                if (resultJson.code == "1") {
+                    window.location.href = '/Home/Index';
+                }
+                else {
+                    layer.msg(resultJson.msg);
                 }
             });
         }

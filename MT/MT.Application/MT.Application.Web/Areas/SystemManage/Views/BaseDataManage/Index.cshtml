@@ -10,6 +10,27 @@
     <div class="layui-row layui-col-space15">
         <div class="layui-col-md12">
             <div class="layui-card">
+                <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label" title="字典编码/字典名称/助记码">字典编码</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="F_ItemCode" placeholder="请输入" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">录入人</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="F_AddUserName" placeholder="请输入" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="mt-data-table-search">
+                                <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
                 <div class="layui-card-body">
                     <table class="layui-hide" id="mt-data-table" lay-filter="mt-data-table"></table>
 
@@ -22,6 +43,7 @@
                     </script>
 
                     <script type="text/html" id="mt-data-table-row-button">
+                        <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="view">查看</a>
                         <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
                         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
                     </script>
@@ -52,6 +74,7 @@
             elem: "#mt-data-table"
             , url: "/SystemManage/BaseDataManage/GetDataItemList"
             , toolbar: "#mt-data-table-toolbar"//头部工具栏
+            , defaultToolbar: ['filter']//仅显示筛选图标
             , cols: [[
                 { type: "checkbox", fixed: "left", }
                 , { field: "F_ItemCode", title: "字典编码", width: 200 }
@@ -61,7 +84,7 @@
                 , { field: "F_AddUserName", width: 100, title: "录入人" }
                 , { field: "F_AddTime", title: "录入时间", width: 200, sort: true }
                 , { field: "F_Remark", title: "备注", }
-                , { title: "操作", width: 120, align: "center", fixed: "right", unresize: true, toolbar: "#mt-data-table-row-button" }
+                , { title: "操作", width: 180, align: "center", fixed: "right", unresize: true, toolbar: "#mt-data-table-row-button" }
             ]]
             , height: 'full-100'
             , cellMinWidth: 80
@@ -75,14 +98,22 @@
             $.post("/SystemManage/BaseDataManage/UpdateF_isEnable", { F_ID: json.F_ID, IsChecked: obj.elem.checked },
             function (result) {
                 var resultJson = JSON.parse(result);
-                if (resultJson.type == "1") {
-                    obj.elem.value = resultJson.message;//修改input标签的value值
+                if (resultJson.code == "1") {
+                    obj.elem.value = resultJson.msg;//修改input标签的value值
                 }
                 else {
-                    layer.msg(resultJson.message, { icon: 5 });//提示消息                    
+                    layer.msg(resultJson.msg, { icon: 5 });//提示消息                    
                     obj.elem.checked = obj.elem.value == "1" ? true : false;//还原checkbox的状态
                 }
             });
+        });
+
+        //监听搜索
+        form.on('submit(mt-data-table-search)', function (data) {
+            var field = data.field;
+            layui.table.reload('mt-data-table', {
+                where: field
+            }); //重载表格
         });
 
         //头工具栏事件
@@ -106,7 +137,31 @@
                     });
                     break;
                 case 'BatchDelete'://批量删除
-                    console.log(checkStatus);
+                    var data = checkStatus.data;
+                    if (data.length <= 0) {
+                        layer.msg('请至少选择一条记录');//提示消息    
+                    }
+                    else {
+                        layer.confirm('确定删除这 ' + data.length + ' 行数据吗？', function (index) {
+                            var F_IDValue = "";
+                            for (var f in data) {
+                                F_IDValue = F_IDValue + data[f].F_ID + ",";
+                            }
+                            F_IDValue = F_IDValue.substr(0, F_IDValue.length - 1);
+
+                            $.post("/SystemManage/BaseDataManage/BatchRemoveForm", { F_IDValue: F_IDValue },
+                            function (result) {
+                                var resultJson = JSON.parse(result);
+                                if (resultJson.code == "1") {
+                                    layui.table.reload('mt-data-table'); //重载表格
+                                }
+                                else {
+                                    layer.msg(resultJson.msg, { icon: 5 });//提示消息                                                    
+                                }
+                            });
+                            layer.close(index);
+                        });
+                    }
                     break;
                 case 'ExportAllData'://导出全部数据
                     console.log(checkStatus);
@@ -117,6 +172,16 @@
         table.on('tool(mt-data-table)', function (obj) {
             var data = obj.data;
             switch (obj.event) {
+                case 'view'://查看
+                    layer.open({
+                        type: 2
+                        , title: '查看基础数据项目'
+                        , content: '/SystemManage/BaseDataManage/Form?FormType=VIEW&F_IDValue=' + data.F_ID
+                        , maxmin: true
+                        , area: ['600px', '550px']
+                        , btn: ['关闭']
+                    });
+                    break;
                 case 'edit'://编辑
                     layer.open({
                         type: 2
@@ -134,8 +199,17 @@
                     });
                     break;
                 case 'delete'://删除
-                    layer.confirm('真的删除行吗？', function (index) {
-
+                    layer.confirm('确定删除这行数据吗？', function (index) {
+                        $.post("/SystemManage/BaseDataManage/RemoveForm", { F_IDValue: data.F_ID },
+                        function (result) {
+                            var resultJson = JSON.parse(result);
+                            if (resultJson.code == "1") {
+                                layui.table.reload('mt-data-table'); //重载表格
+                            }
+                            else {
+                                layer.msg(resultJson.msg, { icon: 5 });//提示消息                                                    
+                            }
+                        });
                         layer.close(index);
                     });
                     break;

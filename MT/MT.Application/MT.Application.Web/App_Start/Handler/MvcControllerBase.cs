@@ -17,7 +17,7 @@ namespace MT.Application.Web
     [HandlerLogin(LoginMode.Enforce)]
     public class MvcControllerBase : Controller
     {
-        #region Index页面获取数据的参数
+        #region Index页面获取数据的参数和方法
         /// <summary>
         /// 总记录数(MvcControllerBase统一变量)
         /// </summary>
@@ -42,7 +42,7 @@ namespace MT.Application.Web
         /// <returns></returns>
         protected virtual ActionResult Success(string message)
         {
-            return Content(new AjaxResult { type = ResultType.success, message = message }.ToJson());
+            return Content(new AjaxResult { code = (int)ResultType.success, codeType = ResultType.success.ToString(), msg = message }.ToJson());
         }
         /// <summary>
         /// 返回成功消息
@@ -52,7 +52,7 @@ namespace MT.Application.Web
         /// <returns></returns>
         protected virtual ActionResult Success(string message, object data)
         {
-            return Content(new AjaxResult { type = ResultType.success, message = message, resultdata = data }.ToJson());
+            return Content(new AjaxResult { code = (int)ResultType.success, codeType = ResultType.success.ToString(), msg = message, data = data }.ToJson());
         }
         /// <summary>
         /// 返回失败消息
@@ -61,7 +61,17 @@ namespace MT.Application.Web
         /// <returns></returns>
         protected virtual ActionResult Error(string message)
         {
-            return Content(new AjaxResult { type = ResultType.error, message = message }.ToJson());
+            return Content(new AjaxResult { code = (int)ResultType.error, codeType = ResultType.error.ToString(), msg = message }.ToJson());
+        }
+        /// <summary>
+        /// 返回数据
+        /// </summary>
+        /// <param name="iTotalNumberUnify">总记录数</param>
+        /// <param name="dtResultUnify">数据表格</param>
+        /// <returns></returns>
+        protected virtual ActionResult ReturnData(int iTotalNumberUnify, DataTable dtResultUnify)
+        {
+            return Content(new AjaxResult { code = (int)ResultType.data, codeType = ResultType.data.ToString(), count = iTotalNumberUnify, data = dtResultUnify }.ToJson());
         }
         /// <summary>
         /// 返回退出消息

@@ -30,7 +30,6 @@ namespace MT.Application.Web.Areas.SystemManage.Controllers
         #region 视图
         public ActionResult Index()
         {
-            ViewBag.Title = "基础数据管理";
             return View();
         }
         /// <summary>
@@ -50,46 +49,45 @@ namespace MT.Application.Web.Areas.SystemManage.Controllers
         /// <returns></returns>
         public ActionResult GetDataItemList(int page, int limit, string ordersort)
         {
-            string sqlWhere = string.Empty;
-            string orderSort = "F_Sort asc";
-            int StartIndex = (page - 1) * limit + 1;
-            int EndIndex = StartIndex + limit - 1;
-
-            if (!string.IsNullOrEmpty(ordersort))
+            try
             {
-                orderSort = ordersort;
+                string sqlWhere = string.Empty;
+                string orderSort = "F_Sort asc";
+                int StartIndex = (page - 1) * limit + 1;
+                int EndIndex = StartIndex + limit - 1;
+
+                if (!string.IsNullOrEmpty(ordersort))
+                {
+                    orderSort = ordersort;
+                }
+                sqlWhere = GetWhere();
+
+                SqlParameter[] sqlParameters =
+                {                
+                    new SqlParameter("@sqlWhere",sqlWhere), 
+                    new SqlParameter("@orderSort",orderSort), 
+                    new SqlParameter("@StartIndex",StartIndex), 
+                    new SqlParameter("@EndIndex",EndIndex)
+                };
+
+                DataSet dsResult = DbHelperSQL.RunProcedure("Proc_GetDataItemList", sqlParameters, "dt");
+                if (dsResult != null && dsResult.Tables != null && dsResult.Tables.Count > 0 && dsResult.Tables[0].Rows.Count > 0)
+                {
+                    dtResultUnify = dsResult.Tables[0];
+                    iTotalNumberUnify = int.Parse(dtResultUnify.Rows[0]["TotalNumber"].ToString());
+                }
+                else
+                {
+                    dtResultUnify = new DataTable();
+                    iTotalNumberUnify = 0;
+                }
+
+                return ReturnData(iTotalNumberUnify, dtResultUnify);
             }
-            sqlWhere = GetWhere();
-
-            SqlParameter[] sqlParameters =
-            {                
-                new SqlParameter("@sqlWhere",sqlWhere), 
-                new SqlParameter("@orderSort",orderSort), 
-                new SqlParameter("@StartIndex",StartIndex), 
-                new SqlParameter("@EndIndex",EndIndex)
-            };
-
-            DataSet dsResult = DbHelperSQL.RunProcedure("Proc_GetDataItemList", sqlParameters, "dt");
-            if (dsResult != null && dsResult.Tables != null && dsResult.Tables.Count > 0 && dsResult.Tables[0].Rows.Count > 0)
+            catch (Exception ex)
             {
-                dtResultUnify = dsResult.Tables[0];
-                iTotalNumberUnify = int.Parse(dtResultUnify.Rows[0]["TotalNumber"].ToString());
+                return Error("获取失败," + ex.Message.ToString());
             }
-            else
-            {
-                dtResultUnify = new DataTable();
-                iTotalNumberUnify = 0;
-            }
-
-            var JsonData = new
-            {
-                code = 0,
-                msg = "",
-                count = iTotalNumberUnify,
-                data = dtResultUnify
-            };
-
-            return Content(JsonData.ToJson());
         }
 
         /// <summary>
@@ -101,13 +99,16 @@ namespace MT.Application.Web.Areas.SystemManage.Controllers
             try
             {
                 StringBuilder sbWhere = new StringBuilder();
+
+                sbWhere.AppendFormat(" and F_isValid='{0}' ", (int)F_isValid.Normal);//正常的数据
+
                 if (Request.QueryString["F_ItemCode"] != null && !string.IsNullOrEmpty(Request.QueryString["F_ItemCode"].ToString()))
                 {
                     sbWhere.AppendFormat(" and (F_ItemCode like '%{0}%' or F_ItemName like '%{0}%' or F_HelpCode like '%{0}%') ", Request.QueryString["F_ItemCode"].ToString());
                 }
                 if (Request.QueryString["F_AddUserName"] != null && !string.IsNullOrEmpty(Request.QueryString["F_AddUserName"].ToString()))
                 {
-                    sbWhere.AppendFormat(" and F_AddUserName like '%{0}%' ) ", Request.QueryString["F_AddUserName"].ToString());
+                    sbWhere.AppendFormat(" and F_AddUserName like '%{0}%' ", Request.QueryString["F_AddUserName"].ToString());
                 }
 
                 return sbWhere.ToString();
@@ -127,21 +128,36 @@ namespace MT.Application.Web.Areas.SystemManage.Controllers
         [HandlerAjaxOnly]
         public ActionResult GetForm(string F_IDValue)
         {
-            MT.Business.Model.T_DataItem model = null;
-            Guid F_ID = default(Guid);
-            if (string.IsNullOrEmpty(F_IDValue))
+            T_DataItem model = null;
+            try
             {
-                model = new T_DataItem();
-                return Error("主键为空,获取记录失败!");
-            }
-            if (Guid.TryParse(F_IDValue, out F_ID) == false)
-            {
-                model = new T_DataItem();
-                return Error("主键格式错误,获取记录失败!");
-            }
+                Guid F_ID = default(Guid);
+                if (string.IsNullOrEmpty(F_IDValue))
+                {
+                    model = new T_DataItem();
+                    return Error("主键为空,获取记录失败!");
+                }
+                if (Guid.TryParse(F_IDValue, out F_ID) == false)
+                {
+                    model = new T_DataItem();
+                    return Error("主键格式错误,获取记录失败!");
+                }
 
-            model = _iT_DataItemBLL.GetModelByCondition(x => x.F_ID == F_ID);
-            return Success(model.ToJson());
+                model = _iT_DataItemBLL.GetModelByCondition(x => x.F_ID == F_ID);
+
+                if (model != null)
+                {
+                    return Success(model.ToJson());
+                }
+                else
+                {
+                    return Error("获取失败,未能获取到该条数据!");
+                }
+            }
+            catch (Exception ex)
+            {
+                return Error("获取失败," + ex.Message.ToString());
+            }
         }
         #endregion
 
@@ -165,11 +181,13 @@ namespace MT.Application.Web.Areas.SystemManage.Controllers
                 {
                     return Error("修改失败,未获取到状态,请刷新页面重试！");
                 }
+
                 T_DataItem T_DataItemModel = _iT_DataItemBLL.GetModelByCondition(x => x.F_ID == F_ID);
                 T_DataItemModel.F_isEnable = IsChecked == true ? 1 : 0;
                 T_DataItemModel.F_UpdateTime = DateTime.Now;
                 T_DataItemModel.F_UpdateUserID = userExtension.F_ID;
                 T_DataItemModel.F_UpdateUserName = userExtension.F_UserName;
+
                 if (_iT_DataItemBLL.Update() > 0)
                 {
                     return Success(T_DataItemModel.F_isEnable.ToString());
@@ -188,51 +206,60 @@ namespace MT.Application.Web.Areas.SystemManage.Controllers
         /// <summary>
         /// 保存表单
         /// </summary>
-        /// <param name="F_IDValue">主键(区别Insert和Update)</param>
+        /// <param name="FormType">页面类型(ADD添加 UPDATE更新)</param>
+        /// <param name="F_IDValue">所修改记录的主键</param>
         /// <param name="model">实体</param>
         /// <returns></returns>
         [HttpPost]
         [HandlerAjaxOnly]
-        public ActionResult SaveForm(string F_IDValue, T_DataItem model)
+        public ActionResult SaveForm(string FormType, string F_IDValue, T_DataItem model)
         {
             try
             {
-                if (string.IsNullOrEmpty(F_IDValue))//Add
+                switch (FormType.ToUpper())
                 {
-                    model.F_ID = Guid.NewGuid();
-                    model.F_AddTime = DateTime.Now;
-                    model.F_AddUserID = userExtension.F_ID;
-                    model.F_AddUserName = userExtension.F_UserName;
-                    model.F_isValid = 1;
-                    if (_iT_DataItemBLL.Insert(model) > 0)
-                    {
-                        return Success("添加成功!");
-                    }
-                    else
-                    {
-                        return Error("添加失败!");
-                    }
-                }
-                else//Update
-                {
-                    Guid F_ID = Guid.Parse(F_IDValue);
-                    T_DataItem T_DataItemModel = _iT_DataItemBLL.GetModelByCondition(x => x.F_ID == F_ID);
-                    T_DataItemModel.F_ItemName = model.F_ItemName;
-                    T_DataItemModel.F_HelpCode = model.F_HelpCode;
-                    T_DataItemModel.F_Sort = model.F_Sort;
-                    T_DataItemModel.F_isEnable = model.F_isEnable;
-                    T_DataItemModel.F_Remark = model.F_Remark;
-                    T_DataItemModel.F_UpdateTime = DateTime.Now;
-                    T_DataItemModel.F_UpdateUserID = userExtension.F_ID;
-                    T_DataItemModel.F_UpdateUserName = userExtension.F_UserName;
-                    if (_iT_DataItemBLL.Update() > 0)
-                    {
-                        return Success("修改成功!");
-                    }
-                    else
-                    {
-                        return Error("修改失败!");
-                    }
+                    case "ADD":
+                        #region 新增
+                        model.F_ID = Guid.NewGuid();
+                        model.F_AddTime = DateTime.Now;
+                        model.F_AddUserID = userExtension.F_ID;
+                        model.F_AddUserName = userExtension.F_UserName;
+                        model.F_isValid = 1;
+                        if (_iT_DataItemBLL.Insert(model) > 0)
+                        {
+                            return Success("添加成功!");
+                        }
+                        else
+                        {
+                            return Error("添加失败!");
+                        }
+                        #endregion
+                        break;
+                    case "UPDATE":
+                        #region 修改
+                        Guid F_ID = Guid.Parse(F_IDValue);
+                        T_DataItem T_DataItemModel = _iT_DataItemBLL.GetModelByCondition(x => x.F_ID == F_ID);
+                        T_DataItemModel.F_ItemName = model.F_ItemName;
+                        T_DataItemModel.F_HelpCode = model.F_HelpCode;
+                        T_DataItemModel.F_Sort = model.F_Sort;
+                        T_DataItemModel.F_isEnable = model.F_isEnable;
+                        T_DataItemModel.F_Remark = model.F_Remark;
+                        T_DataItemModel.F_UpdateTime = DateTime.Now;
+                        T_DataItemModel.F_UpdateUserID = userExtension.F_ID;
+                        T_DataItemModel.F_UpdateUserName = userExtension.F_UserName;
+                        if (_iT_DataItemBLL.Update() > 0)
+                        {
+                            return Success("修改成功!");
+                        }
+                        else
+                        {
+                            return Error("修改失败!");
+                        }
+                        #endregion
+                        break;
+                    default:
+                        return Error("页面类型参数错误!");
+                        break;
                 }
             }
             catch (Exception ex)
@@ -244,33 +271,75 @@ namespace MT.Application.Web.Areas.SystemManage.Controllers
         /// <summary>
         /// 逻辑删除
         /// </summary>
-        /// <param name="F_IDValue">主键(区别Insert和Update)</param>        
+        /// <param name="F_IDValue">主键</param>        
         /// <returns></returns>
         [HttpPost]
         [HandlerAjaxOnly]
         public ActionResult RemoveForm(string F_IDValue)
         {
-            MT.Business.Model.T_DataItem model = null;
-            Guid F_ID = default(Guid);
-            if (string.IsNullOrEmpty(F_IDValue))
+            try
             {
-                model = new T_DataItem();
-                return Error("主键为空,获取记录失败!");
+                T_DataItem model = null;
+                Guid F_ID = default(Guid);
+                if (string.IsNullOrEmpty(F_IDValue))
+                {
+                    return Error("主键为空,获取记录失败!");
+                }
+                if (Guid.TryParse(F_IDValue, out F_ID) == false)
+                {
+                    return Error("主键格式错误,获取记录失败!");
+                }
+
+                model = _iT_DataItemBLL.GetModelByCondition(x => x.F_ID == F_ID);
+                model.F_isValid = (int)F_isValid.Delete;
+
+                if (_iT_DataItemBLL.Update() > 0)
+                {
+                    return Success("删除成功!");
+                }
+                else
+                {
+                    return Error("删除失败!");
+                }
             }
-            if (Guid.TryParse(F_IDValue, out F_ID) == false)
+            catch (Exception ex)
             {
-                model = new T_DataItem();
-                return Error("主键格式错误,获取记录失败!");
+                return Error("删除失败," + ex.Message.ToString());
             }
-            model = _iT_DataItemBLL.GetModelByCondition(x => x.F_ID == F_ID);
-            model.F_isValid = 0;
-            if (_iT_DataItemBLL.Update() > 0)
+        }
+        /// <summary>
+        /// 批量逻辑删除
+        /// </summary>
+        /// <param name="F_IDValue">主键</param>        
+        /// <returns></returns>
+        [HttpPost]
+        [HandlerAjaxOnly]
+        public ActionResult BatchRemoveForm(string F_IDValue)
+        {
+            try
             {
-                return Success("修改成功!");
+                T_DataItem model = null;
+                List<string> lstF_ID = F_IDValue.Split(',').ToList();
+
+                foreach (string item in lstF_ID)
+                {
+                    var F_ID = Guid.Parse(item);
+                    model = _iT_DataItemBLL.GetModelByCondition(x => x.F_ID == F_ID);
+                    model.F_isValid = (int)F_isValid.Delete;
+                }
+
+                if (_iT_DataItemBLL.Update() > 0)
+                {
+                    return Success("删除成功!");
+                }
+                else
+                {
+                    return Error("删除失败!");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return Error("修改失败!");
+                return Error("删除失败," + ex.Message.ToString());
             }
         }
         #endregion

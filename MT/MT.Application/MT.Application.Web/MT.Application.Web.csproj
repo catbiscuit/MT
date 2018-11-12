@@ -135,7 +135,6 @@
     <Content Include="Content\js\login\js\html5.js" />
     <Content Include="Content\js\login\js\rAF.js" />
     <Content Include="Content\js\login\js\TweenLite.min.js" />
-    <Content Include="Content\js\mt\LoadMenu.js" />
     <Content Include="Content\js\plugins\md5\jquery.md5.js" />
     <Content Include="Content\layuiapp\custom\config.js" />
     <Content Include="Content\layuiapp\custom\css\admin.css" />
@@ -329,6 +328,7 @@
     <Folder Include="Content\css\" />
     <Folder Include="Content\fonts\" />
     <Folder Include="Content\images\" />
+    <Folder Include="Content\js\mt\" />
     <Folder Include="Views\ClientData\" />
   </ItemGroup>
   <ItemGroup>

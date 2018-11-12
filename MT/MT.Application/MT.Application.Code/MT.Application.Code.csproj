@@ -42,6 +42,7 @@
     <Compile Include="CurrentUser\IUserProvider.cs" />
     <Compile Include="CurrentUser\UserExtension.cs" />
     <Compile Include="CurrentUser\UserProvider.cs" />
+    <Compile Include="Enums\DataItemEnum.cs" />
     <Compile Include="Enums\LoginMode.cs" />
     <Compile Include="Enums\LogType.cs" />
     <Compile Include="Enums\PermissionMode.cs" />

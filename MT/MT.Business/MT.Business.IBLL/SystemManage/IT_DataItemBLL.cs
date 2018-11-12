@@ -19,6 +19,6 @@ namespace MT.Business.IBLL.SystemManage
         int Delete(T_DataItem entity);
         int Update();
         T_DataItem GetModelByCondition(Expression<Func<T_DataItem, bool>> condition);
-        
+
     }
 }
