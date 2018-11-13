@@ -1,0 +1,21 @@
+1、在js中获取url参数的方法
+//接收URL参数
+function GetQueryString(name) {
+	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+	var r = window.location.search.substr(1).match(reg);
+	if (r != null) return decodeURIComponent(r[2]); return null;
+}
+
+2、在js中以?url对字符串进行转码后，如果字符串中包含特殊字符%98即单引号，
+需要用window.decodeURIComponent进行解码，如果用unescape解码会出现乱码。
+
+3、w3school 介绍：
+地址：http://www.w3school.com.cn/jsref/jsref_unescape.asp
+(1)
+说明
+该函数的工作原理是这样的：通过找到形式为 %xx 和 %uxxxx 的字符序列（x 表示十六进制的数字），
+用 Unicode 字符 \u00xx 和 \uxxxx 替换这样的字符序列进行解码。
+(2)提示和注释
+注释：ECMAScript v3 已从标准中删除了 unescape() 函数，并反对使用它，
+因此应该用 decodeURI() 和 decodeURIComponent() 取而代之。
+
