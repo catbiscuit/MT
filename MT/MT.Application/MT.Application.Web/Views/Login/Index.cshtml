@@ -20,7 +20,7 @@
                 <canvas id="demo-canvas"></canvas>
                 <div class="logo_box">
                     <h3>欢迎你</h3>
-                    <form action="#" name="f" method="post">
+                    <form action="#" name="f" method="post" class="layui-form">
                         <div class="input_outer">
                             <span class="u_user"></span>
                             <input id="loginname" name="loginname" class="text" onpaste="return false;" style="color: #FFFFFF !important; ime-mode: disabled;" type="text" placeholder="请输入账户">
@@ -29,7 +29,10 @@
                             <span class="us_uer"></span>
                             <input id="loginpassword" name="loginpassword" class="text" onpaste="return false;" style="color: #FFFFFF !important; position: absolute; z-index: 100; ime-mode: disabled;" value="" type="password" placeholder="请输入密码">
                         </div>
-                        <div class="mb2"><a class="act-but submit" href="javascript:Login();" style="color: #FFFFFF"><span id="spanLogin">登录</span></a></div>
+                        <div class="mb2">
+                            <a class="act-but submit" href="javascript:Login();" style="color: #FFFFFF"><span id="spanLogin">登录</span></a>
+                            <button id="btnLogin" class="act-but submit" lay-submit lay-filter="mt-button-login" style="color: #FFFFFF"><span>登录</span></button>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -43,44 +46,56 @@
     <script src="~/Content/js/login/js/demo-1.js"></script>
     <script src="~/Content/js/plugins/md5/jquery.md5.js"></script>
     <!--LayUI-->
-    <script src="~/Content/layuiapp/layer/layer.js"></script>
+    <script src="~/Content/layuiapp/layui/layui.js"></script>
+
     <!--业务逻辑处理-->
     <script type="text/javascript">
         document.onkeydown = function (e) {
             if (!e) e = window.event;
             if ((e.keyCode || e.which) == 13) {
-                $("#spanLogin").click();
+                Login();
             }
         };
+        //登录
         function Login() {
-            var $loginname = $("#loginname");
-            var $loginpassword = $("#loginpassword");
-            if ($loginname.val() == "") {
-                $loginname.focus();
-                layer.tips('请输入账号!', '#loginname');
-                return;
-            }
-            if ($loginpassword.val() == "") {
-                $loginpassword.focus();
-                layer.tips('请输入密码!', '#loginpassword');
-                return;
-            }
-
-            var loginname = $.trim($("#loginname").val());
-            var loginpassword = $.trim($("#loginpassword").val());
-            loginpassword = $.md5(loginpassword);
-
-            $.post("/Login/CheckLogin", { loginname: $.trim(loginname), loginpassword: $.trim(loginpassword) },
-            function (result) {
-                var resultJson = JSON.parse(result);
-                if (resultJson.code == "1") {
-                    window.location.href = '/Home/Index';
-                }
-                else {
-                    layer.msg(resultJson.msg);
-                }
-            });
+            $("#btnLogin").click();
         }
+
+        layui.use('form', function () {
+            var form = layui.form,
+                layer = layui.layer;
+
+            //登录按钮
+            form.on('submit(mt-button-login)', function (obj) {
+                var $loginname = $("#loginname");
+                var $loginpassword = $("#loginpassword");
+                if ($loginname.val() == "") {
+                    $loginname.focus();
+                    layer.tips('请输入账号!', '#loginname');
+                    return false;
+                }
+                if ($loginpassword.val() == "") {
+                    $loginpassword.focus();
+                    layer.tips('请输入密码!', '#loginpassword');
+                    return false;
+                }
+
+                var loginname = $.trim($("#loginname").val());
+                var loginpassword = $.trim($("#loginpassword").val());
+                loginpassword = $.md5(loginpassword);
+
+                $.post("/Login/CheckLogin", { loginname: $.trim(loginname), loginpassword: $.trim(loginpassword) },
+                function (result) {
+                    var resultJson = JSON.parse(result);
+                    if (resultJson.code == "1") {
+                        window.location.href = '/Home/Index';
+                    }
+                    else {
+                        layer.msg(resultJson.msg);
+                    }
+                });
+            });
+        });
     </script>
 </body>
 </html>
