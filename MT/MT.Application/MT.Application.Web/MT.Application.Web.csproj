@@ -360,6 +360,10 @@
       <Project>{0d12f622-78a5-4e8d-a11c-7524992447d7}</Project>
       <Name>MT.Utility.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\MT.Utility\MT.Utility.Office\MT.Utility.Office.csproj">
+      <Project>{47135f97-45ae-4cc6-9c9f-b1b37662e834}</Project>
+      <Name>MT.Utility.Office</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\MT.Utility\MT.Utility.WebControl\MT.Utility.WebControl.csproj">
       <Project>{939c4815-eb46-4f6a-8bdf-45e533c6f0a8}</Project>
       <Name>MT.Utility.WebControl</Name>

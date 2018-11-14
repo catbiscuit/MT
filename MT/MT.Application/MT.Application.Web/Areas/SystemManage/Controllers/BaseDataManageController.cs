@@ -10,6 +10,8 @@ using System.Text;
 using MT.Business.Model;
 using MT.Business.IBLL.SystemManage;
 using MT.Application.Code.Enums;
+using MT.Utility.Office;
+using MT.Utility.WebControl;
 
 namespace MT.Application.Web.Areas.SystemManage.Controllers
 {
@@ -47,6 +49,8 @@ namespace MT.Application.Web.Areas.SystemManage.Controllers
         /// 获取字典数据
         /// </summary>
         /// <returns></returns>
+        [HttpPost]
+        [HandlerAjaxOnly]
         public ActionResult GetDataItemList(int page, int limit, string ordersort)
         {
             try
@@ -153,6 +157,77 @@ namespace MT.Application.Web.Areas.SystemManage.Controllers
                 {
                     return Error("获取失败,未能获取到该条数据!");
                 }
+            }
+            catch (Exception ex)
+            {
+                return Error("获取失败," + ex.Message.ToString());
+            }
+        }
+
+        [HttpPost]
+        [HandlerAjaxOnly]
+        public ActionResult ExportList()
+        {
+            try
+            {
+                string sqlWhere = string.Empty;
+                string orderSort = "F_Sort asc";
+                int StartIndex = 1;
+                int EndIndex = int.MaxValue;
+
+                sqlWhere = GetWhere();
+
+                SqlParameter[] sqlParameters =
+                {                
+                    new SqlParameter("@sqlWhere",sqlWhere), 
+                    new SqlParameter("@orderSort",orderSort), 
+                    new SqlParameter("@StartIndex",StartIndex), 
+                    new SqlParameter("@EndIndex",EndIndex)
+                };
+
+                DataSet dsResult = DbHelperSQL.RunProcedure("Proc_GetDataItemList", sqlParameters, "dt");
+
+                string filename = "基础数据管理列表_" + DateTime.Now.ToString("yyyyMMddHHmmss");
+                string columnJson = "[{\"name\":\"F_ItemCode\"},{\"name\":\"F_ItemName\"},{\"name\":\"F_Remark\"}]";
+                string rowJson = "";
+                string exportField = "F_ItemCode,F_ItemName,F_Remark";
+
+                //设置导出格式
+                ExcelConfig excelconfig = new ExcelConfig();
+                excelconfig.Title = Server.UrlDecode(filename);
+                excelconfig.TitleFont = "微软雅黑";
+                excelconfig.TitlePoint = 15;
+                excelconfig.FileName = Server.UrlDecode(filename) + ".xls";
+                excelconfig.IsAllSizeColumn = true;
+                excelconfig.ColumnEntity = new List<ColumnEntity>();
+                //表头
+                List<GridColumnModel> columnData = columnJson.ToList<GridColumnModel>();
+                //行数据
+                //DataTable rowData = rowJson.ToTable();
+                DataTable rowData = dsResult.Tables[0];
+                //写入Excel表头
+                string[] fieldInfo = exportField.Split(',');
+                foreach (string item in fieldInfo)
+                {
+                    var list = columnData.FindAll(t => t.name == item);
+                    foreach (GridColumnModel gridcolumnmodel in list)
+                    {
+                        if (gridcolumnmodel.hidden.ToLower() == "false" && gridcolumnmodel.label != null)
+                        {
+                            string align = gridcolumnmodel.align;
+                            excelconfig.ColumnEntity.Add(new ColumnEntity()
+                            {
+                                Column = gridcolumnmodel.name,
+                                ExcelColumn = gridcolumnmodel.label,
+                                //Width = gridcolumnmodel.width,
+                                Alignment = gridcolumnmodel.align,
+                            });
+                        }
+                    }
+                }
+                ExcelHelper.ExcelDownload(rowData, excelconfig);
+
+                return ReturnData(iTotalNumberUnify, dtResultUnify);
             }
             catch (Exception ex)
             {

@@ -6,7 +6,7 @@
 <div class="layui-fluid">
     <div class="layui-card">
         <div class="layui-card-body" style="padding: 15px;">
-            <form class="layui-form" action="" lay-filter="component-form-group">
+            <form class="layui-form" action="" lay-filter="mt-form">
                 <div class="layui-form-item">
                     <label class="layui-form-label">项目编码</label>
                     <div class="layui-input-block">
@@ -36,7 +36,7 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">是否可用 </label>
                     <div class="layui-input-block">
-                        <input type="checkbox" checked="" name="F_isEnable" lay-skin="switch" lay-filter="component-form-switchTest" lay-text="是|否">
+                        <input type="checkbox" checked="" id="F_isEnable" name="F_isEnable" lay-skin="switch" lay-filter="component-form-switchTest" lay-text="是|否">
                     </div>
                 </div>
                 <div class="layui-form-item layui-form-text">
@@ -70,34 +70,28 @@
         //元素的初始化
         var FormType = request('FormType');
         var F_IDValue = request('F_IDValue');
-        if (FormType != "" && FormType != null && FormType != undefined && (FormType == "UPDATE"||FormType=="VIEW")) {
+        if (FormType != "" && FormType != null && FormType != undefined && (FormType == "UPDATE" || FormType == "VIEW")) {
             $.post("/SystemManage/BaseDataManage/GetForm", { F_IDValue: F_IDValue },
             function (result) {
                 var resultJson = JSON.parse(result);
                 if (resultJson.code == "1") {
                     var model = JSON.parse(resultJson.msg);
-                    $('input[name="F_ItemCode"]').val(model.F_ItemCode);
+                    form.val("mt-form", {
+                        "F_ItemCode": model.F_ItemCode
+                        , "F_ItemName": model.F_ItemName
+                        , "F_HelpCode": model.F_HelpCode
+                        , "F_Sort": model.F_Sort
+                        , "F_isEnable": model.F_isEnable == "1" ? true : false
+                        , "F_Remark": model.F_Remark
+                    });                    
                     $('input[name="F_ItemCode"]').attr("disabled", "disabled");
                     $('input[name="F_ItemCode"]').attr("readonly", "readonly");
-                    $('input[name="F_ItemName"]').val(model.F_ItemName);
-                    $('input[name="F_HelpCode"]').val(model.F_HelpCode);
-                    $('input[name="F_Sort"]').val(model.F_Sort);
-                    if (model.F_isEnable == "1") {
-                        $('input[name="F_isEnable"]').next().addClass("layui-form-onswitch");
-                        $('input[name="F_isEnable"]').next().children("em").html("是");
-                    }
-                    else {
-                        $('input[name="F_isEnable"]').next().removeClass("layui-form-onswitch");
-                        $('input[name="F_isEnable"]').next().children("em").html("否");
-                    }
-                    $('textarea[name="F_Remark"]').val(model.F_Remark);
-                    //form.render(); //更新全部 
                 }
                 else {
                     layer.msg(resultJson.msg, { icon: 5 });//提示消息                                        
                 }
             });
-        }         
+        }
 
         //监听提交
         form.on('submit(mt-form-submit)', function (data) {
@@ -105,7 +99,7 @@
             var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引  
 
             //根据参数判断表单类型
-            var FormType = request('FormType');            
+            var FormType = request('FormType');
             if (FormType != "" && FormType != null && FormType != undefined && FormType == "UPDATE") {
                 var F_IDValue = request('F_IDValue');
                 field["F_IDValue"] = F_IDValue;

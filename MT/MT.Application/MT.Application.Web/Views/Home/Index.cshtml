@@ -10,7 +10,7 @@
     <link href="~/Content/layuiapp/layui/css/layui.css" rel="stylesheet" />
     <link href="~/Content/layuiapp/custom/css/index.css" rel="stylesheet" />
     <script src="~/Content/js/jquery/jquery-2.1.4.js"></script>
-    <script src="~/Content/layuiapp/layui/layui.js"></script>    
+    <script src="~/Content/layuiapp/layui/layui.js"></script>
     <script>
         //加载LayUI页面
         layui.config({
@@ -18,7 +18,10 @@
         }).extend({
             loadmenu: 'modules/loadmenu',//加载菜单
             index: 'lib/index',//主入口
-        }).use(['loadmenu', 'index']);//使用拓展模块
+        }).use(['loadmenu', 'index', 'element'], function () {
+            var element = layui.element;
+            element.init();//菜单初始化(下级菜单的显示)
+        });//使用拓展模块
     </script>
 </head>
 <body class="layui-layout-body">
