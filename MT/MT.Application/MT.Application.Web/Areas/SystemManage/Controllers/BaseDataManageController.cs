@@ -12,6 +12,7 @@ using MT.Business.IBLL.SystemManage;
 using MT.Application.Code.Enums;
 using MT.Utility.Office;
 using MT.Utility.WebControl;
+using System.Drawing;
 
 namespace MT.Application.Web.Areas.SystemManage.Controllers
 {
@@ -163,10 +164,12 @@ namespace MT.Application.Web.Areas.SystemManage.Controllers
                 return Error("获取失败," + ex.Message.ToString());
             }
         }
-
-        [HttpPost]
-        [HandlerAjaxOnly]
-        public ActionResult ExportList()
+        /// <summary>
+        /// 导出列表
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public void ExportList()
         {
             try
             {
@@ -188,7 +191,7 @@ namespace MT.Application.Web.Areas.SystemManage.Controllers
                 DataSet dsResult = DbHelperSQL.RunProcedure("Proc_GetDataItemList", sqlParameters, "dt");
 
                 string filename = "基础数据管理列表_" + DateTime.Now.ToString("yyyyMMddHHmmss");
-                string columnJson = "[{\"name\":\"F_ItemCode\"},{\"name\":\"F_ItemName\"},{\"name\":\"F_Remark\"}]";
+                string columnJson = "[{\"name\":\"F_ItemCode\",\"hidden\":\"false\"},{\"name\":\"F_ItemName\",\"hidden\":\"false\"},{\"name\":\"F_Remark\",\"hidden\":\"false\"}]";
                 string rowJson = "";
                 string exportField = "F_ItemCode,F_ItemName,F_Remark";
 
@@ -199,7 +202,12 @@ namespace MT.Application.Web.Areas.SystemManage.Controllers
                 excelconfig.TitlePoint = 15;
                 excelconfig.FileName = Server.UrlDecode(filename) + ".xls";
                 excelconfig.IsAllSizeColumn = true;
-                excelconfig.ColumnEntity = new List<ColumnEntity>();
+                excelconfig.ColumnEntity = new List<ColumnEntity>() 
+                {
+                    new ColumnEntity(){Column="F_ItemCode",ExcelColumn="F_ItemCode",Width=50,ForeColor=Color.White,Background=Color.White,Font="宋体",Point=16,Alignment="center"},
+                    new ColumnEntity(){Column="F_ItemName",ExcelColumn="F_ItemName",Width=50,ForeColor=Color.White,Background=Color.White,Font="宋体",Point=16,Alignment="center"},
+                    new ColumnEntity(){Column="F_Remark",ExcelColumn="F_Remark",Width=50,ForeColor=Color.White,Background=Color.White,Font="宋体",Point=16,Alignment="center"}
+                };
                 //表头
                 List<GridColumnModel> columnData = columnJson.ToList<GridColumnModel>();
                 //行数据
@@ -226,12 +234,10 @@ namespace MT.Application.Web.Areas.SystemManage.Controllers
                     }
                 }
                 ExcelHelper.ExcelDownload(rowData, excelconfig);
-
-                return ReturnData(iTotalNumberUnify, dtResultUnify);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return Error("获取失败," + ex.Message.ToString());
+
             }
         }
         #endregion

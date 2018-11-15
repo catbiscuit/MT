@@ -73,7 +73,8 @@
         table.render({
             elem: "#mt-data-table"
             , url: "/SystemManage/BaseDataManage/GetDataItemList"
-            , toolbar: "#mt-data-table-toolbar"//头部工具栏
+            , method: "POST"
+            , toolbar: "#mt-data-table-toolbar"//头部工具栏            
             , defaultToolbar: ['filter']//仅显示筛选图标
             , cols: [[
                 { type: "checkbox", fixed: "left", }
@@ -164,6 +165,13 @@
                     }
                     break;
                 case 'ExportAllData'://导出全部数据
+                    var F_ItemCode = $('input[name="F_ItemCode"]').val();
+                    var F_ItemName = $('input[name="F_ItemName"]').val();
+                    var iCount = 0;
+                    var $form = $("<form id='exportexcel" + iCount++ + "' method='get' action='/SystemManage/BaseDataManage/ExportList?F_ItemCode=" + F_ItemCode + "&F_ItemName=" + F_ItemName + "' style='display:none;'></form>");
+                    $("body").append($form);
+                    $form.submit();
+
                     console.log(checkStatus);
                     break;
             };
