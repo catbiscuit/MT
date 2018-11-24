@@ -107,13 +107,13 @@ namespace MT.Application.Web.Areas.SystemManage.Controllers
 
                 sbWhere.AppendFormat(" and F_isValid='{0}' ", (int)F_isValid.Normal);//正常的数据
 
-                if (Request.QueryString["F_ItemCode"] != null && !string.IsNullOrEmpty(Request.QueryString["F_ItemCode"].ToString()))
+                if (Request.Params["F_ItemCode"] != null && !string.IsNullOrEmpty(Request.Params["F_ItemCode"].ToString()))
                 {
-                    sbWhere.AppendFormat(" and (F_ItemCode like '%{0}%' or F_ItemName like '%{0}%' or F_HelpCode like '%{0}%') ", Request.QueryString["F_ItemCode"].ToString());
+                    sbWhere.AppendFormat(" and (F_ItemCode like '%{0}%' or F_ItemName like '%{0}%' or F_HelpCode like '%{0}%') ", Request.Params["F_ItemCode"].ToString());
                 }
-                if (Request.QueryString["F_AddUserName"] != null && !string.IsNullOrEmpty(Request.QueryString["F_AddUserName"].ToString()))
+                if (Request.Params["F_AddUserName"] != null && !string.IsNullOrEmpty(Request.Params["F_AddUserName"].ToString()))
                 {
-                    sbWhere.AppendFormat(" and F_AddUserName like '%{0}%' ", Request.QueryString["F_AddUserName"].ToString());
+                    sbWhere.AppendFormat(" and F_AddUserName like '%{0}%' ", Request.Params["F_AddUserName"].ToString());
                 }
 
                 return sbWhere.ToString();
