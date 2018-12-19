@@ -1,5 +1,6 @@
 ﻿<%@ Template Language="C#" TargetLanguage="Text" %>
 <%@ Property Type="DatabaseSchema" Name="DatabaseSchema" %>
+<%@ Property Name="ProjectName" Type="System.String" Default="MT" Category="Property" Description="项目名称"%>
 <%@ Property Name="ModuleName" Type="System.String" Default="SystemManage" Category="Property" Description="模块名称"%>
 <%@ Assembly Name="SchemaExplorer" %>
 <%@ Import Namespace="SchemaExplorer" %>

@@ -3,6 +3,7 @@
 <%@ Import Namespace="SchemaExplorer" %>
 <%@ Property Name="SourceTable" Type="SchemaExplorer.TableSchema" Category="数据库" %>
 <%@ Property Name="ModuleName" Type="System.String" Default="SystemManage" Category="Property" Description="模块名称"%>
+<%@ Property Name="ProjectName" Type="System.String" Default="MT" Category="Property" Description="项目名称"%>
 
 using System;
 using System.Collections.Generic;
@@ -10,9 +11,9 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
-using MT.Business.Model;
+using <%=ProjectName%>.Business.Model;
 
-namespace MT.Business.IBLL.<%=ModuleName%>
+namespace <%=ProjectName%>.Business.IBLL.<%=ModuleName%>
 {
     /// <summary>
     /// 功能: 实体类 (<%=SourceTable.Description%>)    
@@ -37,5 +38,14 @@ namespace MT.Business.IBLL.<%=ModuleName%>
 public string GetExpressionName(string sTableName)
 {
 		return "Expression<Func<"+sTableName+",bool>>";
+}
+/// <summary>
+/// 根据填写的项目名称获取实体名称
+/// </summary>
+/// <param name="sProjectName"></param>
+/// <returns></returns>
+public string GetEntityName(string sProjectName)
+{
+    return "<"+sProjectName+"Entities>";    
 }
 </script>
