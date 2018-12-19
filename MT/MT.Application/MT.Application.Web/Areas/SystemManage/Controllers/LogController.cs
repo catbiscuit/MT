@@ -38,6 +38,7 @@ namespace MT.Application.Web.Areas.SystemManage.Controllers
         [HttpGet]
         public ActionResult GetPageListJson(int page, int limit, string ordersort)
         {
+            string sTableName = "T_Log";
             string sqlWhere = string.Empty;
             string orderSort = "F_WriteTime desc";
             int StartIndex = (page - 1) * limit + 1;
@@ -50,17 +51,18 @@ namespace MT.Application.Web.Areas.SystemManage.Controllers
 
             SqlParameter[] sqlParameters =
             {                
+                new SqlParameter("@tableName",sTableName), 
                 new SqlParameter("@sqlWhere",sqlWhere), 
                 new SqlParameter("@orderSort",orderSort), 
                 new SqlParameter("@StartIndex",StartIndex), 
                 new SqlParameter("@EndIndex",EndIndex)
             };
 
-            DataSet dsResult = DbHelperSQL.RunProcedure("Proc_GetLogList", sqlParameters, "dt");
+            DataSet dsResult = DbHelperSQL.RunProcedure("proc_GetPageDataList", sqlParameters, "dt");
             if (dsResult != null && dsResult.Tables != null && dsResult.Tables.Count > 0 && dsResult.Tables[0].Rows.Count > 0)
             {
                 dtResultUnify = dsResult.Tables[0];
-                iTotalNumberUnify = int.Parse(dtResultUnify.Rows[0]["TotalNumber"].ToString());
+                iTotalNumberUnify = int.Parse(dtResultUnify.Rows[0]["TotalRows"].ToString());
             }
             else
             {

@@ -56,6 +56,7 @@ namespace MT.Application.Web.Areas.SystemManage.Controllers
         {
             try
             {
+                string sTableName = "T_DataItem";
                 string sqlWhere = string.Empty;
                 string orderSort = "F_Sort asc";
                 int StartIndex = (page - 1) * limit + 1;
@@ -68,18 +69,19 @@ namespace MT.Application.Web.Areas.SystemManage.Controllers
                 sqlWhere = GetWhere();
 
                 SqlParameter[] sqlParameters =
-                {                
+                {   
+                    new SqlParameter("@tableName",sTableName), 
                     new SqlParameter("@sqlWhere",sqlWhere), 
                     new SqlParameter("@orderSort",orderSort), 
                     new SqlParameter("@StartIndex",StartIndex), 
                     new SqlParameter("@EndIndex",EndIndex)
                 };
 
-                DataSet dsResult = DbHelperSQL.RunProcedure("Proc_GetDataItemList", sqlParameters, "dt");
+                DataSet dsResult = DbHelperSQL.RunProcedure("proc_GetPageDataList", sqlParameters, "dt");
                 if (dsResult != null && dsResult.Tables != null && dsResult.Tables.Count > 0 && dsResult.Tables[0].Rows.Count > 0)
                 {
                     dtResultUnify = dsResult.Tables[0];
-                    iTotalNumberUnify = int.Parse(dtResultUnify.Rows[0]["TotalNumber"].ToString());
+                    iTotalNumberUnify = int.Parse(dtResultUnify.Rows[0]["TotalRows"].ToString());
                 }
                 else
                 {
@@ -423,6 +425,102 @@ namespace MT.Application.Web.Areas.SystemManage.Controllers
                 return Error("删除失败," + ex.Message.ToString());
             }
         }
+        #endregion
+
+        #region 基础数据-详细-视图
+        /// <summary>
+        /// 子项列表
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult DetailIndex()
+        {
+            return View();
+        }
+        #endregion
+
+        #region 基础数据-详细-获取数据
+        /// <summary>
+        /// 获取
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="limit"></param>
+        /// <param name="ordersort"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [HandlerAjaxOnly]
+        public ActionResult GetDataItemDetailList(int page, int limit, string ordersort)
+        {
+            try
+            {
+                string sTableName = "T_DataItemDetail";
+                string sqlWhere = string.Empty;
+                string orderSort = "F_Sort asc";
+                int StartIndex = (page - 1) * limit + 1;
+                int EndIndex = StartIndex + limit - 1;
+
+                if (!string.IsNullOrEmpty(ordersort))
+                {
+                    orderSort = ordersort;
+                }
+                sqlWhere = GetDetailWhere();
+
+                SqlParameter[] sqlParameters =
+                {   
+                    new SqlParameter("@tableName",sTableName), 
+                    new SqlParameter("@sqlWhere",sqlWhere), 
+                    new SqlParameter("@orderSort",orderSort), 
+                    new SqlParameter("@StartIndex",StartIndex), 
+                    new SqlParameter("@EndIndex",EndIndex)
+                };
+
+                DataSet dsResult = DbHelperSQL.RunProcedure("proc_GetPageDataList", sqlParameters, "dt");
+                if (dsResult != null && dsResult.Tables != null && dsResult.Tables.Count > 0 && dsResult.Tables[0].Rows.Count > 0)
+                {
+                    dtResultUnify = dsResult.Tables[0];
+                    iTotalNumberUnify = int.Parse(dtResultUnify.Rows[0]["TotalRows"].ToString());
+                }
+                else
+                {
+                    dtResultUnify = new DataTable();
+                    iTotalNumberUnify = 0;
+                }
+
+                return ReturnData(iTotalNumberUnify, dtResultUnify);
+            }
+            catch (Exception ex)
+            {
+                return Error("获取失败," + ex.Message.ToString());
+            }
+        }
+
+        /// <summary>
+        /// 获取查询条件
+        /// </summary>
+        /// <returns></returns>
+        protected string GetDetailWhere()
+        {
+            try
+            {
+                StringBuilder sbWhere = new StringBuilder();
+
+                sbWhere.AppendFormat(" and F_isValid='{0}' ", (int)F_isValid.Normal);//正常的数据
+
+                if (Request.Params["F_ItemCode"] != null && !string.IsNullOrEmpty(Request.Params["F_ItemCode"].ToString()))
+                {
+                    sbWhere.AppendFormat(" and (F_ItemCode like '%{0}%' or F_ItemName like '%{0}%' or F_HelpCode like '%{0}%') ", Request.Params["F_ItemCode"].ToString());
+                }
+
+                return sbWhere.ToString();
+            }
+            catch
+            {
+                return "";
+            }
+        }
+        #endregion
+
+        #region 基础数据-详细-提交数据
+
         #endregion
     }
 }

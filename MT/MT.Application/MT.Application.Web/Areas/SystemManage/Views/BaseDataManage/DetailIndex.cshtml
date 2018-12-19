@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "DetailIndex";
     Layout = "~/Views/Shared/_LayoutIndex.cshtml";
 }
 <div class="layui-card layadmin-header">
@@ -16,12 +16,6 @@
                             <label class="layui-form-label" title="字典编码/字典名称/助记码">字典编码</label>
                             <div class="layui-input-block">
                                 <input type="text" name="F_ItemCode" placeholder="请输入" autocomplete="off" class="layui-input">
-                            </div>
-                        </div>
-                        <div class="layui-inline">
-                            <label class="layui-form-label">录入人</label>
-                            <div class="layui-input-block">
-                                <input type="text" name="F_AddUserName" placeholder="请输入" autocomplete="off" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-inline">
@@ -43,22 +37,15 @@
                     </script>
 
                     <script type="text/html" id="mt-data-table-row-button">
-                        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail">详细</a>
                         <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="view">查看</a>
                         <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
                         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
-                    </script>
-
-                    <script type="text/html" id="mt-data-table-switchF_isEnable">                    
-                         <input type="checkbox" name="F_isEnable" lay-skin="switch" lay-text="是|否" lay-filter="mt-data-table-column-F_isEnable"
-                          value="{{ d.F_isEnable }}" data-json="{{ encodeURIComponent(JSON.stringify(d)) }}" {{ d.F_isEnable== 1 ? 'checked' : '' }}>
                     </script>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
 <script type="text/javascript">
     layui.config({
         base: "/Content/layuiapp/custom/" //存放拓展模块的根目录
@@ -73,7 +60,7 @@
         //表格信息
         table.render({
             elem: "#mt-data-table"
-            , url: "/SystemManage/BaseDataManage/GetDataItemList"
+            , url: "/SystemManage/BaseDataManage/GetDataItemDetailList"
             , method: "POST"
             , toolbar: "#mt-data-table-toolbar"//头部工具栏            
             , defaultToolbar: ['filter']//仅显示筛选图标
