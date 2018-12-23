@@ -1,0 +1,105 @@
+﻿<%@ Template Language="C#" TargetLanguage="C#" %>
+<%@ Assembly Name="SchemaExplorer" %>
+<%@ Import Namespace="SchemaExplorer" %>
+<%@ Property Name="SourceTable" Type="SchemaExplorer.TableSchema" Category="数据库" %>
+<%@ Property Name="ModuleName" Type="System.String" Default="SystemManage" Category="Property" Description="模块名称"%>
+<%@ Property Name="ProjectName" Type="System.String" Default="MT" Category="Property" Description="项目名称"%>
+
+@{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body" style="padding: 15px;">
+            <form class="layui-form" action="" lay-filter="mt-form">
+                <%for(int i=0; i<SourceTable.Columns.Count; i++) {%>                
+                <div class="layui-form-item">
+                    <label class="layui-form-label"><%=SourceTable.Columns[i].Description%></label>
+                    <div class="layui-input-block">
+                        <input type="text" id="<%=SourceTable.Columns[i].Name%>" name="<%=SourceTable.Columns[i].Name%>" lay-verify="required" placeholder="请输入<%=SourceTable.Columns[i].Description%>" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <%}%>
+
+                <div class="layui-form-item layui-hide">
+                    <input type="button" lay-submit lay-filter="mt-form-submit" id="mt-form-submit" value="确认添加">
+                    <input type="button" lay-submit lay-filter="mt-form-edit" id="mt-form-edit" value="确认编辑">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    layui.config({
+        base: "/Content/layuiapp/custom/" //存放拓展模块的根目录
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form'], function () {
+        var $ = layui.$
+         , admin = layui.admin
+         , element = layui.element
+         , layer = layui.layer
+         , form = layui.form;
+
+        //元素的初始化
+        var FormType = request('FormType');
+        var F_IDValue = request('F_IDValue');
+        if (FormType != "" && FormType != null && FormType != undefined && (FormType == "UPDATE" || FormType == "VIEW")) {
+            $.post("/SystemManage/DataItem/GetForm", { F_IDValue: F_IDValue },
+            function (result) {
+                var resultJson = JSON.parse(result);
+                if (resultJson.code == "1") {
+                    var model = JSON.parse(resultJson.msg);
+                    form.val("mt-form", {
+                    <%for(int i=0; i<SourceTable.Columns.Count; i++) {%>                
+                    , "<%=SourceTable.Columns[i].Name%>": model.<%=SourceTable.Columns[i].Name%>
+                    <%}%>
+                    });
+                    $('input[name="F_ItemCode"]').attr("disabled", "disabled");
+                    $('input[name="F_ItemCode"]').attr("readonly", "readonly");
+                }
+                else {
+                    layer.msg(resultJson.msg, { icon: 5 });//提示消息                                        
+                }
+            });
+        }
+
+        //监听提交
+        form.on('submit(mt-form-submit)', function (data) {
+            var field = data.field; //获取提交的字段
+            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引  
+
+            //根据参数判断表单类型
+            var FormType = request('FormType');
+            if (FormType != "" && FormType != null && FormType != undefined && FormType == "UPDATE") {
+                var F_IDValue = request('F_IDValue');
+                field["F_IDValue"] = F_IDValue;
+            }
+
+            field["F_isEnable"] = field["F_isEnable"] == "on" ? 1 : 0;//将on-off 转换为 1-0
+            field["FormType"] = FormType;//页面类型
+
+            //提交 Ajax 成功后，关闭当前弹层并重载表格
+            $.post("/SystemManage/DataItem/SaveForm", field,
+            function (result) {
+                var resultJson = JSON.parse(result);
+                if (resultJson.code == "1") {
+                    parent.layui.table.reload('mt-data-table'); //重载表格
+                    parent.layer.close(index); //再执行关闭 
+                }
+                else {
+                    layer.msg(resultJson.msg, { icon: 5 });//提示消息                                        
+                }
+            });
+        });
+    });
+    //生成助记码
+    $(function () {
+        $("#F_ItemName").keyup(function () {
+            $("#F_HelpCode").val(PinyinInitials($(this).val()));
+        });
+    });
+</script>

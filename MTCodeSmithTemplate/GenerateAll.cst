@@ -8,6 +8,9 @@
 <%@ Register Name="BLL" Template="BLL.cst" %>
 <%@ Register Name="IDAL" Template="IDAL.cst" %>
 <%@ Register Name="IBLL" Template="IBLL.cst" %>
+<%@ Register Name="Controller" Template="Controller.cst" %>
+<%@ Register Name="Index" Template="Index.cst" %>
+<%@ Register Name="Form" Template="Form.cst" %>
 <%Generate(); %>
 <script runat="template">
     private string _outputDirectory;
@@ -62,6 +65,33 @@
             this.CopyPropertiesTo(ibll);
             ibll.RenderToFile(System.IO.Path.Combine(OutputDirectory+@"\IBLL\","I"+GetClassName(i)+"BLL.cs" ), true);
     		Response.WriteLine("Rendering: "+GetClassName(i)+".cs");
+        }
+        Controller controller=new Controller();
+        foreach(var i in DatabaseSchema.Tables)
+        {
+            controller.SetProperty("ModuleName",ModuleName);                        
+            controller.SetProperty("SourceTable",i);
+            this.CopyPropertiesTo(controller);
+            controller.RenderToFile(System.IO.Path.Combine(OutputDirectory+@"\Controller\",GetClassName(i)+"Controller.cs" ), true);
+    		Response.WriteLine("Rendering: "+GetClassName(i)+".cs");
+        }
+        Index index=new Index();
+        foreach(var i in DatabaseSchema.Tables)
+        {
+            index.SetProperty("ModuleName",ModuleName);                        
+            index.SetProperty("SourceTable",i);
+            this.CopyPropertiesTo(index);
+            index.RenderToFile(System.IO.Path.Combine(OutputDirectory+@"\Index\",GetClassName(i)+"Index.cshtml" ), true);
+    		Response.WriteLine("Rendering: "+GetClassName(i)+"Index.cshtml");
+        }
+        Form form=new Form();
+        foreach(var i in DatabaseSchema.Tables)
+        {
+            form.SetProperty("ModuleName",ModuleName);                        
+            form.SetProperty("SourceTable",i);
+            this.CopyPropertiesTo(form);
+            form.RenderToFile(System.IO.Path.Combine(OutputDirectory+@"\Form\",GetClassName(i)+"Form.cshtml" ), true);
+    		Response.WriteLine("Rendering: "+GetClassName(i)+"Form.cshtml");
         }
     }
     /// <summary>

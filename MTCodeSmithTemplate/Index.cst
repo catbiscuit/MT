@@ -1,0 +1,231 @@
+﻿<%@ Template Language="C#" TargetLanguage="C#" %>
+<%@ Assembly Name="SchemaExplorer" %>
+<%@ Import Namespace="SchemaExplorer" %>
+<%@ Property Name="SourceTable" Type="SchemaExplorer.TableSchema" Category="数据库" %>
+<%@ Property Name="ModuleName" Type="System.String" Default="SystemManage" Category="Property" Description="模块名称"%>
+<%@ Property Name="ProjectName" Type="System.String" Default="MT" Category="Property" Description="项目名称"%>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+    </div>
+</div>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label" title="字典编码/字典名称/助记码">字典编码</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="F_ItemCode" placeholder="请输入" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">录入人</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="F_AddUserName" placeholder="请输入" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="mt-data-table-search">
+                                <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="mt-data-table" lay-filter="mt-data-table"></table>
+
+                    <script type="text/html" id="mt-data-table-toolbar">
+                        <div class="layui-btn-container">
+                            <button class="layui-btn layui-btn-sm" lay-event="Add">添加</button>
+                            <button class="layui-btn layui-btn-sm" lay-event="BatchDelete">批量删除</button>                            
+                        </div>
+                    </script>
+
+                    <script type="text/html" id="mt-data-table-row-button">                        
+                        <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="view">查看</a>
+                        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+                        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
+                    </script>
+
+                    <script type="text/html" id="mt-data-table-switchF_isEnable">                    
+                         <input type="checkbox" name="F_isEnable" lay-skin="switch" lay-text="是|否" lay-filter="mt-data-table-column-F_isEnable"
+                          value="{{ d.F_isEnable }}" data-json="{{ encodeURIComponent(JSON.stringify(d)) }}" {{ d.F_isEnable== 1 ? 'checked' : '' }}>
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    layui.config({
+        base: "/Content/layuiapp/custom/" //存放拓展模块的根目录
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'table', 'form', 'layer'], function () {
+        var admin = layui.admin
+            , form = layui.form
+            , table = layui.table
+            , $ = layui.$;
+
+        //表格信息
+        table.render({
+            elem: "#mt-data-table"
+            , url: "/<%=ModuleName%>/<%=SourceTable.Name %>/GetGetDataListList"
+            , method: "POST"
+            , toolbar: "#mt-data-table-toolbar"//头部工具栏            
+            , defaultToolbar: ['filter']//仅显示筛选图标
+            , cols: [[
+                { type: "checkbox", fixed: "left", }
+                , { field: "F_ItemCode", title: "字典编码", width: 200 }
+                , { field: "F_ItemName", title: "字典名称", width: 200, }
+                , { field: "F_Sort", title: "排序", width: 80 }
+                , { field: "F_isEnable", title: "是否可用", width: 100, templet: '#mt-data-table-switchF_isEnable', unresize: true }
+                , { field: "F_AddUserName", width: 100, title: "录入人" }
+                , { field: "F_AddTime", title: "录入时间", width: 200, sort: true }
+                , { field: "F_Remark", title: "备注", }
+                , { title: "操作", width: 220, align: "center", fixed: "right", unresize: true, toolbar: "#mt-data-table-row-button" }
+            ]]
+            , height: 'full-100'
+            , cellMinWidth: 80
+            , page: true
+            , limit: 20
+        });
+
+        //监听"是否可用"操作
+        form.on('switch(mt-data-table-column-F_isEnable)', function (obj) {
+            var json = JSON.parse(decodeURIComponent($(this).data('json')));
+            $.post("/<%=ModuleName%>/<%=SourceTable.Name %>/UpdateF_isEnable", { F_ID: json.F_ID, IsChecked: obj.elem.checked },
+            function (result) {
+                var resultJson = JSON.parse(result);
+                if (resultJson.code == "1") {
+                    obj.elem.value = resultJson.msg;//修改input标签的value值
+                }
+                else {
+                    layer.msg(resultJson.msg, { icon: 5 });//提示消息                    
+                    obj.elem.checked = obj.elem.value == "1" ? true : false;//还原checkbox的状态
+                }
+            });
+        });
+
+        //监听搜索
+        form.on('submit(mt-data-table-search)', function (data) {
+            var field = data.field;
+            layui.table.reload('mt-data-table', {
+                where: field
+            }); //重载表格
+        });
+
+        //头工具栏事件
+        table.on('toolbar(mt-data-table)', function (obj) {
+            var checkStatus = table.checkStatus(obj.config.id);
+            switch (obj.event) {
+                case 'Add'://添加
+                    layer.open({
+                        type: 2
+                        , title: '添加基础数据项目'
+                        , content: '/<%=ModuleName%>/<%=SourceTable.Name %>/Form?FormType=ADD'
+                        , maxmin: true
+                        , area: ['600px', '550px']
+                        , btn: ['确定', '取消']
+                        , yes: function (index, layero) {
+                            var iframeWindow = window['layui-layer-iframe' + index],
+                                submitID = 'mt-form-submit',
+                                submit = layero.find('iframe').contents().find('#' + submitID);
+                            submit.click();
+                        }
+                    });
+                    break;
+                case 'BatchDelete'://批量删除
+                    var data = checkStatus.data;
+                    if (data.length <= 0) {
+                        layer.msg('请至少选择一条记录');//提示消息    
+                    }
+                    else {
+                        layer.confirm('确定删除这 ' + data.length + ' 行数据吗？', function (index) {
+                            var F_IDValue = "";
+                            for (var f in data) {
+                                F_IDValue = F_IDValue + data[f].F_ID + ",";
+                            }
+                            F_IDValue = F_IDValue.substr(0, F_IDValue.length - 1);
+
+                            $.post("/<%=ModuleName%>/<%=SourceTable.Name %>/BatchRemoveForm", { F_IDValue: F_IDValue },
+                            function (result) {
+                                var resultJson = JSON.parse(result);
+                                if (resultJson.code == "1") {
+                                    layui.table.reload('mt-data-table'); //重载表格
+                                }
+                                else {
+                                    layer.msg(resultJson.msg, { icon: 5 });//提示消息                                                    
+                                }
+                            });
+                            layer.close(index);
+                        });
+                    }
+                    break;
+                case 'ExportAllData'://导出全部数据
+                    var F_ItemCode = $('input[name="F_ItemCode"]').val();
+                    var F_AddUserName = $('input[name="F_AddUserName"]').val();
+                    var ranNum = Math.random();
+                    var $form = $("<form id='exportexcel" + ranNum + "' method='post' action='/<%=ModuleName%>/<%=SourceTable.Name %>/ExportList?F_ItemCode=" + F_ItemCode + "&F_AddUserName=" + F_AddUserName + "' style='display:none;'></form>");
+                    $("body").append($form);
+                    $form.submit();
+                    break;
+            };
+        });
+        //监听行工具事件
+        table.on('tool(mt-data-table)', function (obj) {
+            var data = obj.data;
+            switch (obj.event) {
+                case 'view'://查看
+                    layer.open({
+                        type: 2
+                        , title: '查看基础数据项目'
+                        , content: '/<%=ModuleName%>/<%=SourceTable.Name %>/Form?FormType=VIEW&F_IDValue=' + data.F_ID
+                        , maxmin: true
+                        , area: ['600px', '550px']
+                        , btn: ['关闭']
+                    });
+                    break;
+                case 'edit'://编辑
+                    layer.open({
+                        type: 2
+                        , title: '修改基础数据项目'
+                        , content: '/<%=ModuleName%>/<%=SourceTable.Name %>/Form?FormType=UPDATE&F_IDValue=' + data.F_ID
+                        , maxmin: true
+                        , area: ['600px', '550px']
+                        , btn: ['确定', '取消']
+                        , yes: function (index, layero) {
+                            var iframeWindow = window['layui-layer-iframe' + index],
+                                submitID = 'mt-form-submit',
+                                submit = layero.find('iframe').contents().find('#' + submitID);
+                            submit.click();
+                        }
+                    });
+                    break;
+                case 'delete'://删除
+                    layer.confirm('确定删除这行数据吗？', function (index) {
+                        $.post("/<%=ModuleName%>/<%=SourceTable.Name %>/RemoveForm", { F_IDValue: data.F_ID },
+                        function (result) {
+                            var resultJson = JSON.parse(result);
+                            if (resultJson.code == "1") {
+                                layui.table.reload('mt-data-table'); //重载表格
+                            }
+                            else {
+                                layer.msg(resultJson.msg, { icon: 5 });//提示消息                                                    
+                            }
+                        });
+                        layer.close(index);
+                    });
+                    break;
+            }
+        });
+    });
+</script>
