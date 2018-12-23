@@ -34,8 +34,12 @@ namespace MT.Utility.Office
             curContext.Response.ContentType = "application/ms-excel";
             curContext.Response.ContentEncoding = Encoding.UTF8;
             curContext.Response.Charset = "";
-            curContext.Response.AppendHeader("Content-Disposition",
-                "attachment;filename=" + HttpUtility.UrlEncode(excelConfig.FileName, Encoding.UTF8));
+            //如果不是或火狐浏览器，则对文件名称进行UTF8编码。如果是火狐浏览器，则不需要操作
+            if (HttpContext.Current.Request.ServerVariables["http_user_agent"].ToLower().IndexOf("firefox") == -1)
+            {
+                excelConfig.FileName = System.Web.HttpUtility.UrlEncode(excelConfig.FileName, System.Text.Encoding.UTF8);
+            }
+            curContext.Response.AppendHeader("Content-Disposition", "attachment;filename=" + excelConfig.FileName);
             //调用导出具体方法Export()
             curContext.Response.BinaryWrite(ExportMemoryStream(lists, excelConfig).GetBuffer());
             curContext.Response.End();

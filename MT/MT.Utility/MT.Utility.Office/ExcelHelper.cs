@@ -33,8 +33,12 @@ namespace MT.Utility.Office
             curContext.Response.ContentType = "application/ms-excel";
             curContext.Response.ContentEncoding = Encoding.UTF8;
             curContext.Response.Charset = "";
-            curContext.Response.AppendHeader("Content-Disposition",
-                "attachment;filename=" + HttpUtility.UrlEncode(excelConfig.FileName, Encoding.UTF8));
+            //如果不是或火狐浏览器，则对文件名称进行UTF8编码。如果是火狐浏览器，则不需要操作
+            if (HttpContext.Current.Request.ServerVariables["http_user_agent"].ToLower().IndexOf("firefox") == -1)
+            {
+                excelConfig.FileName = System.Web.HttpUtility.UrlEncode(excelConfig.FileName, System.Text.Encoding.UTF8);
+            }
+            curContext.Response.AppendHeader("Content-Disposition", "attachment;filename=" + excelConfig.FileName);
             //调用导出具体方法Export()
             curContext.Response.BinaryWrite(ExportMemoryStream(dtSource, excelConfig).GetBuffer());
             curContext.Response.End();
@@ -51,6 +55,11 @@ namespace MT.Utility.Office
             response.Clear();
             response.Charset = "UTF-8";
             response.ContentType = "application/vnd-excel";//"application/vnd.ms-excel";
+            //如果不是或火狐浏览器，则对文件名称进行UTF8编码。如果是火狐浏览器，则不需要操作
+            if (HttpContext.Current.Request.ServerVariables["http_user_agent"].ToLower().IndexOf("firefox") == -1)
+            {
+                newFileName = System.Web.HttpUtility.UrlEncode(newFileName, System.Text.Encoding.UTF8);
+            }
             System.Web.HttpContext.Current.Response.AddHeader("Content-Disposition", string.Format("attachment; filename=" + newFileName));
             System.Web.HttpContext.Current.Response.BinaryWrite(ExportListByTempale(list, templdateName).ToArray());
         }
@@ -84,18 +93,17 @@ namespace MT.Utility.Office
         /// <param name="excelConfig">导出设置包含文件名、标题、列设置</param>
         public static MemoryStream ExportMemoryStream(DataTable dtSource, ExcelConfig excelConfig)
         {
-            int colint = 0;
+            List<string> lstColumn = (from r in excelConfig.ColumnEntity select r.Column).ToList();
             for (int i = 0; i < dtSource.Columns.Count; )
             {
                 DataColumn column = dtSource.Columns[i];
-                if (excelConfig.ColumnEntity[colint].Column != column.ColumnName)
+                if (lstColumn.Contains(column.ColumnName) == false)
                 {
                     dtSource.Columns.Remove(column.ColumnName);
                 }
                 else
                 {
                     i++;
-                    colint++;
                 }
             }
 

@@ -71,7 +71,7 @@
         var FormType = request('FormType');
         var F_IDValue = request('F_IDValue');
         if (FormType != "" && FormType != null && FormType != undefined && (FormType == "UPDATE" || FormType == "VIEW")) {
-            $.post("/SystemManage/BaseDataManage/GetForm", { F_IDValue: F_IDValue },
+            $.post("/SystemManage/DataItem/GetForm", { F_IDValue: F_IDValue },
             function (result) {
                 var resultJson = JSON.parse(result);
                 if (resultJson.code == "1") {
@@ -83,7 +83,7 @@
                         , "F_Sort": model.F_Sort
                         , "F_isEnable": model.F_isEnable == "1" ? true : false
                         , "F_Remark": model.F_Remark
-                    });                    
+                    });
                     $('input[name="F_ItemCode"]').attr("disabled", "disabled");
                     $('input[name="F_ItemCode"]').attr("readonly", "readonly");
                 }
@@ -109,7 +109,7 @@
             field["FormType"] = FormType;//页面类型
 
             //提交 Ajax 成功后，关闭当前弹层并重载表格
-            $.post("/SystemManage/BaseDataManage/SaveForm", field,
+            $.post("/SystemManage/DataItem/SaveForm", field,
             function (result) {
                 var resultJson = JSON.parse(result);
                 if (resultJson.code == "1") {

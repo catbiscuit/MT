@@ -273,7 +273,8 @@
     <Compile Include="Areas\PersonalIssue\PersonalIssueAreaRegistration.cs" />
     <Compile Include="Areas\PersonnelManage\Controllers\PersonnelArchivesController.cs" />
     <Compile Include="Areas\PersonnelManage\PersonnelManageAreaRegistration.cs" />
-    <Compile Include="Areas\SystemManage\Controllers\BaseDataManageController.cs" />
+    <Compile Include="Areas\SystemManage\Controllers\DataItemController.cs" />
+    <Compile Include="Areas\SystemManage\Controllers\DataItemDetailController.cs" />
     <Compile Include="Areas\SystemManage\Controllers\LogController.cs" />
     <Compile Include="Areas\SystemManage\SystemManageAreaRegistration.cs" />
     <Compile Include="Controllers\ClientDataController.cs" />
@@ -309,9 +310,10 @@
     <Content Include="Areas\PersonalIssue\Views\UserInfomation\UserInfo.cshtml" />
     <Content Include="Areas\PersonalIssue\Views\UserInfomation\ChangePwd.cshtml" />
     <Content Include="Areas\PersonalIssue\Views\UserInfomation\Index.cshtml" />
-    <Content Include="Areas\SystemManage\Views\BaseDataManage\Index.cshtml" />
-    <Content Include="Areas\SystemManage\Views\BaseDataManage\Form.cshtml" />
-    <Content Include="Areas\SystemManage\Views\BaseDataManage\DetailIndex.cshtml" />
+    <Content Include="Areas\SystemManage\Views\DataItem\Index.cshtml" />
+    <Content Include="Areas\SystemManage\Views\DataItem\Form.cshtml" />
+    <Content Include="Areas\SystemManage\Views\DataItemDetail\Index.cshtml" />
+    <Content Include="Areas\SystemManage\Views\DataItemDetail\Form.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
