@@ -35,5 +35,6 @@ namespace MT.Business.Model
         public DbSet<T_Department> T_Department { get; set; }
         public DbSet<T_Menu> T_Menu { get; set; }
         public DbSet<T_RoleMenu> T_RoleMenu { get; set; }
+        public DbSet<T_Parameter> T_Parameter { get; set; }
     }
 }

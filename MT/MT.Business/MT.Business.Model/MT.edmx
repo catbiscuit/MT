@@ -12,6 +12,7 @@
           <EntitySet Name="T_Department" EntityType="MTModel.Store.T_Department" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="T_Log" EntityType="MTModel.Store.T_Log" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="T_Menu" EntityType="MTModel.Store.T_Menu" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="T_Parameter" EntityType="MTModel.Store.T_Parameter" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="T_Role" EntityType="MTModel.Store.T_Role" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="T_RoleMenu" EntityType="MTModel.Store.T_RoleMenu" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="T_User" EntityType="MTModel.Store.T_User" store:Type="Tables" Schema="dbo" />
@@ -115,6 +116,27 @@
           <Property Name="F_isPage" Type="int" />
           <Property Name="F_Icon" Type="varchar" MaxLength="200" />
         </EntityType>
+        <EntityType Name="T_Parameter">
+          <Key>
+            <PropertyRef Name="F_ID" />
+          </Key>
+          <Property Name="F_ID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="F_CatalogCode" Type="varchar" MaxLength="200" />
+          <Property Name="F_CatalogName" Type="varchar" MaxLength="4000" />
+          <Property Name="F_Code" Type="varchar" MaxLength="200" />
+          <Property Name="F_Name" Type="varchar" MaxLength="4000" />
+          <Property Name="F_Value" Type="varchar" />
+          <Property Name="F_Explain" Type="varchar" />
+          <Property Name="F_Sort" Type="int" />
+          <Property Name="F_AddUserID" Type="uniqueidentifier" />
+          <Property Name="F_AddUserName" Type="nvarchar" MaxLength="20" />
+          <Property Name="F_AddTime" Type="datetime" />
+          <Property Name="F_UpdateUserID" Type="uniqueidentifier" />
+          <Property Name="F_UpdateUserName" Type="nvarchar" MaxLength="20" />
+          <Property Name="F_UpdateTime" Type="datetime" />
+          <Property Name="F_isValid" Type="int" />
+          <Property Name="F_Remark" Type="nvarchar" MaxLength="2000" />
+        </EntityType>
         <EntityType Name="T_Role">
           <Key>
             <PropertyRef Name="F_ID" />
@@ -169,6 +191,7 @@
           <EntitySet Name="T_Department" EntityType="MTModel.T_Department" />
           <EntitySet Name="T_Menu" EntityType="MTModel.T_Menu" />
           <EntitySet Name="T_RoleMenu" EntityType="MTModel.T_RoleMenu" />
+          <EntitySet Name="T_Parameter" EntityType="MTModel.T_Parameter" />
         </EntityContainer>
         <EntityType Name="T_BaseInfo">
           <Key>
@@ -306,6 +329,27 @@
           <Property Type="Guid" Name="F_ID" Nullable="false" />
           <Property Type="Guid" Name="F_RoleID" />
           <Property Type="Guid" Name="F_MenuID" />
+        </EntityType>
+        <EntityType Name="T_Parameter">
+          <Key>
+            <PropertyRef Name="F_ID" />
+          </Key>
+          <Property Type="Guid" Name="F_ID" Nullable="false" />
+          <Property Type="String" Name="F_CatalogCode" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="F_CatalogName" MaxLength="4000" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="F_Code" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="F_Name" MaxLength="4000" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="F_Value" MaxLength="8000" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="F_Explain" MaxLength="8000" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="F_Sort" />
+          <Property Type="Guid" Name="F_AddUserID" />
+          <Property Type="String" Name="F_AddUserName" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="F_AddTime" Precision="3" />
+          <Property Type="Guid" Name="F_UpdateUserID" />
+          <Property Type="String" Name="F_UpdateUserName" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="F_UpdateTime" Precision="3" />
+          <Property Type="Int32" Name="F_isValid" />
+          <Property Type="String" Name="F_Remark" MaxLength="2000" FixedLength="false" Unicode="true" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -456,6 +500,28 @@
               <MappingFragment StoreEntitySet="T_RoleMenu">
                 <ScalarProperty Name="F_MenuID" ColumnName="F_MenuID" />
                 <ScalarProperty Name="F_RoleID" ColumnName="F_RoleID" />
+                <ScalarProperty Name="F_ID" ColumnName="F_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_Parameter">
+            <EntityTypeMapping TypeName="MTModel.T_Parameter">
+              <MappingFragment StoreEntitySet="T_Parameter">
+                <ScalarProperty Name="F_Remark" ColumnName="F_Remark" />
+                <ScalarProperty Name="F_isValid" ColumnName="F_isValid" />
+                <ScalarProperty Name="F_UpdateTime" ColumnName="F_UpdateTime" />
+                <ScalarProperty Name="F_UpdateUserName" ColumnName="F_UpdateUserName" />
+                <ScalarProperty Name="F_UpdateUserID" ColumnName="F_UpdateUserID" />
+                <ScalarProperty Name="F_AddTime" ColumnName="F_AddTime" />
+                <ScalarProperty Name="F_AddUserName" ColumnName="F_AddUserName" />
+                <ScalarProperty Name="F_AddUserID" ColumnName="F_AddUserID" />
+                <ScalarProperty Name="F_Sort" ColumnName="F_Sort" />
+                <ScalarProperty Name="F_Explain" ColumnName="F_Explain" />
+                <ScalarProperty Name="F_Value" ColumnName="F_Value" />
+                <ScalarProperty Name="F_Name" ColumnName="F_Name" />
+                <ScalarProperty Name="F_Code" ColumnName="F_Code" />
+                <ScalarProperty Name="F_CatalogName" ColumnName="F_CatalogName" />
+                <ScalarProperty Name="F_CatalogCode" ColumnName="F_CatalogCode" />
                 <ScalarProperty Name="F_ID" ColumnName="F_ID" />
               </MappingFragment>
             </EntityTypeMapping>

@@ -256,6 +256,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Code\AutofacRegister.cs" />
+    <Compile Include="App_Code\CodeHelper.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\Handler\HandlerAjaxOnlyAttribute.cs" />
     <Compile Include="App_Start\Handler\HandlerAuthorizeAttribute.cs" />
@@ -276,6 +277,7 @@
     <Compile Include="Areas\SystemManage\Controllers\DataItemController.cs" />
     <Compile Include="Areas\SystemManage\Controllers\DataItemDetailController.cs" />
     <Compile Include="Areas\SystemManage\Controllers\LogController.cs" />
+    <Compile Include="Areas\SystemManage\Controllers\ParameterController.cs" />
     <Compile Include="Areas\SystemManage\SystemManageAreaRegistration.cs" />
     <Compile Include="Controllers\ClientDataController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -314,6 +316,8 @@
     <Content Include="Areas\SystemManage\Views\DataItem\Form.cshtml" />
     <Content Include="Areas\SystemManage\Views\DataItemDetail\Index.cshtml" />
     <Content Include="Areas\SystemManage\Views\DataItemDetail\Form.cshtml" />
+    <Content Include="Areas\SystemManage\Views\Parameter\Index.cshtml" />
+    <Content Include="Areas\SystemManage\Views\Parameter\Form.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -354,6 +358,14 @@
     <ProjectReference Include="..\..\MT.Business\MT.Business.Model\MT.Business.Model.csproj">
       <Project>{f39af84c-2abd-4ae3-a977-35db7f3125a5}</Project>
       <Name>MT.Business.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MT.Cache\MT.Cache.Caching\MT.Cache.Caching.csproj">
+      <Project>{b1756213-b10c-462e-8d98-3e1ee696d5ca}</Project>
+      <Name>MT.Cache.Caching</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MT.Cache\MT.Cache.Factory\MT.Cache.Factory.csproj">
+      <Project>{b4d0f152-ea4e-43d2-82db-9b83183787fd}</Project>
+      <Name>MT.Cache.Factory</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\MT.Data\MT.Data.Base\MT.Data.Base.csproj">
       <Project>{cf913ef0-41e2-431f-9611-8f64542afe0e}</Project>

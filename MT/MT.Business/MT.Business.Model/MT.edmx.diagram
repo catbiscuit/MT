@@ -15,6 +15,7 @@
         <EntityTypeShape EntityType="MTModel.T_Department" Width="1.5" PointX="2.375" PointY="4.25" />
         <EntityTypeShape EntityType="MTModel.T_Menu" Width="1.5" PointX="4.5" PointY="4" />
         <EntityTypeShape EntityType="MTModel.T_RoleMenu" Width="1.5" PointX="0.5" PointY="4.375" />
+        <EntityTypeShape EntityType="MTModel.T_Parameter" Width="1.5" PointX="6.375" PointY="3.875" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

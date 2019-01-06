@@ -1,11 +1,4 @@
-﻿<%@ Template Language="C#" TargetLanguage="C#" %>
-<%@ Assembly Name="SchemaExplorer" %>
-<%@ Import Namespace="SchemaExplorer" %>
-<%@ Property Name="SourceTable" Type="SchemaExplorer.TableSchema" Category="数据库" %>
-<%@ Property Name="ModuleName" Type="System.String" Default="SystemManage" Category="Property" Description="模块名称"%>
-<%@ Property Name="ProjectName" Type="System.String" Default="MT" Category="Property" Description="项目名称"%>
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -14,33 +7,34 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
-using <%=ProjectName%>.Application.Code.Enums;
-using <%=ProjectName%>.Business.IBLL.<%=ModuleName%>;
-using <%=ProjectName%>.Business.Model;
-using <%=ProjectName%>.Utility.Common;
-using <%=ProjectName%>.Utility.Office;
-using <%=ProjectName%>.Utility.WebControl;
+using MT.Application.Code.Enums;
+using MT.Business.IBLL.SystemManage;
+using MT.Business.Model;
+using MT.Utility.Common;
+using MT.Utility.Office;
+using MT.Utility.WebControl;
 
-namespace <%=ProjectName%>.Application.Web.Areas.<%=ModuleName%>.Controllers
+namespace MT.Application.Web.Areas.SystemManage.Controllers
 {
     /// <summary>
-    /// 功能:<%=SourceTable.Description%>
-    /// 创建日期：<%=DateTime.Now.ToShortDateString() %>    
+    /// 功能:
+    /// 创建日期：2019/1/6    
     /// </summary>  
     [HandlerLogin(LoginMode.Enforce)]
-    public class <%=SourceTable.Name %>Controller : MvcControllerBase
+    public class ParameterController : MvcControllerBase
     {
         #region 字段、属性
-        private readonly I<%=SourceTable.Name %>BLL _i<%=SourceTable.Name %>BLL;
-        public <%=SourceTable.Name %>Controller(I<%=SourceTable.Name %>BLL i<%=SourceTable.Name %>BLL)
+        private readonly IT_ParameterBLL _iT_ParameterBLL;
+        public ParameterController(IT_ParameterBLL iT_ParameterBLL)
         {
-            this._i<%=SourceTable.Name %>BLL = i<%=SourceTable.Name %>BLL;
+            this._iT_ParameterBLL = iT_ParameterBLL;
         }
         #endregion
-        
+
         #region 视图
         public ActionResult Index()
         {
+            var l = App_Code.CodeHelper.GetT_ParameterList();
             return View();
         }
         public ActionResult Form()
@@ -48,9 +42,9 @@ namespace <%=ProjectName%>.Application.Web.Areas.<%=ModuleName%>.Controllers
             return View();
         }
         #endregion
-        
-         #region 获取数据
-         /// <summary>
+
+        #region 获取数据
+        /// <summary>
         /// 获取列表数据
         /// </summary>
         /// <returns></returns>
@@ -60,7 +54,7 @@ namespace <%=ProjectName%>.Application.Web.Areas.<%=ModuleName%>.Controllers
         {
             try
             {
-                string sTableName = "<%=SourceTable.Name %>";
+                string sTableName = "T_Parameter";
                 string sqlWhere = string.Empty;
                 string orderSort = "F_Sort asc";
                 int StartIndex = (page - 1) * limit + 1;
@@ -96,7 +90,7 @@ namespace <%=ProjectName%>.Application.Web.Areas.<%=ModuleName%>.Controllers
                 return Error("获取失败," + ex.Message.ToString());
             }
         }
-        
+
         /// <summary>
         /// 获取查询条件
         /// </summary>
@@ -125,7 +119,7 @@ namespace <%=ProjectName%>.Application.Web.Areas.<%=ModuleName%>.Controllers
                 return "";
             }
         }
-        
+
         /// <summary>
         /// 获取数据
         /// </summary>
@@ -135,22 +129,22 @@ namespace <%=ProjectName%>.Application.Web.Areas.<%=ModuleName%>.Controllers
         [HandlerAjaxOnly]
         public ActionResult GetForm(string F_IDValue)
         {
-            <%=SourceTable.Name %> model = null;
+            T_Parameter model = null;
             try
             {
                 Guid F_ID = default(Guid);
                 if (string.IsNullOrEmpty(F_IDValue))
                 {
-                    model = new <%=SourceTable.Name %>();
+                    model = new T_Parameter();
                     return Error("主键为空,获取记录失败!");
                 }
                 if (Guid.TryParse(F_IDValue, out F_ID) == false)
                 {
-                    model = new <%=SourceTable.Name %>();
+                    model = new T_Parameter();
                     return Error("主键格式错误,获取记录失败!");
                 }
 
-                model = _i<%=SourceTable.Name %>BLL.GetModelByCondition(x => x.F_ID == F_ID);
+                model = _iT_ParameterBLL.GetModelByCondition(x => x.F_ID == F_ID);
 
                 if (model != null)
                 {
@@ -167,7 +161,7 @@ namespace <%=ProjectName%>.Application.Web.Areas.<%=ModuleName%>.Controllers
             }
         }
         #endregion
-         
+
         #region 提交数据
         /// <summary>
         /// 保存表单
@@ -178,7 +172,7 @@ namespace <%=ProjectName%>.Application.Web.Areas.<%=ModuleName%>.Controllers
         /// <returns></returns>
         [HttpPost]
         [HandlerAjaxOnly]
-        public ActionResult SaveForm(string FormType, string F_IDValue, <%=SourceTable.Name %> model)
+        public ActionResult SaveForm(string FormType, string F_IDValue, T_Parameter model)
         {
             try
             {
@@ -191,7 +185,7 @@ namespace <%=ProjectName%>.Application.Web.Areas.<%=ModuleName%>.Controllers
                         model.F_AddUserID = userExtension.F_ID;
                         model.F_AddUserName = userExtension.F_UserName;
                         model.F_isValid = 1;
-                        if (_i<%=SourceTable.Name %>BLL.Insert(model) > 0)
+                        if (_iT_ParameterBLL.Insert(model) > 0)
                         {
                             return Success("添加成功!");
                         }
@@ -204,17 +198,17 @@ namespace <%=ProjectName%>.Application.Web.Areas.<%=ModuleName%>.Controllers
                     case "UPDATE":
                         #region 修改
                         Guid F_ID = Guid.Parse(F_IDValue);
-                        <%=SourceTable.Name %> <%=SourceTable.Name %>Model = _i<%=SourceTable.Name %>BLL.GetModelByCondition(x => x.F_ID == F_ID);                        
-                        <%System.Collections.Generic.List<string> lstExcludeColumn=new System.Collections.Generic.List<string>(){"F_ID","F_isValid","F_AddUserID","F_AddUserName","F_AddTime","F_UpdateUserID","F_UpdateUserName","F_UpdateTime"};%>
-                        <%for(int i=0; i<SourceTable.Columns.Count; i++) {%>
-                        <%if(lstExcludeColumn.Contains(SourceTable.Columns[i].Name)==false) {%>
-                        <%=SourceTable.Name %>Model.<%=SourceTable.Columns[i].Name%> = model.<%=SourceTable.Columns[i].Name%>;                                                
-                        <%}%>
-                        <%}%>
-                        <%=SourceTable.Name %>Model.F_UpdateTime = DateTime.Now;
-                        <%=SourceTable.Name %>Model.F_UpdateUserID = userExtension.F_ID;
-                        <%=SourceTable.Name %>Model.F_UpdateUserName = userExtension.F_UserName;
-                        if (_i<%=SourceTable.Name %>BLL.Update() > 0)
+                        T_Parameter T_ParameterModel = _iT_ParameterBLL.GetModelByCondition(x => x.F_ID == F_ID);
+                        T_ParameterModel.F_Code = model.F_Code;
+                        T_ParameterModel.F_Name = model.F_Name;
+                        T_ParameterModel.F_Value = model.F_Value;
+                        T_ParameterModel.F_Explain = model.F_Explain;
+                        T_ParameterModel.F_Sort = model.F_Sort;
+                        T_ParameterModel.F_Remark = model.F_Remark;
+                        T_ParameterModel.F_UpdateTime = DateTime.Now;
+                        T_ParameterModel.F_UpdateUserID = userExtension.F_ID;
+                        T_ParameterModel.F_UpdateUserName = userExtension.F_UserName;
+                        if (_iT_ParameterBLL.Update() > 0)
                         {
                             return Success("修改成功!");
                         }
@@ -246,7 +240,7 @@ namespace <%=ProjectName%>.Application.Web.Areas.<%=ModuleName%>.Controllers
         {
             try
             {
-                <%=SourceTable.Name %> model = null;
+                T_Parameter model = null;
                 Guid F_ID = default(Guid);
                 if (string.IsNullOrEmpty(F_IDValue))
                 {
@@ -257,10 +251,10 @@ namespace <%=ProjectName%>.Application.Web.Areas.<%=ModuleName%>.Controllers
                     return Error("主键格式错误,获取记录失败!");
                 }
 
-                model = _i<%=SourceTable.Name %>BLL.GetModelByCondition(x => x.F_ID == F_ID);
+                model = _iT_ParameterBLL.GetModelByCondition(x => x.F_ID == F_ID);
                 model.F_isValid = (int)F_isValid.Delete;
 
-                if (_i<%=SourceTable.Name %>BLL.Update() > 0)
+                if (_iT_ParameterBLL.Update() > 0)
                 {
                     return Success("删除成功!");
                 }
@@ -285,17 +279,17 @@ namespace <%=ProjectName%>.Application.Web.Areas.<%=ModuleName%>.Controllers
         {
             try
             {
-                <%=SourceTable.Name %> model = null;
+                T_Parameter model = null;
                 List<string> lstF_ID = F_IDValue.Split(',').ToList();
 
                 foreach (string item in lstF_ID)
                 {
                     var F_ID = Guid.Parse(item);
-                    model = _i<%=SourceTable.Name %>BLL.GetModelByCondition(x => x.F_ID == F_ID);
+                    model = _iT_ParameterBLL.GetModelByCondition(x => x.F_ID == F_ID);
                     model.F_isValid = (int)F_isValid.Delete;
                 }
 
-                if (_i<%=SourceTable.Name %>BLL.Update() > 0)
+                if (_iT_ParameterBLL.Update() > 0)
                 {
                     return Success("删除成功!");
                 }
@@ -309,6 +303,6 @@ namespace <%=ProjectName%>.Application.Web.Areas.<%=ModuleName%>.Controllers
                 return Error("删除失败," + ex.Message.ToString());
             }
         }
-        #endregion                
+        #endregion
     }
 }

@@ -43,6 +43,7 @@
     <Compile Include="SystemManage\IT_DataItemBLL.cs" />
     <Compile Include="SystemManage\IT_DataItemDetailBLL.cs" />
     <Compile Include="SystemManage\IT_LogBLL.cs" />
+    <Compile Include="SystemManage\IT_ParameterBLL.cs" />
     <Compile Include="SystemManage\IT_RoleBLL.cs" />
     <Compile Include="SystemManage\IT_UserBLL.cs" />
     <Compile Include="SystemManage\IT_UserRoleBLL.cs" />

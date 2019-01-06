@@ -49,6 +49,7 @@
     <Compile Include="SystemManage\T_DataItemDAL.cs" />
     <Compile Include="SystemManage\T_DataItemDetailDAL.cs" />
     <Compile Include="SystemManage\T_LogDAL.cs" />
+    <Compile Include="SystemManage\T_ParameterDAL.cs" />
     <Compile Include="SystemManage\T_RoleDAL.cs" />
     <Compile Include="SystemManage\T_UserDAL.cs" />
     <Compile Include="SystemManage\T_UserRoleDAL.cs" />

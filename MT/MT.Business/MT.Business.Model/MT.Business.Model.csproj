@@ -81,6 +81,9 @@
     <Compile Include="T_Menu.cs">
       <DependentUpon>MT.tt</DependentUpon>
     </Compile>
+    <Compile Include="T_Parameter.cs">
+      <DependentUpon>MT.tt</DependentUpon>
+    </Compile>
     <Compile Include="T_Role.cs">
       <DependentUpon>MT.tt</DependentUpon>
     </Compile>

@@ -1,11 +1,4 @@
-﻿<%@ Template Language="C#" TargetLanguage="C#" %>
-<%@ Assembly Name="SchemaExplorer" %>
-<%@ Import Namespace="SchemaExplorer" %>
-<%@ Property Name="SourceTable" Type="SchemaExplorer.TableSchema" Category="数据库" %>
-<%@ Property Name="ModuleName" Type="System.String" Default="SystemManage" Category="Property" Description="模块名称"%>
-<%@ Property Name="ProjectName" Type="System.String" Default="MT" Category="Property" Description="项目名称"%>
-
-@{
+﻿@{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_LayoutIndex.cshtml";
 }
@@ -20,9 +13,15 @@
                 <div class="layui-form layui-card-header layuiadmin-card-header-auto">
                     <div class="layui-form-item">
                         <div class="layui-inline">
-                            <label class="layui-form-label" title="字典编码/字典名称/助记码">字典编码</label>
+                            <label class="layui-form-label" title="字典编码">字典编码</label>
                             <div class="layui-input-block">
-                                <input type="text" name="F_ItemCode" placeholder="请输入" autocomplete="off" class="layui-input">
+                                <input type="text" name="F_CatalogCode" placeholder="请输入" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label" title="参数编码">参数编码</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="F_Code" placeholder="请输入" autocomplete="off" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-inline">
@@ -44,19 +43,14 @@
                     <script type="text/html" id="mt-data-table-toolbar">
                         <div class="layui-btn-container">
                             <button class="layui-btn layui-btn-sm" lay-event="Add">添加</button>
-                            <button class="layui-btn layui-btn-sm" lay-event="BatchDelete">批量删除</button>                            
+                            <button class="layui-btn layui-btn-sm" lay-event="BatchDelete">批量删除</button>
                         </div>
                     </script>
 
-                    <script type="text/html" id="mt-data-table-row-button">                        
+                    <script type="text/html" id="mt-data-table-row-button">
                         <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="view">查看</a>
                         <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
                         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
-                    </script>
-
-                    <script type="text/html" id="mt-data-table-switchF_isEnable">                    
-                         <input type="checkbox" name="F_isEnable" lay-skin="switch" lay-text="是|否" lay-filter="mt-data-table-column-F_isEnable"
-                          value="{{ d.F_isEnable }}" data-json="{{ encodeURIComponent(JSON.stringify(d)) }}" {{ d.F_isEnable== 1 ? 'checked' : '' }}>
                     </script>
                 </div>
             </div>
@@ -78,17 +72,19 @@
         //表格信息
         table.render({
             elem: "#mt-data-table"
-            , url: "/<%=ModuleName%>/<%=SourceTable.Name.Replace("T_","") %>/GetDataList"
+            , url: "/SystemManage/Parameter/GetDataList"
             , method: "POST"
             , toolbar: "#mt-data-table-toolbar"//头部工具栏            
             , defaultToolbar: ['filter']//仅显示筛选图标
             , cols: [[
                 { type: "checkbox", fixed: "left", }
-                , { field: "F_ItemCode", title: "字典编码", width: 200 }
-                , { field: "F_ItemName", title: "字典名称", width: 200, }
-                , { field: "F_Sort", title: "排序", width: 80 }
-                , { field: "F_isEnable", title: "是否可用", width: 100, templet: '#mt-data-table-switchF_isEnable', unresize: true }
-                , { field: "F_AddUserName", width: 100, title: "录入人" }
+                , { field: "F_CatalogCode", title: "字典编码", width: 200 }
+                , { field: "F_CatalogName", title: "字典名称", width: 200, }
+                , { field: "F_Code", title: "参数编码", width: 200 }
+                , { field: "F_Name", title: "参数名称", width: 200, }
+                , { field: "F_Value", title: "参数值", width: 100, sort: true }
+                , { field: "F_Explain", title: "参数说明", width: 200, sort: true }
+                , { field: "F_Sort", title: "排序", width: 80 }                                
                 , { field: "F_AddTime", title: "录入时间", width: 200, sort: true }
                 , { field: "F_Remark", title: "备注", }
                 , { title: "操作", width: 220, align: "center", fixed: "right", unresize: true, toolbar: "#mt-data-table-row-button" }
@@ -97,22 +93,6 @@
             , cellMinWidth: 80
             , page: true
             , limit: 20
-        });
-
-        //监听"是否可用"操作
-        form.on('switch(mt-data-table-column-F_isEnable)', function (obj) {
-            var json = JSON.parse(decodeURIComponent($(this).data('json')));
-            $.post("/<%=ModuleName%>/<%=SourceTable.Name.Replace("T_","") %>/UpdateF_isEnable", { F_ID: json.F_ID, IsChecked: obj.elem.checked },
-            function (result) {
-                var resultJson = JSON.parse(result);
-                if (resultJson.code == "1") {
-                    obj.elem.value = resultJson.msg;//修改input标签的value值
-                }
-                else {
-                    layer.msg(resultJson.msg, { icon: 5 });//提示消息                    
-                    obj.elem.checked = obj.elem.value == "1" ? true : false;//还原checkbox的状态
-                }
-            });
         });
 
         //监听搜索
@@ -131,7 +111,7 @@
                     layer.open({
                         type: 2
                         , title: '添加基础数据项目'
-                        , content: '/<%=ModuleName%>/<%=SourceTable.Name.Replace("T_","") %>/Form?FormType=ADD'
+                        , content: '/SystemManage/Parameter/Form?FormType=ADD'
                         , maxmin: true
                         , area: ['600px', '550px']
                         , btn: ['确定', '取消']
@@ -156,7 +136,7 @@
                             }
                             F_IDValue = F_IDValue.substr(0, F_IDValue.length - 1);
 
-                            $.post("/<%=ModuleName%>/<%=SourceTable.Name.Replace("T_","") %>/BatchRemoveForm", { F_IDValue: F_IDValue },
+                            $.post("/SystemManage/Parameter/BatchRemoveForm", { F_IDValue: F_IDValue },
                             function (result) {
                                 var resultJson = JSON.parse(result);
                                 if (resultJson.code == "1") {
@@ -174,7 +154,7 @@
                     var F_ItemCode = $('input[name="F_ItemCode"]').val();
                     var F_AddUserName = $('input[name="F_AddUserName"]').val();
                     var ranNum = Math.random();
-                    var $form = $("<form id='exportexcel" + ranNum + "' method='post' action='/<%=ModuleName%>/<%=SourceTable.Name.Replace("T_","") %>/ExportList?F_ItemCode=" + F_ItemCode + "&F_AddUserName=" + F_AddUserName + "' style='display:none;'></form>");
+                    var $form = $("<form id='exportexcel" + ranNum + "' method='post' action='/SystemManage/T_Parameter/ExportList?F_ItemCode=" + F_ItemCode + "&F_AddUserName=" + F_AddUserName + "' style='display:none;'></form>");
                     $("body").append($form);
                     $form.submit();
                     break;
@@ -188,7 +168,7 @@
                     layer.open({
                         type: 2
                         , title: '查看基础数据项目'
-                        , content: '/<%=ModuleName%>/<%=SourceTable.Name.Replace("T_","") %>/Form?FormType=VIEW&F_IDValue=' + data.F_ID
+                        , content: '/SystemManage/Parameter/Form?FormType=VIEW&F_IDValue=' + data.F_ID
                         , maxmin: true
                         , area: ['600px', '550px']
                         , btn: ['关闭']
@@ -198,7 +178,7 @@
                     layer.open({
                         type: 2
                         , title: '修改基础数据项目'
-                        , content: '/<%=ModuleName%>/<%=SourceTable.Name.Replace("T_","") %>/Form?FormType=UPDATE&F_IDValue=' + data.F_ID
+                        , content: '/SystemManage/Parameter/Form?FormType=UPDATE&F_IDValue=' + data.F_ID
                         , maxmin: true
                         , area: ['600px', '550px']
                         , btn: ['确定', '取消']
@@ -212,7 +192,7 @@
                     break;
                 case 'delete'://删除
                     layer.confirm('确定删除这行数据吗？', function (index) {
-                        $.post("/<%=ModuleName%>/<%=SourceTable.Name.Replace("T_","") %>/RemoveForm", { F_IDValue: data.F_ID },
+                        $.post("/SystemManage/Parameter/RemoveForm", { F_IDValue: data.F_ID },
                         function (result) {
                             var resultJson = JSON.parse(result);
                             if (resultJson.code == "1") {

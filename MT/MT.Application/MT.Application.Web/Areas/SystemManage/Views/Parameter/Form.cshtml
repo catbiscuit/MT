@@ -1,0 +1,139 @@
+﻿@{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body" style="padding: 15px;">
+            <form class="layui-form" action="" lay-filter="mt-form">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">目录编码</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="F_CatalogCode" name="F_CatalogCode" lay-verify="required" placeholder="请输入目录编码" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">目录名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="F_CatalogName" name="F_CatalogName" lay-verify="required" placeholder="请输入目录名称" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">参数编码</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="F_Code" name="F_Code" lay-verify="required" placeholder="请输入参数编码" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">参数名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="F_Name" name="F_Name" lay-verify="required" placeholder="请输入参数名称" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">参数值</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="F_Value" name="F_Value" lay-verify="required" placeholder="请输入参数值" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">参数说明</label>
+                    <div class="layui-input-block">
+                        <textarea name="F_Explain" placeholder="请输入参数说明" class="layui-textarea"></textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">排序</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="F_Sort" lay-verify="required|number" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">备注</label>
+                    <div class="layui-input-block">
+                        <textarea name="F_Remark" placeholder="请输入备注" class="layui-textarea"></textarea>
+                    </div>
+                </div>
+
+                <div class="layui-form-item layui-hide">
+                    <input type="button" lay-submit lay-filter="mt-form-submit" id="mt-form-submit" value="确认添加">
+                    <input type="button" lay-submit lay-filter="mt-form-edit" id="mt-form-edit" value="确认编辑">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    layui.config({
+        base: "/Content/layuiapp/custom/" //存放拓展模块的根目录
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form'], function () {
+        var $ = layui.$
+         , admin = layui.admin
+         , element = layui.element
+         , layer = layui.layer
+         , form = layui.form;
+
+        //元素的初始化
+        var FormType = request('FormType');
+        var F_IDValue = request('F_IDValue');
+        if (FormType != "" && FormType != null && FormType != undefined && (FormType == "UPDATE" || FormType == "VIEW")) {
+            $.post("/SystemManage/Parameter/GetForm", { F_IDValue: F_IDValue },
+            function (result) {
+                var resultJson = JSON.parse(result);
+                if (resultJson.code == "1") {
+                    var model = JSON.parse(resultJson.msg);
+                    form.val("mt-form", {
+                        "F_CatalogCode": model.F_CatalogCode
+                        , "F_CatalogName": model.F_CatalogName
+                        , "F_Code": model.F_Code
+                        , "F_Name": model.F_Name
+                        , "F_Value": model.F_Value
+                        , "F_Explain": model.F_Explain
+                        , "F_Sort": model.F_Sort                        
+                        , "F_Remark": model.F_Remark
+                    });
+                    $('input[name="F_CatalogCode"]').attr("disabled", "disabled");
+                    $('input[name="F_CatalogCode"]').attr("readonly", "readonly");
+                    $('input[name="F_Code"]').attr("disabled", "disabled");
+                    $('input[name="F_Code"]').attr("readonly", "readonly");
+                }
+                else {
+                    layer.msg(resultJson.msg, { icon: 5 });//提示消息                                        
+                }
+            });
+        }
+
+        //监听提交
+        form.on('submit(mt-form-submit)', function (data) {
+            var field = data.field; //获取提交的字段
+            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引  
+
+            //根据参数判断表单类型
+            var FormType = request('FormType');
+            if (FormType != "" && FormType != null && FormType != undefined && FormType == "UPDATE") {
+                var F_IDValue = request('F_IDValue');
+                field["F_IDValue"] = F_IDValue;
+            }
+            
+            field["FormType"] = FormType;//页面类型
+
+            //提交 Ajax 成功后，关闭当前弹层并重载表格
+            $.post("/SystemManage/Parameter/SaveForm", field,
+            function (result) {
+                var resultJson = JSON.parse(result);
+                if (resultJson.code == "1") {
+                    parent.layui.table.reload('mt-data-table'); //重载表格
+                    parent.layer.close(index); //再执行关闭 
+                }
+                else {
+                    layer.msg(resultJson.msg, { icon: 5 });//提示消息                                        
+                }
+            });
+        });
+    });
+</script>
