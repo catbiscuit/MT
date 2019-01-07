@@ -21,7 +21,7 @@ namespace MT.Application.Web.App_Code
         public static List<T_Parameter> GetT_ParameterList()
         {
             string cacheKey = "T_Parameter";
-            List<T_Parameter> list = CacheFactory.Cache().GetCahce<List<T_Parameter>>(cacheKey);
+            List<T_Parameter> list = CacheFactory.Cache().GetCache<List<T_Parameter>>(cacheKey);
             if (list == null)
             {
                 List<T_Parameter> data = (
