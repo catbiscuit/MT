@@ -14,27 +14,27 @@ using MT.Utility.Common;
 using MT.Utility.Office;
 using MT.Utility.WebControl;
 
+
 namespace MT.Application.Web.Areas.SystemManage.Controllers
 {
     /// <summary>
     /// 功能:
-    /// 创建日期：2019/1/6    
+    /// 创建日期：2019/2/28    
     /// </summary>  
     [HandlerLogin(LoginMode.Enforce)]
-    public class ParameterController : MvcControllerBase
+    public class DepartmentController : MvcControllerBase
     {
         #region 字段、属性
-        private readonly IT_ParameterBLL _iT_ParameterBLL;
-        public ParameterController(IT_ParameterBLL iT_ParameterBLL)
+        private readonly IT_DepartmentBLL _iT_DepartmentBLL;
+        public DepartmentController(IT_DepartmentBLL iT_DepartmentBLL)
         {
-            this._iT_ParameterBLL = iT_ParameterBLL;
+            this._iT_DepartmentBLL = iT_DepartmentBLL;
         }
         #endregion
 
         #region 视图
         public ActionResult Index()
         {
-            var l = App_Code.CodeHelper.GetT_ParameterList();
             return View();
         }
         public ActionResult Form()
@@ -54,7 +54,7 @@ namespace MT.Application.Web.Areas.SystemManage.Controllers
         {
             try
             {
-                string sTableName = "T_Parameter";
+                string sTableName = "T_Department";
                 string sqlWhere = string.Empty;
                 string orderSort = "F_Sort asc";
                 int StartIndex = (page - 1) * limit + 1;
@@ -107,14 +107,6 @@ namespace MT.Application.Web.Areas.SystemManage.Controllers
                 {
                     sbWhere.AppendFormat(" and (F_ItemCode like '%{0}%' or F_ItemName like '%{0}%' or F_HelpCode like '%{0}%') ", Request.Params["F_ItemCode"].ToString());
                 }
-                if (Request.Params["F_CatalogCode"] != null && !string.IsNullOrEmpty(Request.Params["F_CatalogCode"].ToString()))
-                {
-                    sbWhere.AppendFormat(" and F_CatalogCode like '%{0}%' ", Request.Params["F_CatalogCode"].ToString());
-                }
-                if (Request.Params["F_Code"] != null && !string.IsNullOrEmpty(Request.Params["F_Code"].ToString()))
-                {
-                    sbWhere.AppendFormat(" and F_Code like '%{0}%' ", Request.Params["F_Code"].ToString());
-                }
                 if (Request.Params["F_AddUserName"] != null && !string.IsNullOrEmpty(Request.Params["F_AddUserName"].ToString()))
                 {
                     sbWhere.AppendFormat(" and F_AddUserName like '%{0}%' ", Request.Params["F_AddUserName"].ToString());
@@ -137,22 +129,22 @@ namespace MT.Application.Web.Areas.SystemManage.Controllers
         [HandlerAjaxOnly]
         public ActionResult GetForm(string F_IDValue)
         {
-            T_Parameter model = null;
+            T_Department model = null;
             try
             {
                 Guid F_ID = default(Guid);
                 if (string.IsNullOrEmpty(F_IDValue))
                 {
-                    model = new T_Parameter();
+                    model = new T_Department();
                     return Error("主键为空,获取记录失败!");
                 }
                 if (Guid.TryParse(F_IDValue, out F_ID) == false)
                 {
-                    model = new T_Parameter();
+                    model = new T_Department();
                     return Error("主键格式错误,获取记录失败!");
                 }
 
-                model = _iT_ParameterBLL.GetModelByCondition(x => x.F_ID == F_ID);
+                model = _iT_DepartmentBLL.GetModelByCondition(x => x.F_ID == F_ID);
 
                 if (model != null)
                 {
@@ -180,7 +172,7 @@ namespace MT.Application.Web.Areas.SystemManage.Controllers
         /// <returns></returns>
         [HttpPost]
         [HandlerAjaxOnly]
-        public ActionResult SaveForm(string FormType, string F_IDValue, T_Parameter model)
+        public ActionResult SaveForm(string FormType, string F_IDValue, T_Department model)
         {
             try
             {
@@ -193,7 +185,7 @@ namespace MT.Application.Web.Areas.SystemManage.Controllers
                         model.F_AddUserID = userExtension.F_ID;
                         model.F_AddUserName = userExtension.F_UserName;
                         model.F_isValid = 1;
-                        if (_iT_ParameterBLL.Insert(model) > 0)
+                        if (_iT_DepartmentBLL.Insert(model) > 0)
                         {
                             return Success("添加成功!");
                         }
@@ -206,17 +198,19 @@ namespace MT.Application.Web.Areas.SystemManage.Controllers
                     case "UPDATE":
                         #region 修改
                         Guid F_ID = Guid.Parse(F_IDValue);
-                        T_Parameter T_ParameterModel = _iT_ParameterBLL.GetModelByCondition(x => x.F_ID == F_ID);
-                        T_ParameterModel.F_Code = model.F_Code;
-                        T_ParameterModel.F_Name = model.F_Name;
-                        T_ParameterModel.F_Value = model.F_Value;
-                        T_ParameterModel.F_Explain = model.F_Explain;
-                        T_ParameterModel.F_Sort = model.F_Sort;
-                        T_ParameterModel.F_Remark = model.F_Remark;
-                        T_ParameterModel.F_UpdateTime = DateTime.Now;
-                        T_ParameterModel.F_UpdateUserID = userExtension.F_ID;
-                        T_ParameterModel.F_UpdateUserName = userExtension.F_UserName;
-                        if (_iT_ParameterBLL.Update() > 0)
+                        T_Department T_DepartmentModel = _iT_DepartmentBLL.GetModelByCondition(x => x.F_ID == F_ID);
+                        T_DepartmentModel.F_FullName = model.F_FullName;
+                        T_DepartmentModel.F_ShortName = model.F_ShortName;
+                        T_DepartmentModel.F_HelpCode = model.F_HelpCode;
+                        T_DepartmentModel.F_ParentID = model.F_ParentID;
+                        T_DepartmentModel.F_Level = model.F_Level;
+                        T_DepartmentModel.F_Sort = model.F_Sort;
+                        T_DepartmentModel.F_isEnable = model.F_isEnable;
+                        T_DepartmentModel.F_Remark = model.F_Remark;
+                        T_DepartmentModel.F_UpdateTime = DateTime.Now;
+                        T_DepartmentModel.F_UpdateUserID = userExtension.F_ID;
+                        T_DepartmentModel.F_UpdateUserName = userExtension.F_UserName;
+                        if (_iT_DepartmentBLL.Update() > 0)
                         {
                             return Success("修改成功!");
                         }
@@ -248,7 +242,7 @@ namespace MT.Application.Web.Areas.SystemManage.Controllers
         {
             try
             {
-                T_Parameter model = null;
+                T_Department model = null;
                 Guid F_ID = default(Guid);
                 if (string.IsNullOrEmpty(F_IDValue))
                 {
@@ -259,10 +253,10 @@ namespace MT.Application.Web.Areas.SystemManage.Controllers
                     return Error("主键格式错误,获取记录失败!");
                 }
 
-                model = _iT_ParameterBLL.GetModelByCondition(x => x.F_ID == F_ID);
+                model = _iT_DepartmentBLL.GetModelByCondition(x => x.F_ID == F_ID);
                 model.F_isValid = (int)F_isValid.Delete;
 
-                if (_iT_ParameterBLL.Update() > 0)
+                if (_iT_DepartmentBLL.Update() > 0)
                 {
                     return Success("删除成功!");
                 }
@@ -287,17 +281,17 @@ namespace MT.Application.Web.Areas.SystemManage.Controllers
         {
             try
             {
-                T_Parameter model = null;
+                T_Department model = null;
                 List<string> lstF_ID = F_IDValue.Split(',').ToList();
 
                 foreach (string item in lstF_ID)
                 {
                     var F_ID = Guid.Parse(item);
-                    model = _iT_ParameterBLL.GetModelByCondition(x => x.F_ID == F_ID);
+                    model = _iT_DepartmentBLL.GetModelByCondition(x => x.F_ID == F_ID);
                     model.F_isValid = (int)F_isValid.Delete;
                 }
 
-                if (_iT_ParameterBLL.Update() > 0)
+                if (_iT_DepartmentBLL.Update() > 0)
                 {
                     return Success("删除成功!");
                 }

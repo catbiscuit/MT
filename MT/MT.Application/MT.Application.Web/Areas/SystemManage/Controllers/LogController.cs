@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using MT.Application.Code.Enums;
@@ -36,7 +37,7 @@ namespace MT.Application.Web.Areas.SystemManage.Controllers
 
         #region 获取数据
         [HttpGet]
-        public ActionResult GetPageListJson(int page, int limit, string ordersort)
+        public ActionResult GetPageListJson(int page, int limit)
         {
             string sTableName = "T_Log";
             string sqlWhere = string.Empty;
@@ -44,10 +45,7 @@ namespace MT.Application.Web.Areas.SystemManage.Controllers
             int StartIndex = (page - 1) * limit + 1;
             int EndIndex = StartIndex + limit - 1;
 
-            if (!string.IsNullOrEmpty(ordersort))
-            {
-                orderSort = ordersort;
-            }
+            sqlWhere = GetWhere();
 
             SqlParameter[] sqlParameters =
             {                
@@ -79,6 +77,35 @@ namespace MT.Application.Web.Areas.SystemManage.Controllers
             };
 
             return Content(JsonData.ToJson());
+        }
+
+        /// <summary>
+        /// 获取查询条件
+        /// </summary>
+        /// <returns></returns>
+        protected string GetWhere()
+        {
+            try
+            {
+                StringBuilder sbWhere = new StringBuilder();
+
+                sbWhere.AppendFormat(" and F_isValid='{0}' ", (int)F_isValid.Normal);//正常的数据
+
+                if (Request.Params["F_LoginName"] != null && !string.IsNullOrEmpty(Request.Params["F_LoginName"].ToString()))
+                {
+                    sbWhere.AppendFormat(" and F_LoginName like '%{0}%' ", Request.Params["F_LoginName"].ToString());
+                }
+                if (Request.Params["F_LogType"] != null && !string.IsNullOrEmpty(Request.Params["F_LogType"].ToString()))
+                {
+                    sbWhere.AppendFormat(" and F_LogType like '%{0}%' ", Request.Params["F_LogType"].ToString());
+                }
+
+                return sbWhere.ToString();
+            }
+            catch
+            {
+                return "";
+            }
         }
         #endregion
     }

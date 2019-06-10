@@ -32,9 +32,9 @@ namespace MT.Business.Model
         public DbSet<T_Log> T_Log { get; set; }
         public DbSet<T_DataItem> T_DataItem { get; set; }
         public DbSet<T_DataItemDetail> T_DataItemDetail { get; set; }
-        public DbSet<T_Department> T_Department { get; set; }
         public DbSet<T_Menu> T_Menu { get; set; }
         public DbSet<T_RoleMenu> T_RoleMenu { get; set; }
         public DbSet<T_Parameter> T_Parameter { get; set; }
+        public DbSet<T_Department> T_Department { get; set; }
     }
 }

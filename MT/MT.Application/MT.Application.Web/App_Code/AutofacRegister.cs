@@ -56,6 +56,10 @@ namespace MT.Application.Web.App_Code
                 builder.RegisterType<T_ParameterDAL>().As<IT_ParameterDAL>();
                 builder.RegisterType<T_ParameterBLL>().As<IT_ParameterBLL>();
 
+                //T_Department类
+                builder.RegisterType<T_DepartmentDAL>().As<IT_DepartmentDAL>();
+                builder.RegisterType<T_DepartmentBLL>().As<IT_DepartmentBLL>();
+
                 return builder;
             }
             catch

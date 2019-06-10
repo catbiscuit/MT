@@ -276,6 +276,7 @@
     <Compile Include="Areas\PersonnelManage\PersonnelManageAreaRegistration.cs" />
     <Compile Include="Areas\SystemManage\Controllers\DataItemController.cs" />
     <Compile Include="Areas\SystemManage\Controllers\DataItemDetailController.cs" />
+    <Compile Include="Areas\SystemManage\Controllers\DepartmentController.cs" />
     <Compile Include="Areas\SystemManage\Controllers\LogController.cs" />
     <Compile Include="Areas\SystemManage\Controllers\ParameterController.cs" />
     <Compile Include="Areas\SystemManage\SystemManageAreaRegistration.cs" />
@@ -318,6 +319,8 @@
     <Content Include="Areas\SystemManage\Views\DataItemDetail\Form.cshtml" />
     <Content Include="Areas\SystemManage\Views\Parameter\Index.cshtml" />
     <Content Include="Areas\SystemManage\Views\Parameter\Form.cshtml" />
+    <Content Include="Areas\SystemManage\Views\Department\Index.cshtml" />
+    <Content Include="Areas\SystemManage\Views\Department\Form.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

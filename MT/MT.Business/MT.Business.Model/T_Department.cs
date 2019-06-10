@@ -22,15 +22,63 @@ namespace MT.Business.Model
     	/// </summary>
         public System.Guid F_ID { get; set; }
     	/// <summary>
-    	/// 部门名称
+    	/// 完整名称
     	/// </summary>
-        public string F_Name { get; set; }
+        public string F_FullName { get; set; }
+    	/// <summary>
+    	/// 短名称
+    	/// </summary>
+        public string F_ShortName { get; set; }
+    	/// <summary>
+    	/// 助记码
+    	/// </summary>
+        public string F_HelpCode { get; set; }
     	/// <summary>
     	/// 父级部门编码
     	/// </summary>
         public Nullable<System.Guid> F_ParentID { get; set; }
     	/// <summary>
-    	/// 数据状态
+    	/// 父级部门名称
+    	/// </summary>
+        public string F_ParentName { get; set; }
+    	/// <summary>
+    	/// 级别
+    	/// </summary>
+        public Nullable<int> F_Level { get; set; }
+    	/// <summary>
+    	/// 排序
+    	/// </summary>
+        public Nullable<int> F_Sort { get; set; }
+    	/// <summary>
+    	/// 是否启用
+    	/// </summary>
+        public Nullable<int> F_isEnable { get; set; }
+    	/// <summary>
+    	/// 录入人编码
+    	/// </summary>
+        public Nullable<System.Guid> F_AddUserID { get; set; }
+    	/// <summary>
+    	/// 录入人姓名
+    	/// </summary>
+        public string F_AddUserName { get; set; }
+    	/// <summary>
+    	/// 录入时间
+    	/// </summary>
+        public Nullable<System.DateTime> F_AddTime { get; set; }
+    	/// <summary>
+    	/// 修改人编码
+    	/// </summary>
+        public Nullable<System.Guid> F_UpdateUserID { get; set; }
+    	/// <summary>
+    	/// 修改人姓名
+    	/// </summary>
+        public string F_UpdateUserName { get; set; }
+    	/// <summary>
+    	/// 修改时间
+    	/// </summary>
+        public Nullable<System.DateTime> F_UpdateTime { get; set; }
+    	/// <summary>
+    	/// 数据状态(0删除1正常)
     	/// </summary>
         public Nullable<int> F_isValid { get; set; }
     	/// <summary>

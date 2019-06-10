@@ -28,7 +28,7 @@
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <button class="layui-btn layuiadmin-btn-admin" lay-submit lay-filter="LAY-user-back-search">
+                    <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="mt-data-table-search">
                         <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
                     </button>
                 </div>
@@ -48,7 +48,8 @@
     }).use(['index', 'table'], function () {
         var admin = layui.admin
         , form = layui.form
-        , table = layui.table;
+        , table = layui.table
+        , $ = layui.$;
 
         //表格信息
         table.render({

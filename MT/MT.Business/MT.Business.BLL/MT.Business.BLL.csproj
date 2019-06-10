@@ -48,6 +48,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SystemManage\T_DataItemBLL.cs" />
     <Compile Include="SystemManage\T_DataItemDetailBLL.cs" />
+    <Compile Include="SystemManage\T_DepartmentBLL.cs" />
     <Compile Include="SystemManage\T_LogBLL.cs" />
     <Compile Include="SystemManage\T_ParameterBLL.cs" />
     <Compile Include="SystemManage\T_RoleBLL.cs" />

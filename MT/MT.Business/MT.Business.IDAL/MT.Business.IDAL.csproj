@@ -42,6 +42,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SystemManage\IT_DataItemDAL.cs" />
     <Compile Include="SystemManage\IT_DataItemDetailDAL.cs" />
+    <Compile Include="SystemManage\IT_DepartmentDAL.cs" />
     <Compile Include="SystemManage\IT_LogDAL.cs" />
     <Compile Include="SystemManage\IT_ParameterDAL.cs" />
     <Compile Include="SystemManage\IT_RoleDAL.cs" />
